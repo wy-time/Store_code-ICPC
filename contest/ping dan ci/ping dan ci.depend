@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1524301223 source:f:\desktop\question\contest\ping dan ci\main.cpp
+	<iostream>
+	<string>
+	<cstring>
+

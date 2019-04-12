@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1513082430 source:f:\desktop\question\an da oj\big num add\main.cpp
+	<iostream>
+	<string>
+	<algorithm>
+

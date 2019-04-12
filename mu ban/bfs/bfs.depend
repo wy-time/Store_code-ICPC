@@ -1,0 +1,5 @@
+# depslib dependency file v1.0
+1518963998 source:f:\desktop\question\mu ban\bfs\main.cpp
+	<iostream>
+	<queue>
+

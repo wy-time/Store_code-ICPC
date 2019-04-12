@@ -1,0 +1,5 @@
+# depslib dependency file v1.0
+1509023379 source:f:\desktop\question\oj\3019\try.c
+	<stdio.h>
+	<stdlib.h>
+

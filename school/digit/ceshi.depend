@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1511436389 source:f:\desktop\question\school\digit\try.c
+	<stdio.h>
+	<string.h>
+	<ctype.h>
+

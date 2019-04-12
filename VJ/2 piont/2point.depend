@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1509893238 source:f:\desktop\question\vj\2 piont\main.cpp
+	<iostream>
+	<iomanip>
+	<math.h>
+

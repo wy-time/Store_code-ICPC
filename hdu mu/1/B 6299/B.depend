@@ -1,0 +1,8 @@
+# depslib dependency file v1.0
+1532442276 source:f:\desktop\question\hdu mu\1\b 6299\main.cpp
+	<iostream>
+	<stack>
+	<string>
+	<cstring>
+	<algorithm>
+

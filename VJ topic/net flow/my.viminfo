@@ -1,0 +1,366 @@
+# 这个 viminfo 文件是由 Vim 8.1 所产生。
+# 如果想要自行修改请特别小心！
+
+# Viminfo version
+|1,4
+
+# 文件被写的时候 ‘encoding’ 的值
+*encoding=utf-8
+
+
+# hlsearch on (H) or off (h):
+~h
+# 上个 Search 图案：
+~MSle0~/OP
+
+# 上个 替换 Search 图案：
+~MSle0&OP
+
+# 最后替换的字符串
+$PO
+
+# 命令行 历史记录 (从新到旧)：
+:wq
+|2,0,1543146495,,"wq"
+:q
+|2,0,1543144295,,"q"
+:w
+|2,0,1542894813,,"w"
+:%s/OP/PO
+|2,0,1542894553,,"%s/OP/PO"
+:q!
+|2,0,1542890221,,"q!"
+:ss
+|2,0,1542523095,,"ss"
+:rs
+|2,0,1542523063,,"rs"
+:vim --version | grep mksession
+|2,0,1542522912,,"vim --version | grep mksession"
+:vim --version | grep mksessionvim --version | grep viminfo
+|2,0,1542522904,,"vim --version | grep mksessionvim --version | grep viminfo"
+:Q
+|2,0,1542464533,,"Q"
+:0 split /home/time/debug/in
+|2,0,1542464440,,"0 split /home/time/debug/in"
+:maa
+|2,0,1542463527,,"maa"
+:echo has('signs')
+|2,0,1542463307,,"echo has('signs')"
+:YcmDiags
+|2,0,1542455689,,"YcmDiags"
+:help ultisnip
+|2,0,1542451863,,"help ultisnip"
+:version
+|2,0,1542451453,,"version"
+:echo has("python")
+|2,0,1542451440,,"echo has(\"python\")"
+:echo has("python3")
+|2,0,1542451438,,"echo has(\"python3\")"
+:W
+|2,0,1542443854,,"W"
+:set autoindent
+|2,0,1542093462,,"set autoindent"
+:ls!
+|2,0,1542092851,,"ls!"
+:ls
+|2,0,1542092844,,"ls"
+:marks
+|2,0,1542091653,,"marks"
+:wq!
+|2,0,1541166700,,"wq!"
+:Wq
+|2,0,1540819938,,"Wq"
+:set number
+|2,0,1540817639,,"set number"
+:s
+|2,0,1540817579,,"s"
+:1
+|2,0,1540811293,,"1"
+:!q
+|2,0,1540646387,,"!q"
+
+# 查找字符串 历史记录 (从新到旧)：
+? OP
+|2,1,1542894553,,"OP"
+?/cpp
+|2,1,1542809777,47,"cpp"
+? @$
+|2,1,1542012420,,"@$"
+? \<listen\>
+|2,1,1540813977,,"\\<listen\\>"
+??\a
+|2,1,1540726185,63,"\\a"
+
+# 表达式 历史记录 (从新到旧)：
+
+# 输入行 历史记录 (从新到旧)：
+
+# Debug Line 历史记录 (从新到旧)：
+
+# 寄存器:
+""0	LINE	0
+	PO people[maxn],home[maxn];
+|3,1,0,1,1,0,1543146959,"PO people[maxn],home[maxn];"
+"1	LINE	0
+	PO people[maxn],home[maxn];
+|3,0,1,1,1,0,1543146938,"PO people[maxn],home[maxn];"
+"2	CHAR	0
+	 wfor(i,0,n)
+	        {
+	            wfor(j,0,m)
+	            {
+	                if(ma[i][j])
+	                {
+	                    bfs(i,j);
+	                    break;
+	                }
+	            }
+	        }
+	
+|3,0,2,0,12,0,1543146235," wfor(i,0,n)","        {","            wfor(j,0,m)","            {","                if(ma[i][j])","                {","                    bfs(i,j);","                    break;","                }","            }","        }",""
+"3	CHAR	0
+	 wfor(i,0,n)
+	        {
+	            wfor(j,0,m)
+	            {
+	                if(ma[i][j])
+	                {
+	                    bfs(i,j);
+	                    break;
+	                }
+	            }
+	        }
+	
+|3,0,3,0,12,0,1543146217," wfor(i,0,n)","        {","            wfor(j,0,m)","            {","                if(ma[i][j])","                {","                    bfs(i,j);","                    break;","                }","            }","        }",""
+"4	LINE	0
+	    int id;
+|3,0,4,1,1,0,1543146201,"    int id;"
+"5	LINE	0
+	    int status;
+|3,0,5,1,1,0,1543146200,"    int status;"
+"6	LINE	0
+	        id=a>b?a+b+1:a+b+10001;
+|3,0,6,1,1,0,1543146185,"        id=a>b?a+b+1:a+b+10001;"
+"7	LINE	0
+	        status=s;
+|3,0,7,1,1,0,1543146175,"        status=s;"
+"8	LINE	0
+	int vis[105][105];
+|3,0,8,1,1,0,1543146165,"int vis[105][105];"
+"9	CHAR	0
+	void bfs(int begx,int begy)
+	{
+	    queue<PO>qu;  
+	    qu.push(PO(begx,begy,1));
+	    while(!qu.empty())
+	    {
+	        PO temp=qu.front();
+	        qu.pop();
+	        int dx[4]={0,1,-1,0};
+	        int dy[4]={1,0,-1,0};
+	        int i;
+	        wfor(i,0,4)
+	        {
+	            int x1=temp.x+dx[i];
+	            int y1=temp.y+dy[i];
+	            if(x1>=0&&x1<n&&y1>=0&&y1<m&&!vis[x1][y1])
+	            {
+	                if(temp.status==1)
+	                {
+	                    add(temp.id,PO(x1,y1,1).id,1);
+	                    add(PO(x1,y1,1).id,temp,-1);
+	                }else
+	                {
+	                    add(temp.id,PO(x1,y1,1).id,-1);
+	                    add(PO(x1,y1,1).id,temp,1);
+	                }
+	                if(ma[x1][y1]=='m')
+	                {
+	                    qu.push(PO(x1,y1,-1));
+	                }else if(ma[x1][y1]=='H')
+	                {
+	                    qu.push(PO(x1,y1,1));
+	                }else
+	                {
+	                    qu.push(PO(x1,y1,temp.status));
+	                }
+	            }
+	        }
+	    }
+	}
+	
+|3,0,9,0,41,0,1543146151,"void bfs(int begx,int begy)","{","    queue<PO>qu;  ","    qu.push(PO(begx,begy,1));","    while(!qu.empty())","    {","        PO temp=qu.front();","        qu.pop();","        int dx[4]={0,1,-1,0};","        int dy[4]={1,0,-1,0};","        int i;","        wfor(i,0,4)","        {","            int x1=temp.x+dx[i];","            int y1=temp.y+dy[i];","            if(x1>=0&&x1<n&&y1>=0&&y1<m&&!vis[x1][y1])","            {",>36
+|<"                if(temp.status==1)","                {","                    add(temp.id,PO(x1,y1,1).id,1);","                    add(PO(x1,y1,1).id,temp,-1);","                }else","                {","                    add(temp.id,PO(x1,y1,1).id,-1);","                    add(PO(x1,y1,1).id,temp,1);","                }","                if(ma[x1][y1]=='m')","                {","                    qu.push(PO(x1,y1,-1));","                }else if(ma[x1][y1]=='H')",>19
+|<"                {","                    qu.push(PO(x1,y1,1));","                }else","                {","                    qu.push(PO(x1,y1,temp.status));","                }","            }","        }","    }","}",""
+"-	CHAR	0
+	TODO
+|3,0,36,0,1,0,1543146957,"TODO"
+
+# 文件标记:
+'0  60  0  ~/question/kuangbin 专题/net flow/D.cpp
+|4,48,60,0,1543147009,"~/question/kuangbin 专题/net flow/D.cpp"
+'1  69  4  ~/question/kuangbin 专题/net flow/D.cpp
+|4,49,69,4,1543146495,"~/question/kuangbin 专题/net flow/D.cpp"
+'2  1  0  ~/question/kuangbin 专题/net flow/D.cpp
+|4,50,1,0,1543144295,"~/question/kuangbin 专题/net flow/D.cpp"
+'3  1  0  ~/question/kuangbin 专题/net flow/D.cpp
+|4,51,1,0,1543144295,"~/question/kuangbin 专题/net flow/D.cpp"
+'4  1  0  ~/question/kuangbin 专题/net flow/D.cpp
+|4,52,1,0,1543144258,"~/question/kuangbin 专题/net flow/D.cpp"
+'5  1  0  ~/question/kuangbin 专题/net flow/D.cpp
+|4,53,1,0,1543144258,"~/question/kuangbin 专题/net flow/D.cpp"
+'6  58  28  ~/question/kuangbin 专题/net flow/D.cpp
+|4,54,58,28,1542964446,"~/question/kuangbin 专题/net flow/D.cpp"
+'7  58  28  ~/question/kuangbin 专题/net flow/D.cpp
+|4,55,58,28,1542964446,"~/question/kuangbin 专题/net flow/D.cpp"
+'8  58  28  ~/question/kuangbin 专题/net flow/D.cpp
+|4,56,58,28,1542964446,"~/question/kuangbin 专题/net flow/D.cpp"
+'9  58  28  ~/question/kuangbin 专题/net flow/D.cpp
+|4,57,58,28,1542964446,"~/question/kuangbin 专题/net flow/D.cpp"
+
+# 跳转列表 (从新到旧):
+-'  60  0  ~/question/kuangbin 专题/net flow/D.cpp
+|4,39,60,0,1543147009,"~/question/kuangbin 专题/net flow/D.cpp"
+-'  36  1  ~/question/kuangbin 专题/net flow/D.cpp
+|4,39,36,1,1543146991,"~/question/kuangbin 专题/net flow/D.cpp"
+-'  32  1  ~/question/kuangbin 专题/net flow/D.cpp
+|4,39,32,1,1543146990,"~/question/kuangbin 专题/net flow/D.cpp"
+-'  33  0  ~/question/kuangbin 专题/net flow/D.cpp
+|4,39,33,0,1543146985,"~/question/kuangbin 专题/net flow/D.cpp"
+-'  43  0  ~/question/kuangbin 专题/net flow/D.cpp
+|4,39,43,0,1543146977,"~/question/kuangbin 专题/net flow/D.cpp"
+-'  4  16  ~/question/kuangbin 专题/net flow/D.cpp
+|4,39,4,16,1543146964,"~/question/kuangbin 专题/net flow/D.cpp"
+-'  5  0  ~/question/kuangbin 专题/net flow/D.cpp
+|4,39,5,0,1543146948,"~/question/kuangbin 专题/net flow/D.cpp"
+-'  66  0  ~/question/kuangbin 专题/net flow/D.cpp
+|4,39,66,0,1543146932,"~/question/kuangbin 专题/net flow/D.cpp"
+-'  34  11  ~/question/kuangbin 专题/net flow/D.cpp
+|4,39,34,11,1543146661,"~/question/kuangbin 专题/net flow/D.cpp"
+-'  65  1  ~/question/kuangbin 专题/net flow/D.cpp
+|4,39,65,1,1543146512,"~/question/kuangbin 专题/net flow/D.cpp"
+-'  1  0  ~/question/kuangbin 专题/net flow/D.cpp
+|4,39,1,0,1543146499,"~/question/kuangbin 专题/net flow/D.cpp"
+-'  69  4  ~/question/kuangbin 专题/net flow/D.cpp
+|4,39,69,4,1543146495,"~/question/kuangbin 专题/net flow/D.cpp"
+-'  17  0  ~/question/kuangbin 专题/net flow/D.cpp
+|4,39,17,0,1543146446,"~/question/kuangbin 专题/net flow/D.cpp"
+-'  58  0  ~/question/kuangbin 专题/net flow/D.cpp
+|4,39,58,0,1543146446,"~/question/kuangbin 专题/net flow/D.cpp"
+-'  63  24  ~/question/kuangbin 专题/net flow/D.cpp
+|4,39,63,24,1543146343,"~/question/kuangbin 专题/net flow/D.cpp"
+-'  95  28  ~/question/kuangbin 专题/net flow/D.cpp
+|4,39,95,28,1542964446,"~/question/kuangbin 专题/net flow/D.cpp"
+-'  72  51  ~/question/kuangbin 专题/net flow/D.cpp
+|4,39,72,51,1542894796,"~/question/kuangbin 专题/net flow/D.cpp"
+-'  71  35  ~/question/kuangbin 专题/net flow/D.cpp
+|4,39,71,35,1542894553,"~/question/kuangbin 专题/net flow/D.cpp"
+-'  40  11  ~/question/kuangbin 专题/net flow/D.cpp
+|4,39,40,11,1542893664,"~/question/kuangbin 专题/net flow/D.cpp"
+-'  12  17  /usr/local/share/shadowsocksr/config.json
+|4,39,12,17,1542893376,"/usr/local/share/shadowsocksr/config.json"
+-'  1  0  /usr/local/share/shadowsocksr/config.json
+|4,39,1,0,1542893352,"/usr/local/share/shadowsocksr/config.json"
+-'  1  0  /usr/local/share/shadowsocksr/config
+|4,39,1,0,1542893350,"/usr/local/share/shadowsocksr/config"
+-'  91  0  ~/question/kuangbin 专题/net flow/D.cpp
+|4,39,91,0,1542892406,"~/question/kuangbin 专题/net flow/D.cpp"
+-'  67  18  ~/question/kuangbin 专题/net flow/D.cpp
+|4,39,67,18,1542892405,"~/question/kuangbin 专题/net flow/D.cpp"
+-'  64  18  ~/question/kuangbin 专题/net flow/D.cpp
+|4,39,64,18,1542892405,"~/question/kuangbin 专题/net flow/D.cpp"
+
+# 文件内的标记历史记录 (从新到旧):
+
+> ~/question/kuangbin 专题/net flow/D.cpp
+	*	1543147009	0
+	"	60	0
+	^	66	20
+	.	66	19
+	+	33	8
+	+	33	0
+	+	59	0
+	+	22	0
+	+	32	0
+	+	26	15
+	+	32	1
+	+	26	0
+	+	30	0
+	+	30	16
+	+	44	12
+	+	44	11
+	+	44	25
+	+	44	0
+	+	44	9
+	+	31	0
+	+	31	13
+	+	32	0
+	+	44	0
+	+	44	24
+	+	44	23
+	+	44	0
+	+	44	27
+	+	44	32
+	+	44	0
+	+	44	19
+	+	26	10
+	+	30	29
+	+	34	9
+	+	35	11
+	+	44	73
+	+	44	67
+	+	44	13
+	+	44	68
+	+	30	29
+	+	44	0
+	+	1	19
+	+	44	0
+	+	44	19
+	+	44	43
+	+	44	19
+	+	44	70
+	+	44	67
+	+	44	0
+	+	44	20
+	+	44	0
+	+	44	47
+	+	44	0
+	+	44	16
+	+	44	0
+	+	44	16
+	+	44	0
+	+	44	41
+	+	44	0
+	+	44	41
+	+	44	0
+	+	44	50
+	+	60	0
+	+	60	7
+	+	60	36
+	+	60	33
+	+	70	0
+	+	45	0
+	+	34	0
+	+	30	0
+	+	26	17
+	+	26	0
+	+	60	7
+	+	70	0
+	+	60	1
+	+	60	0
+	+	67	0
+	+	63	17
+	+	33	26
+	+	15	18
+	+	34	0
+	+	35	20
+	+	15	17
+	+	65	33
+	+	66	0
+	+	33	0
+	+	5	0
+	+	4	16
+	+	33	0
+	+	66	19
+	a	32	1
+	b	66	0

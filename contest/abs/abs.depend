@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1511064805 source:f:\desktop\question\contest\abs\main.cpp
+	<iostream>
+	<algorithm>
+	<math.h>
+

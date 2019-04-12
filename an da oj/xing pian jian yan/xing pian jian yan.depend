@@ -1,0 +1,7 @@
+# depslib dependency file v1.0
+1512823966 source:f:\desktop\question\an da oj\xing pian jian yan\main.cpp
+	<string>
+	<iostream>
+	<cstring>
+	<cstdio>
+

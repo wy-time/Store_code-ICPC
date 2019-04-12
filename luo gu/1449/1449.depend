@@ -1,0 +1,9 @@
+# depslib dependency file v1.0
+1523800035 source:f:\desktop\question\luo gu\1449\main.cpp
+	<iostream>
+	<stack>
+	<cstring>
+	<cstdio>
+	<cstdlib>
+	<cctype>
+

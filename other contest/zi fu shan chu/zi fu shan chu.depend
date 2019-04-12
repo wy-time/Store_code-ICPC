@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1511685567 source:f:\desktop\question\other contest\zi fu shan chu\main.cpp
+	<iostream>
+	<string.h>
+	<cstdio>
+

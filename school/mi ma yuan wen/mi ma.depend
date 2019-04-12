@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1511698093 source:f:\desktop\question\school\mi ma yuan wen\try.c
+	<stdio.h>
+	<string.h>
+	<ctype.h>
+

@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1508412275 source:f:\desktop\question\oj\2015\2015.c
+	<stdio.h>
+	<math.h>
+	<stdlib.h>
+

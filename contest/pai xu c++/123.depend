@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1510462610 source:f:\desktop\question\contest\pai xu c++\main.cpp
+	<iostream>
+	<stdlib.h>
+	<algorithm>
+

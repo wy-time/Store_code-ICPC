@@ -1,0 +1,5 @@
+# depslib dependency file v1.0
+1512290407 source:f:\desktop\question\contest\escape\main.cpp
+	<iostream>
+	<math.h>
+

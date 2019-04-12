@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1514621108 source:f:\desktop\question\contest\da zi\main.cpp
+	<iostream>
+	<cstring>
+	<algorithm>
+

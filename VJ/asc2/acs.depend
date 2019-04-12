@@ -1,0 +1,5 @@
+# depslib dependency file v1.0
+1509888853 source:f:\desktop\question\vj\asc2\main.cpp
+	<iostream>
+	<algorithm>
+

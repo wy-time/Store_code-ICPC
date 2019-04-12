@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1509893870 source:f:\desktop\question\vj\abs\main.cpp
+	<iostream>
+	<math.h>
+	<cstdio>
+
