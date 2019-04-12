@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstring> 
 #include <vector> 
 #include <cstdio>
 using namespace std;
@@ -10,30 +11,29 @@ typedef long long ll;
 // 	for (; ch < '0' || ch > '9'; ch = getchar());
 // 	for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
 // }
-const int maxn=2e5+5;
-ll num[maxn];
+const int maxn=10005;
 vector<int>G[maxn];
-ll ans;
 int vis[maxn];
-int pre[maxn];
-int dfs(int beg)
+int maching[maxn];
+int slove(int beg)
 {
     int i;
     int len=G[beg].size();
-    int temp=1e9;
     wfor(i,0,len)
     {
         int v=G[beg][i];
-        if(!vis[v]&&(G[v].size()!=0||num[v]!=-1))
+        if(!vis[v])
         {
             vis[v]=1;
-            int t=dfs(v);
-            temp=min(t,temp);
+            if(maching[v]==-1||slove(maching[v]))
+            {
+                maching[v]=beg;
+                maching[beg]=v;
+                return 1;
+            }
         }
     }
-    if(num[beg]==-1)
-        num[beg]=temp;
-    return num[beg];
+    return 0;
 }
 int main()
 {
@@ -45,42 +45,49 @@ int main()
     freopen("/home/time/debug/debug/in","r",stdin);
     freopen("/home/time/debug/debug/out","w",stdout);
     #endif
-    int n;
-    cin>>n;
-    int i;
-    pre[1]=1;
-    wfor(i,1,n)
+    int n,m,x,y;
+    while(cin>>n>>m>>x>>y)
     {
-        int t;
-        cin>>t;
-        G[t].push_back(i+1);
-        pre[i+1]=t;
-    }
-    wfor(i,0,n)
-    {
-        int t;
-        cin>>t;
-        num[i+1]=t;
-    }
-    dfs(1);
-    int flag=0;
-    ans=num[1];
-    wfor(i,1,n+1)
-    {
-        if(num[i]!=-1)
+        int i;
+        wfor(i,0,n+1)
+            G[i].clear();
+        wfor(i,0,m)
         {
-            if(num[i]>=num[pre[i]])
-                ans+=num[i]-num[pre[i]];
-            else
+            int u,v;
+            cin>>u>>v;
+            G[u].push_back(v+n);
+            G[v+n].push_back(u);
+        }
+        memset(maching,-1,sizeof(maching));
+        int ans=0;
+        wfor(i,1,n+1)
+        {
+            if(maching[i]==-1)
             {
-                flag=1;
-                break;
+                memset(vis,0,sizeof(vis));
+                if(slove(i)==1)
+                    ans++;
             }
         }
+        ans*=2;
+        wfor(i,0,x)
+        {
+            int t;
+            cin>>t;
+            if(maching[t]==-1)
+                ans++;
+        }
+        wfor(i,0,y)
+        {
+            int t;
+            cin>>t;
+            if(maching[t]==-1)
+                ans++;
+        }
+        if(ans==n)
+            cout<<"YES"<<endl;
+        else
+            cout<<"NO"<<endl;
     }
-    if(flag!=1)
-        cout<<ans<<endl;
-    else
-        cout<<-1<<endl;
     return 0;
 }
