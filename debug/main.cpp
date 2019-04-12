@@ -65,11 +65,26 @@ int main()
             if(maching[i]==-1)
             {
                 memset(vis,0,sizeof(vis));
-                if(slove(i)==1)
-                    ans++;
+                slove(i);
             }
         }
-        ans*=2;
+        memset(vis,0,sizeof(vis));
+        wfor(i,1,n+1)
+        {
+            if(maching[i]!=-1)
+            {
+                if(!vis[i])
+                {
+                    ans++;
+                    vis[i]=1;
+                }
+                if(!vis[maching[i]-n])
+                {
+                    ans++;
+                    vis[maching[i]-n]=1;
+                }
+            }
+        }
         wfor(i,0,x)
         {
             int t;
