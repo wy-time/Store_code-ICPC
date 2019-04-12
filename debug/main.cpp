@@ -11,7 +11,7 @@ typedef long long ll;
 // 	for (; ch < '0' || ch > '9'; ch = getchar());
 // 	for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
 // }
-const int maxn=1005;
+const int maxn=10005;
 int vis[maxn];
 struct st
 {
