@@ -75,7 +75,7 @@ int main()
     int n,m,x,y;
     while(cin>>n>>m>>x>>y)
     {
-        set<pair<int,int>>st;
+        //set<pair<int,int>>st;
         cnt=0;
         memset(vis,0,sizeof(vis));
         memset(head,0,sizeof(head));
@@ -84,15 +84,15 @@ int main()
         {
             int u,v;
             cin>>u>>v;
-            if(st.count(make_pair(u,v))==0)
-            {
+          //  if(st.count(make_pair(u,v))==0)
+            //{
                 add(u,v);
                 add(v,u);
                 have[u]=1;
                 have[v]=1;
-                st.insert(make_pair(u,v));
-                st.insert(make_pair(v,u));
-            }
+              //  st.insert(make_pair(u,v));
+                //st.insert(make_pair(v,u));
+            //}
         }
         wfor(i,0,x)
         {
