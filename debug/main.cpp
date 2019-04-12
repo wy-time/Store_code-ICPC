@@ -1,4 +1,5 @@
 #include <iostream>
+#include <set> 
 #include <cstring> 
 #include <cstdio>
 using namespace std;
@@ -17,7 +18,7 @@ struct st
     int end;
     int next;
 };
-st edge[maxn*10];
+st edge[maxn*20];
 int head[maxn];
 int cnt;
 void add(int beg,int end)
@@ -74,6 +75,7 @@ int main()
     int n,m,x,y;
     while(cin>>n>>m>>x>>y)
     {
+        set<pair<int,int>>st;
         cnt=0;
         memset(vis,0,sizeof(vis));
         memset(head,0,sizeof(head));
@@ -82,10 +84,15 @@ int main()
         {
             int u,v;
             cin>>u>>v;
-            add(u,v);
-            add(v,u);
-            have[u]=1;
-            have[v]=1;
+            if(st.count(make_pair(u,v))==0)
+            {
+                add(u,v);
+                add(v,u);
+                have[u]=1;
+                have[v]=1;
+                st.insert(make_pair(u,v));
+                st.insert(make_pair(v,u));
+            }
         }
         wfor(i,0,x)
         {
