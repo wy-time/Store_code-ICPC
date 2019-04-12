@@ -44,7 +44,21 @@ int main()
         if(ans>=l)
             ans=ans|r;
         else
-            ans=r;
+        {
+            ans=l;
+            int high=log2(l);
+            wfor(i,high+1,62)
+            {
+                ll temp=1ll<<i;
+                ans+=temp;
+                if(ans>r)
+                {
+                    ans-=temp;
+                    break;
+                }
+            }
+            ans=ans|r;
+        }
         cout<<ans<<endl;
     }
     return 0;
