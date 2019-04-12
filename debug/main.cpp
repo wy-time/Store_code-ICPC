@@ -111,7 +111,12 @@ int main()
         {
             if (have[i] && vis[i] != -1 && vis[i] != 1)
             {
-                vis[i] = 1;
+                if (vis[i] == 0)
+                    vis[i] = 1;
+                else if (vis[i] == 2)
+                    vis[i] = 1;
+                else
+                    vis[i] = -1;
                 if (dfs(i) == 0)
                 {
                     flag = 0;
