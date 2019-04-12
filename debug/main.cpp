@@ -62,6 +62,7 @@ int dfs(int beg)
     }
     return 1;
 }
+int num[maxn];
 int main()
 {
     std::ios::sync_with_stdio(false);
@@ -79,6 +80,7 @@ int main()
         cnt = 0;
         memset(vis, 0, sizeof(vis));
         memset(head, 0, sizeof(head));
+        memset(have, 0, sizeof(have));
         int i;
         wfor(i, 0, m)
         {
@@ -94,16 +96,19 @@ int main()
                 st.insert(make_pair(v, u));
             }
         }
+        int tnum = 0;
         wfor(i, 0, x)
         {
             int t;
             cin >> t;
+            num[tnum++] = t;
             vis[t] = 2;
         }
         wfor(i, 0, y)
         {
             int t;
             cin >> t;
+            num[tnum++] = t;
             vis[t] = -2;
         }
         int flag = 1;
@@ -115,7 +120,7 @@ int main()
                     vis[i] = 1;
                 else if (vis[i] == 2)
                     vis[i] = 1;
-                else
+                else if (vis[i] == -2)
                     vis[i] = -1;
                 if (dfs(i) == 0)
                 {
@@ -136,10 +141,53 @@ int main()
             }
             if (flag)
                 cout << "YES" << endl;
-            else
+        }
+        if (flag == 0)
+        {
+            memset(vis, 0, sizeof(vis));
+            wfor(i, 0, x)
+            {
+                vis[num[i]] = 2;
+            }
+            wfor(i, x, x + y)
+            {
+                vis[num[i]] = -2;
+            }
+            int flag = 1;
+            wfor(i, 1, n + 1)
+            {
+                if (have[i] && vis[i] != -1 && vis[i] != 1)
+                {
+                    if (vis[i] == 0)
+                        vis[i] = -1;
+                    else if (vis[i] == 2)
+                        vis[i] = 1;
+                    else if (vis[i] == -2)
+                        vis[i] = -1;
+                    if (dfs(i) == 0)
+                    {
+                        flag = 0;
+                        break;
+                    }
+                }
+            }
+            if (flag)
+            {
+                wfor(i, 1, n + 1)
+                {
+                    if (vis[i] == 0)
+                    {
+                        flag = 0;
+                        break;
+                    }
+                }
+                if (flag)
+                    cout << "YES" << endl;
+                else
+                    cout << endl;
+            } else
                 cout << "NO" << endl;
-        } else
-            cout << "NO" << endl;
+        }
     }
     return 0;
 }
