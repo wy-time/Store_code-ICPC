@@ -1,7 +1,0 @@
-# depslib dependency file v1.0
-1509938495 source:f:\desktop\question\vj\da fen\main.cpp
-	<iostream>
-	<algorithm>
-	<stdlib.h>
-	<cstdio>
-

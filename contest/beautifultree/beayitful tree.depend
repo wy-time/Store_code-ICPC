@@ -1,8 +1,0 @@
-# depslib dependency file v1.0
-1524830908 source:f:\desktop\question\contest\新建文件夹\main.cpp
-	<iostream>
-
-1524835227 source:f:\desktop\question\contest\beautifultree\main.cpp
-	<iostream>
-	<algorithm>
-

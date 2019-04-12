@@ -1,7 +1,0 @@
-# depslib dependency file v1.0
-1511871310 source:f:\desktop\question\other contest\gifts\main.cpp
-	<iostream>
-	<algorithm>
-	<cstring>
-	<cstdio>
-

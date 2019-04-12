@@ -1,7 +1,0 @@
-# depslib dependency file v1.0
-1524312045 source:f:\desktop\question\contest\wen\main.cpp
-	<iostream>
-	<string>
-	<algorithm>
-	<iomanip>
-
