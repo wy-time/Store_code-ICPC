@@ -13,37 +13,27 @@ typedef long long ll;
 const int maxn=2e5+5;
 ll num[maxn];
 vector<int>G[maxn];
-int dep[maxn];
 ll ans;
 int vis[maxn];
-int dfs(int beg,ll sum)
+int pre[maxn];
+int dfs(int beg)
 {
     int i;
     int len=G[beg].size();
+    int temp=1e9;
     wfor(i,0,len)
     {
         int v=G[beg][i];
-        ll val=0;
-        if(num[v]==-1)
-            val=0;
-        else
+        if(!vis[v]&&(G[v].size()!=0||num[v]!=-1))
         {
-            val=num[v]-sum;
-            if(val<0)
-            {
-                ans=-1;
-                return 0;
-            }
-        }
-        if(!vis[v])
-        {
-            ans+=val;
             vis[v]=1;
-            if(dfs(v,max(num[v],num[beg]))==0)
-                return 0;
+            int t=dfs(v);
+            temp=min(t,temp);
         }
     }
-    return 1;
+    if(num[beg]==-1)
+        num[beg]=temp;
+    return num[beg];
 }
 int main()
 {
@@ -58,12 +48,13 @@ int main()
     int n;
     cin>>n;
     int i;
-    dep[1]=1;
+    pre[1]=1;
     wfor(i,1,n)
     {
         int t;
         cin>>t;
         G[t].push_back(i+1);
+        pre[i+1]=t;
     }
     wfor(i,0,n)
     {
@@ -71,8 +62,25 @@ int main()
         cin>>t;
         num[i+1]=t;
     }
+    dfs(1);
+    int flag=0;
     ans=num[1];
-    dfs(1,num[1]);
-    cout<<ans<<endl;
+    wfor(i,1,n+1)
+    {
+        if(num[i]!=-1)
+        {
+            if(num[i]>=num[pre[i]])
+                ans+=num[i]-num[pre[i]];
+            else
+            {
+                flag=1;
+                break;
+            }
+        }
+    }
+    if(flag!=1)
+        cout<<ans<<endl;
+    else
+        cout<<-1<<endl;
     return 0;
 }
