@@ -153,7 +153,7 @@ int main()
             {
                 vis[num[i]] = -2;
             }
-            int flag = 1;
+            flag = 1;
             wfor(i, 1, n + 1)
             {
                 if (have[i] && vis[i] != -1 && vis[i] != 1)
@@ -184,7 +184,7 @@ int main()
                 if (flag)
                     cout << "YES" << endl;
                 else
-                    cout << endl;
+                    cout <<"NO"<<endl;
             } else
                 cout << "NO" << endl;
         }
