@@ -109,7 +109,7 @@ int main()
         int flag = 1;
         wfor(i, 1, n + 1)
         {
-            if (have[i] && vis[i] == 0)
+            if (have[i] && vis[i] != -1 && vis[i] != 1)
             {
                 vis[i] = 1;
                 if (dfs(i) == 0)
