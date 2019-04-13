@@ -29,7 +29,7 @@ int main()
         int pin2 = b;
         int pin3 = c * 2;
         ll ans = 0;
-        if (pin1 <= pin3 && pin1 <= pin2)
+        if (pin1 < pin3 && pin1 < pin2)
         {
             int na = n + k;
             int nv = m + k;
@@ -46,7 +46,7 @@ int main()
                 ans += na % 2 * a;
                 ans += nv % 2 * a;
             }
-        } else if (pin2 <= pin1 && pin2 <= pin3)
+        } else if (pin2 < pin1 && pin2 < pin3)
         {
             int na = n + k;
             int nv = m + k;
@@ -80,7 +80,7 @@ int main()
                 if (nv % 3 != 0)
                     ans += min(a, b);
             }
-        } else if (pin3 <= pin1 && pin3 <= pin2)
+        } else if (pin3 < pin1 && pin3 < pin2)
         {
             ans += k * c;
             if (pin1 <= pin2)
