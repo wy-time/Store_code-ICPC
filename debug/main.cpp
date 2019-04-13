@@ -21,7 +21,7 @@ int main()
     #endif
     int n;
     cin>>n;
-    int mou[12]={31,28,31,30,31,30,31,31,30,31,30,31};
+    int mou[13]={0,31,28,31,30,31,30,31,31,30,31,30,31};
     while(n--)
     {
         int y,m,d,h,mi,s;
@@ -40,21 +40,21 @@ int main()
         {
             if(m<2)
                 ans++;
-            wfor(i,m+1,12)
+            wfor(i,m+1,13)
                 ans+=mou[i];
             if(m==2)
-                ans+=29-d-1;
+                ans+=max(29-d-1,0);
             else
-                ans+=mou[m]-d-1;
+                ans+=max(mou[m]-d-1,0);
         }else
         {
-            wfor(i,m+1,12)
+            wfor(i,m+1,13)
                 ans+=mou[i];
-            ans+=mou[m]-d-1;
+            ans+=max(mou[m]-d-1,0);
         }
         ans=ans%100*24%100*60%100*60%100;
         int temp=h*3600+mi*60+s;
-        temp=12*3600-temp;
+        temp=24*3600-temp;
         ans+=temp;
         ans%=100;
         cout<<ans<<endl;
