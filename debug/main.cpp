@@ -32,7 +32,7 @@ int main()
         int flag = 1;
         wfor(i, 0, len)
         {
-            if (s[i] != s2[i % 5])
+            if (s[i] != s2[i % 4])
             {
                 flag = 0;
                 break;
