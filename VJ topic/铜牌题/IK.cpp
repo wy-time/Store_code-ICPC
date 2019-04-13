@@ -26,40 +26,18 @@ int main()
     {
         ll l, r;
         cin >> l >> r;
-        //int high=log2(l);
         ll ans = 0;
-        ll i;
-        wfor(i, 0, 62)
+        ll cnt = 0;
+        ll temp = 1;
+        while ((ans | l) < r)
         {
-            ll temp = 1ll << i;
-            if (temp > r)
-                break;
+            temp = 1ll << cnt;
             ans += temp;
-            if (ans > r)
-            {
-                ans -= temp;
-                break;
-            }
+            cnt++;
         }
-        if (ans >= l)
-            ans = ans | r;
-        else
-        {
-            ans = l;
-            int high = log2(l);
-            wfor(i, high + 1, 62)
-            {
-                ll temp = 1ll << i;
-                ans += temp;
-                if (ans > r)
-                {
-                    ans -= temp;
-                    break;
-                }
-            }
-            ans = ans | r;
-        }
-        cout << ans << endl;
+        if ((ans | l) > r)
+            ans -= temp;
+        cout << (ans | r) << endl;
     }
     return 0;
 }
