@@ -1,5 +1,5 @@
 #include <iostream>
-#include <cmath> 
+#include <string> 
 #include <cstdio>
 using namespace std;
 typedef long long ll;
@@ -20,24 +20,28 @@ int main()
     freopen("/home/time/debug/debug/in","r",stdin);
     freopen("/home/time/debug/debug/out","w",stdout);
     #endif
-    int t;
-    cin>>t;
-    while(t--)
+    int n;
+    cin>>n;
+    string s2="2050";
+    while(n--)
     {
-        ll l,r;
-        cin>>l>>r;
-        ll ans=0;
-        int cnt=0;
-        ll temp=1;
-        while((ans|l)<r)
+        string s;
+        cin>>s;
+        int len=s.size();
+        int i;
+        int flag=1;
+        wfor(i,0,len)
         {
-            temp=1ll<<cnt;
-            ans+=temp;
-            cnt++;
+            if(s[i]!=s2[i%5])
+            {
+                flag=0;
+                break;
+            }
         }
-        if((ans|l)>r)
-            ans-=temp;
-        cout<<(ans|r)<<endl;
+        if(flag==1)
+            cout<<"Yes"<<endl;
+        else
+            cout<<"No"<<endl;
     }
     return 0;
 }
