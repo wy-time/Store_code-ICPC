@@ -1,5 +1,4 @@
 #include <iostream>
-#include <cstring> 
 #include <cstdio>
 using namespace std;
 typedef long long ll;
@@ -10,10 +9,6 @@ typedef long long ll;
 // 	for (; ch < '0' || ch > '9'; ch = getchar());
 // 	for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
 // }
-const int maxn=1e4+5;
-int num[maxn];
-int sch[maxn];
-int _get[maxn];
 int main()
 {
     std::ios::sync_with_stdio(false);
@@ -28,24 +23,79 @@ int main()
     cin>>t;
     while(t--)
     {
-        memset(_get,0,sizeof(_get));
-        memset(sch,0,sizeof(sch));
-        int n,m,k;
-        cin>>n>>m>>k;
-        int i;
-        int need=n/2;
-        wfor(i,1,n+1)
+        int n,m,k,a,b,c;
+        cin>>n>>m>>k>>a>>b>>c;
+        int pin1=a*2;
+        int pin2=b;
+        int pin3=c*2;
+        ll ans=0;
+        if(pin1<pin3&&pin1<pin2)
         {
-            cin>>num[i];
-            sch[num[i]]++;
-            if(need>=i)
-                _get[num[i]]++;
-        }
-        int ans=0;
-        wfor(i,1,m+1)
+            int na=n+k;
+            int nv=m+k;
+            ans+=na/2*a;
+            ans+=nv/2*a;
+            if(na%2!=0&&nv%2!=0)
+            {
+                if(k>=1)
+                    ans+=min(c,2*a);
+                else
+                    ans+=2*a;
+            }else
+            {
+                ans+=na%2*a;
+                ans+=nv%2*a;
+            }
+        }else if(pin2<pin1&&pin2<pin1)
         {
-            int can=sch[i]/k;
-            ans+=min(can,_get[i]);
+            int na=n+k;
+            int nv=m+k;
+            ans+=na/3*b;
+            ans+=nv/3*b;
+            if(na%3!=0&&nv%3!=0)
+            {
+                int t1=na%3;
+                int t2=nv%3;
+                if(t1==t2&&t1==2)
+                {
+                    if(k>=2)
+                        ans+=min(a*2,min(c*2,b*2));
+                    else if(k>=1)
+                    {
+                        ans+=min(a,b)*2;
+                        ans+=min(2*a,min(2*b,c));
+                    }
+                }else if(t1==t2)
+                {
+                    if(k>=1)
+                    {
+                        ans+=min(a*2,min(b*2,c));
+                    }else
+                        ans+=min(a*2,b*2);
+                }
+            }else
+            {
+                if(na%3!=0)
+                    ans+=min(a,b);
+                if(nv%3!=0)
+                    ans+=min(a,b);
+            }
+        }else if(pin3<pin1&&pin3<pin2)
+        {
+            ans+=k*c;
+            if(pin1<=pin2)
+            {
+                ans+=n/2*a;
+                ans+=n%2*a;
+                ans+=m/2*a;
+                ans+=m%2*a;
+            }else
+            {
+                ans+=n/3*b;
+                ans+=m/3*b;
+                ans+=n%3==0?0:min(a,b);
+                ans+=m%3==0?0:min(a,b);
+            }
         }
         cout<<ans<<endl;
     }
