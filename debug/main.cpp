@@ -38,6 +38,8 @@ int main()
                 break;
             }
         }
+        if (len % 4 != 0)
+            flag = 0;
         if (flag == 1)
             cout << "Yes" << endl;
         else
