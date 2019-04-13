@@ -26,14 +26,18 @@ int main()
     {
         ll l,r;
         cin>>l>>r;
-        int high=log2(r);
-        ll ans=1ll<<high;
-        if(ans-1>=l)
-            ans=ans|(ans-1);
-        else
+        ll ans=0;
+        int cnt=0;
+        ll temp=1;
+        while((ans|l)<r)
         {
-            
+            temp=1ll<<cnt;
+            ans+=temp;
+            cnt++;
         }
+        if((ans|l)>r)
+            ans-=temp;
+        cout<<(ans|r)<<endl;
     }
     return 0;
 }
