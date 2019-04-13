@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstring> 
 #include <cstdio>
 using namespace std;
 typedef long long ll;
@@ -9,9 +10,13 @@ typedef long long ll;
 // 	for (; ch < '0' || ch > '9'; ch = getchar());
 // 	for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
 // }
+const int maxn=1e4+5;
+int num[maxn];
+int sch[maxn];
+int _get[maxn];
 int main()
 {
-    //std::ios::sync_with_stdio(false);
+    std::ios::sync_with_stdio(false);
     #ifdef test
     freopen("F:\\Desktop\\question\\in.txt","r",stdin);
     #endif
@@ -19,44 +24,29 @@ int main()
     freopen("/home/time/debug/debug/in","r",stdin);
     freopen("/home/time/debug/debug/out","w",stdout);
     #endif
-    int n;
-    cin>>n;
-    int mou[13]={0,31,28,31,30,31,30,31,31,30,31,30,31};
-    while(n--)
+    int t;
+    cin>>t;
+    while(t--)
     {
-        int y,m,d,h,mi,s;
-        scanf("%d-%d-%d %d:%d:%d",&y,&m,&d,&h,&mi,&s);
+        memset(_get,0,sizeof(_get));
+        memset(sch,0,sizeof(sch));
+        int n,m,k;
+        cin>>n>>m>>k;
         int i;
-        ll ans=0;
-        wfor(i,y+1,2050)
+        int need=n/2;
+        wfor(i,1,n+1)
         {
-            if((i%4==0&&i%100!=0)||(i%400==0))
-            {
-                ans+=366;
-            }else
-                ans+=365;
+            cin>>num[i];
+            sch[num[i]]++;
+            if(need>=i)
+                _get[num[i]]++;
         }
-        if((y%4==0&&y%100!=0)||y%400==0)
+        int ans=0;
+        wfor(i,1,m+1)
         {
-            if(m<2)
-                ans++;
-            wfor(i,m+1,13)
-                ans+=mou[i];
-            if(m==2)
-                ans+=max(29-d-1,0);
-            else
-                ans+=max(mou[m]-d-1,0);
-        }else
-        {
-            wfor(i,m+1,13)
-                ans+=mou[i];
-            ans+=max(mou[m]-d-1,0);
+            int can=sch[i]/k;
+            ans+=min(can,_get[i]);
         }
-        ans=ans%100*24%100*60%100*60%100;
-        int temp=h*3600+mi*60+s;
-        temp=24*3600-temp;
-        ans+=temp;
-        ans%=100;
         cout<<ans<<endl;
     }
     return 0;
