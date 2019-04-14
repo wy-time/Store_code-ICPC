@@ -29,8 +29,14 @@ struct st
     }
     bool operator < (const st &a) const 
     {
-        if(a.chi==this->chi)
-            return a.op>this->op;
+        int temp=a.chi;
+        int temp2=chi;
+        if(temp==0)
+            return 0;
+        if(temp2==0)
+            return 1;
+        if(a.op!=this->op)
+            return a.op<this->op;
         else
             return a.chi>this->chi;
     }
