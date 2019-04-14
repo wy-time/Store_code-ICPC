@@ -1,4 +1,6 @@
 #include <iostream>
+#include <stack> 
+#include <string> 
 #include <cstdio>
 using namespace std;
 typedef long long ll;
@@ -9,9 +11,6 @@ typedef long long ll;
 // 	for (; ch < '0' || ch > '9'; ch = getchar());
 // 	for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
 // }
-int ma[105][105];
-int numf[105];
-int numl[105];
 int main()
 {
     std::ios::sync_with_stdio(false);
@@ -22,39 +21,100 @@ int main()
     freopen("/home/time/debug/debug/in","r",stdin);
     freopen("/home/time/debug/debug/out","w",stdout);
     #endif
-    int n,m,h;
-    cin>>n>>m>>h;
-    int i,j;
-    wfor(i,0,m)
+    int n;
+    cin>>n;
+    string s;
+    cin>>s;
+    if(s[0]==')'||s[n-1]=='(')
+        cout<<":("<<endl;
+    else 
     {
-        cin>>numf[i];
-    }
-    wfor(i,0,n)
-    {
-        cin>>numl[i];
-    }
-    wfor(i,0,n)
-    {
-        wfor(j,0,m)
+        string temp=s.substr(1,n-2);
+        stack<pair<char,int>>st;
+        int i;
+        int len=temp.size();
+        int flag=1;
+        wfor(i,0,len)
         {
-            cin>>ma[i][j];
+            if(st.empty())
+            {
+                if(temp[i]==')')
+                {
+                    flag=0;
+                    break;
+                }else
+                {
+                    st.push(make_pair(temp[i],i));
+                }
+            }else 
+            {
+                if(temp[i]==')')
+                {
+                    temp[i]=')';
+                    int id=st.top().second;
+                    st.pop();
+                    temp[id]='(';
+                }else
+                    st.push(make_pair(temp[i],i));
+            }
         }
-    }
-    wfor(i,0,n)
-    {
-        wfor(j,0,m)
+        if(flag)
         {
-            if(ma[i][j]==1)
-                ma[i][j]=min(numl[i],numf[j]);
+            stack<pair<char,int>>st_temp;
+            if(!st.empty())
+            {
+                while(!st.empty())
+                {
+                    pair <char,int>t_pari;
+                    t_pari=st.top();
+                    st.pop();
+                    if(st_temp.empty())
+                    {
+                        if(t_pari.first=='(')
+                        {
+                            flag=0;
+                            break;
+                        }
+                        st_temp.push(t_pari);
+                    }
+                    else
+                    {
+                        if(t_pari.first=='(')
+                        {
+                            int id=st_temp.top().second;
+                            st_temp.pop();
+                            temp[id]=')';
+                        }else
+                            st_temp.push(t_pari);
+                    }
+                }
+            }
+            if(st_temp.size()%2!=0)
+                flag=0;
+            else 
+            {
+                int tag=1;
+                while(!st_temp.empty())
+                {
+                    int id=st_temp.top().second;
+                    if(tag==1)
+                    {
+                        temp[id]='(';
+                        tag*=-1;
+                    }
+                    else
+                    {
+                        temp[id]=')';
+                        tag*=-1;
+                    }
+                    st_temp.pop();
+                }
+            }
         }
-    }
-    wfor(i,0,n)
-    {
-        wfor(j,0,m)
-        {
-            cout<<ma[i][j]<<" ";
-        }
-        cout<<endl;
+        if(flag)
+            cout<<'('<<temp<<')'<<endl;
+        else
+            cout<<":("<<endl;
     }
     return 0;
 }
