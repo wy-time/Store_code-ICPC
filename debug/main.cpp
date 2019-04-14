@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cstdio>
-#include <vector> 
+#include <set> 
+#include <algorithm> 
 using namespace std;
 typedef long long ll;
 #define wfor(i,j,k) for(i=j;i<k;++i)
@@ -13,11 +14,31 @@ typedef long long ll;
 const int maxn=3e5+5;
 const int INF=1e9;
 int op[maxn];
-vector<int>G[maxn];
+struct st
+{
+    int op;
+    int chi;
+    int id;
+    st(){
+    }
+    st(int a,int b,int c)
+    {
+        op=a;
+        chi=b;
+        id=c;
+    }
+    bool operator < (const st &a) const 
+    {
+        if(a.chi==this->chi)
+            return a.op>this->op;
+        else
+            return a.chi>this->chi;
+    }
+};
+multiset<st>G[maxn];
 int dfs(int aim,int beg,int &have)
 {
     int len=G[beg].size();
-    int i;
     if(len==0)
     {
         if(have>0)
@@ -29,9 +50,9 @@ int dfs(int aim,int beg,int &have)
     }
     if(op[beg]==1)
     {
-        wfor(i,0,len)
+        for(auto it:G[beg])
         {
-            int v=G[beg][i];
+            int v=it.id;
             int temp=have;
             int t=dfs(aim,v,have);
             if(t>=aim)
@@ -42,9 +63,9 @@ int dfs(int aim,int beg,int &have)
     }else
     {
         int maxnum=0;
-        wfor(i,0,len)
+        for(auto it:G[beg])
         {
-            int v=G[beg][i];
+            int v=it.id;
             int t=dfs(aim,v,have);
             maxnum=max(maxnum,t);
             if(t<aim)
@@ -61,6 +82,8 @@ int check(int val,int cnt)
     else
         return -1;
 }
+int chi[maxn];
+int pre[maxn];
 int main()
 {
     std::ios::sync_with_stdio(false);
@@ -83,9 +106,15 @@ int main()
     {
         int t;
         cin>>t;
+        pre[i]=t;
+        chi[t]++;
+    }
+    wfor(i,2,n+1)
+    {
+        int t=pre[i];
         if(G[t].size()==0)
             cnt--;
-        G[t].push_back(i);
+        G[t].insert(st(op[i],chi[i],i));
     }
     int l=0,r=cnt;
     while(l<=r)
