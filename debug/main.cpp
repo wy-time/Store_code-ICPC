@@ -25,7 +25,7 @@ int main()
     cin>>n;
     string s;
     cin>>s;
-    if(s[0]==')'||s[n-1]=='(')
+    if(s[0]==')'||s[n-1]=='('||n%2!=0)
         cout<<":("<<endl;
     else 
     {
