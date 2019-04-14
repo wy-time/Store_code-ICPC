@@ -9,6 +9,9 @@ typedef long long ll;
 // 	for (; ch < '0' || ch > '9'; ch = getchar());
 // 	for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
 // }
+int ma[105][105];
+int numf[105];
+int numl[105];
 int main()
 {
     std::ios::sync_with_stdio(false);
@@ -19,31 +22,39 @@ int main()
     freopen("/home/time/debug/debug/in","r",stdin);
     freopen("/home/time/debug/debug/out","w",stdout);
     #endif
-    int n,t;
-    cin>>n>>t;
-    int i;
-    int ans=1e9;
-    int res=0;
+    int n,m,h;
+    cin>>n>>m>>h;
+    int i,j;
+    wfor(i,0,m)
+    {
+        cin>>numf[i];
+    }
     wfor(i,0,n)
     {
-        int temp=t;
-        int a,b;
-        cin>>a>>b;
-        if(t>a)
+        cin>>numl[i];
+    }
+    wfor(i,0,n)
+    {
+        wfor(j,0,m)
         {
-            temp-=a;
-            if(temp%b==0)
-                temp/=b;
-            else
-                temp=temp/b+1;
-        }else
-            temp=0;
-        if(temp*b+a<ans)
-        {
-            ans=temp*b+a;
-            res=i+1;
+            cin>>ma[i][j];
         }
     }
-    cout<<res<<endl;
+    wfor(i,0,n)
+    {
+        wfor(j,0,m)
+        {
+            if(ma[i][j]==1)
+                ma[i][j]=min(numl[i],numf[j]);
+        }
+    }
+    wfor(i,0,n)
+    {
+        wfor(j,0,m)
+        {
+            cout<<ma[i][j]<<" ";
+        }
+        cout<<endl;
+    }
     return 0;
 }
