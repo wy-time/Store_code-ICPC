@@ -34,6 +34,7 @@ int main()
         int i;
         int len=temp.size();
         int flag=1;
+        int cnt=0;
         wfor(i,0,len)
         {
             if(st.empty())
@@ -50,15 +51,37 @@ int main()
             {
                 if(temp[i]==')')
                 {
-                    temp[i]=')';
-                    int id=st.top().second;
-                    st.pop();
-                    temp[id]='(';
+                    if(cnt==0)
+                    {
+                        temp[i]=')';
+                        int id=st.top().second;
+                        st.pop();
+                        temp[id]='(';
+                    }else
+                    {
+                        stack<pair<char,int>>ttt;
+                        while(st.top().first=='?')
+                        {
+                            ttt.push(st.top());
+                            st.pop();
+                        }
+                        st.pop();
+                        cnt--;
+                        while(!ttt.empty())
+                        {
+                            st.push(ttt.top());
+                            ttt.pop();
+                        }
+                    }
                 }else
+                {
                     st.push(make_pair(temp[i],i));
+                    if(temp[i]!='?')
+                        cnt++;
+                }
             }
         }
-        if(flag)
+        if(flag==1)
         {
             stack<pair<char,int>>st_temp;
             if(!st.empty())
@@ -82,6 +105,7 @@ int main()
                         if(t_pari.first=='(')
                         {
                             int id=st_temp.top().second;
+                            temp[t_pari.second]='(';
                             st_temp.pop();
                             temp[id]=')';
                         }else
