@@ -11,73 +11,75 @@ using namespace std;
 LL gcd(LL a, LL b) {return b ? gcd(b, a % b) : a;}
 LL lcm(LL a, LL b) {return a / gcd(a, b) * b;}
 LL powmod(LL a, LL b, LL MOD) {LL ans = 1; while (b) {if (b % 2)ans = ans * a % MOD; a = a * a % MOD; b /= 2;} return ans;}
-const int N = 2e5 + 11;
 string slove(string s)
 {
 	int len = s.size();
 	int i;
 	stack<char>st;
+	int flag = 0;
 	for (i = 0; i < len; i++)
 	{
+		if (flag == 3)
+		{
+			st.pop();
+			st.pop();
+			char temp = st.top();
+			st.pop();
+			if (temp == 'a')
+				st.push('b');
+			else
+				st.push('a');
+			if (s[i] == 'c')
+				flag = 0;
+			else
+				flag = 1;
+		}
 		if (st.empty())
+		{
 			st.push(s[i]);
+			if (s[i] != 'c')
+				flag = 1;
+			else
+				flag = 0;
+		}
 		else
 		{
 			if (st.top() == 'a' && s[i] == 'a')
 			{
 				st.pop();
+				flag--;
 			} else if (st.top() == 'b' && s[i] == 'b')
 			{
 				st.pop();
-			} else
-				st.push(s[i]);
-		}
-	}
-	stack<char>st2;
-	int flag = 0;
-	while (!st.empty())
-	{
-		char te = st.top();
-		st.pop();
-		if (flag == 4)
-		{
-			st2.pop();
-			st2.pop();
-			st2.pop();
-			st2.pop();
-		}
-		if (te == 'c')
-		{
-			flag = 0;
-			st2.push(te);
-		} else
-		{
-			if (flag == 4)
-			{
-				st2.push(te);
-				flag = 1;
+				flag--;
 			} else
 			{
-				if (!st2.empty())
+				if (s[i] == 'c')
 				{
-					if (st2.top() != te)
-					{
-						flag++;
-						st2.push(te);
-					}
+					flag = 0;
 				} else
-				{
 					flag++;
-					st2.push(te);
-				}
+				st.push(s[i]);
 			}
 		}
 	}
-	s = "";
-	while (!st2.empty())
+	if (flag == 3)
 	{
-		s += st2.top();
-		st2.pop();
+		st.pop();
+		st.pop();
+		char temp = st.top();
+		st.pop();
+		if (temp == 'a')
+			st.push('b');
+		else
+			st.push('a');
+		flag = 0;
+	}
+	s = "";
+	while (!st.empty())
+	{
+		s += st.top();
+		st.pop();
 	}
 	return s;
 }
@@ -101,7 +103,8 @@ int main() {
 			{
 				if (s[i] == t[i] || ((i + 1 < len1) && s[i] == t[i + 1] && s[i + 1] == t[i] && s[i] != 'c' && s[i + 1] != 'c'))
 				{
-					i++;
+					if (s[i] != t[i])
+						i++;
 				} else
 				{
 					flag = 0;
