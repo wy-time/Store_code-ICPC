@@ -47,9 +47,11 @@ string slove(string s)
 			if (st.top() == 'a' && s[i] == 'a')
 			{
 				st.pop();
+                flag--;
 			} else if (st.top() == 'b' && s[i] == 'b')
 			{
 				st.pop();
+                flag--;
 			} else
 			{
                 if(s[i]=='c')
