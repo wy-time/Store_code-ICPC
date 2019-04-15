@@ -1,136 +1,118 @@
-#include <iostream>
-#include <cstdio>
-#include <set> 
-#include <algorithm> 
+#include<bits/stdc++.h>
+
+#define LL long long
+#define fi first
+#define se second
+#define mp make_pair
+#define pb push_back
+
 using namespace std;
-typedef long long ll;
-#define wfor(i,j,k) for(i=j;i<k;++i)
-#define mfor(i,j,k) for(i=j;i>=k;--i)
-// void read(int &x) {
-// 	char ch = getchar(); x = 0;
-// 	for (; ch < '0' || ch > '9'; ch = getchar());
-// 	for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
-// }
-const int maxn=3e5+5;
-const int INF=1e9;
-int op[maxn];
-struct st
+
+LL gcd(LL a, LL b) {return b ? gcd(b, a % b) : a;}
+LL lcm(LL a, LL b) {return a / gcd(a, b) * b;}
+LL powmod(LL a, LL b, LL MOD) {LL ans = 1; while (b) {if (b % 2)ans = ans * a % MOD; a = a * a % MOD; b /= 2;} return ans;}
+const int N = 2e5 + 11;
+string slove(string s)
 {
-    int op;
-    int chi;
-    int id;
-    st(){
-    }
-    st(int a,int b,int c)
-    {
-        op=a;
-        chi=b;
-        id=c;
-    }
-    bool operator < (const st &a) const 
-    {
-        int temp=a.chi;
-        int temp2=chi;
-        if(temp==0)
-            return 0;
-        if(temp2==0)
-            return 1;
-        if(a.op!=this->op)
-            return a.op<this->op;
-        else
-            return a.chi>this->chi;
-    }
-};
-multiset<st>G[maxn];
-int dfs(int aim,int beg,int &have)
-{
-    int len=G[beg].size();
-    if(len==0)
-    {
-        if(have>0)
-        {
-            have--;
-            return INF;
-        }else
-            return -1;
-    }
-    if(op[beg]==1)
-    {
-        for(auto it:G[beg])
-        {
-            int v=it.id;
-            int temp=have;
-            int t=dfs(aim,v,have);
-            if(t>=aim)
-                return t;
-            have=temp;
-        }
-        return -1;
-    }else
-    {
-        int maxnum=0;
-        for(auto it:G[beg])
-        {
-            int v=it.id;
-            int t=dfs(aim,v,have);
-            maxnum=max(maxnum,t);
-            if(t<aim)
-                return -1;
-        }
-        return maxnum;
-    }
+	int len = s.size();
+	int i;
+	stack<char>st;
+	for (i = 0; i < len; i++)
+	{
+		if (st.empty())
+			st.push(s[i]);
+		else
+		{
+			if (st.top() == 'a' && s[i] == 'a')
+			{
+				st.pop();
+			} else if (st.top() == 'b' && s[i] == 'b')
+			{
+				st.pop();
+			} else
+				st.push(s[i]);
+		}
+	}
+	stack<char>st2;
+	int flag = 0;
+	while (!st.empty())
+	{
+		char te = st.top();
+		st.pop();
+		if (flag == 4)
+		{
+			st2.pop();
+			st2.pop();
+			st2.pop();
+			st2.pop();
+		}
+		if (te == 'c')
+		{
+			flag = 0;
+			st2.push(te);
+		} else
+		{
+			if (flag == 4)
+			{
+				st2.push(te);
+				flag = 1;
+			} else
+			{
+				if (!st2.empty())
+				{
+					if (st2.top() != te)
+					{
+						flag++;
+						st2.push(te);
+					}
+				} else
+				{
+					flag++;
+					st2.push(te);
+				}
+			}
+		}
+	}
+	s = "";
+	while (!st2.empty())
+	{
+		s += st2.top();
+		st2.pop();
+	}
+	return s;
 }
-int check(int val,int cnt)
-{
-    int have=cnt-val+1;
-    if(dfs(val,1,have)!=-1)
-        return 1;
-    else
-        return -1;
-}
-int chi[maxn];
-int pre[maxn];
-int main()
-{
-    std::ios::sync_with_stdio(false);
-    #ifdef test
-    freopen("F:\\Desktop\\question\\in.txt","r",stdin);
-    #endif
-    #ifdef ubuntu
-    freopen("/home/time/debug/debug/in","r",stdin);
-    freopen("/home/time/debug/debug/out","w",stdout);
-    #endif
-    int n;
-    cin>>n;
-    int i;
-    wfor(i,1,n+1)
-    {
-        cin>>op[i];
-    }
-    int cnt=n;
-    wfor(i,2,n+1)
-    {
-        int t;
-        cin>>t;
-        pre[i]=t;
-        chi[t]++;
-    }
-    wfor(i,2,n+1)
-    {
-        int t=pre[i];
-        if(G[t].size()==0)
-            cnt--;
-        G[t].insert(st(op[i],chi[i],i));
-    }
-    int l=0,r=cnt;
-    while(l<=r)
-    {
-        int mid=(l+r)>>1;
-        if(check(mid,cnt)==1)
-            l=mid+1;
-        else
-            r=mid-1;
-    }
-    cout<<r<<endl;
-    return 0;
+int main() {
+	ios::sync_with_stdio(false);
+	string s;
+	while (cin >> s)
+	{
+		string t;
+		cin >> t;
+		s = slove(s);
+		t = slove(t);
+		int len1 = s.size();
+		int len2 = t.size();
+		if (len1 != len2)
+			cout << "No" << endl;
+		else
+		{
+			int flag = 1;
+			for (int i = 0; i < len1; i++)
+			{
+				if (s[i] == t[i] || ((i + 1 < len1) && s[i] == t[i + 1] && s[i + 1] == t[i] && s[i] != 'c' && s[i + 1] != 'c'))
+				{
+                    i++;
+				} else
+				{
+					flag = 0;
+					break;
+				}
+			}
+			if (flag == 1)
+				cout << "Yes" << endl;
+			else
+				cout << "No" << endl;
+		}
+	}
+	return 0;
 }
