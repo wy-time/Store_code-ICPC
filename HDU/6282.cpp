@@ -99,8 +99,9 @@ int main() {
 			int flag = 1;
 			for (int i = 0; i < len1; i++)
 			{
-				if (s[i] == t[i] || ((i + 1 < len1) && s[i] == t[i + 1] && s[i + 1] == t[i] && s[i] != 'c' && t[i + 1] != 'c'))
+				if (s[i] == t[i] || ((i + 1 < len1) && s[i] == t[i + 1] && s[i + 1] == t[i] && s[i] != 'c' && s[i + 1] != 'c'))
 				{
+					i++;
 				} else
 				{
 					flag = 0;
