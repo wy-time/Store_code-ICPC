@@ -1,121 +1,105 @@
-#include<bits/stdc++.h>
-
-#define LL long long
-#define fi first
-#define se second
-#define mp make_pair
-#define pb push_back
-
+#include <iostream>
+#include <cmath> 
+#include <cstring> 
+#include <vector> 
+#include <cstdio>
 using namespace std;
-
-LL gcd(LL a, LL b) {return b ? gcd(b, a % b) : a;}
-LL lcm(LL a, LL b) {return a / gcd(a, b) * b;}
-LL powmod(LL a, LL b, LL MOD) {LL ans = 1; while (b) {if (b % 2)ans = ans * a % MOD; a = a * a % MOD; b /= 2;} return ans;}
-string slove(string s)
+typedef long long ll;
+#define wfor(i,j,k) for(i=j;i<k;++i)
+#define mfor(i,j,k) for(i=j;i>=k;--i)
+// void read(int &x) {
+// 	char ch = getchar(); x = 0;
+// 	for (; ch < '0' || ch > '9'; ch = getchar());
+// 	for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
+// }
+struct st
 {
-	int len = s.size();
-	int i;
-	stack<char>st;
-	int flag = 0;
-	for (i = 0; i < len; i++)
-	{
-        if(flag==3)
-        {
-            st.pop();
-            st.pop();
-            char temp=st.top();
-            st.pop();
-            if(temp=='a')
-                st.push('b');
-            else
-                st.push('a');
-            if(s[i]=='c')
-                flag=0;
-            else
-                flag=1;
-        }
-		if (st.empty())
-		{
-			st.push(s[i]);
-            if(s[i]!='c')
-                flag=1;
-            else
-                flag=0;
-		}
-		else
-		{
-			if (st.top() == 'a' && s[i] == 'a')
-			{
-				st.pop();
-                flag--;
-			} else if (st.top() == 'b' && s[i] == 'b')
-			{
-				st.pop();
-                flag--;
-			} else
-			{
-                if(s[i]=='c')
-                {
-                    flag=0;
-                }else
-                    flag++;
-                st.push(s[i]);
-			}
-		}
-	}
-    if(flag==3)
+    int first;
+    int second;
+    st(){}
+    st(int a,int b)
     {
-        st.pop();
-        st.pop();
-        char temp=st.top();
-        st.pop();
-        if(temp=='a')
-            st.push('b');
-        else
-            st.push('a');
-        flag=0;
+        first=a;
+        second=b;
     }
-	s = "";
-	while (!st.empty())
-	{
-		s += st.top();
-		st.pop();
-	}
-	return s;
-}
-int main() {
-	ios::sync_with_stdio(false);
-	string s;
-	while (cin >> s)
-	{
-		string t;
-		cin >> t;
-		s = slove(s);
-		t = slove(t);
-		int len1 = s.size();
-		int len2 = t.size();
-		if (len1 != len2)
-			cout << "No" << endl;
-		else
-		{
-			int flag = 1;
-			for (int i = 0; i < len1; i++)
-			{
-				if (s[i] == t[i] || ((i + 1 < len1) && s[i] == t[i + 1] && s[i + 1] == t[i] && s[i] != 'c' && s[i + 1] != 'c'))
-				{
-                    if(s[i]!=t[i])
-                        i++;
-				} else
-				{
-					flag = 0;
-					break;
-				}
-			}
-			if (flag == 1)
-				cout << "Yes" << endl;
-			else
-				cout << "No" << endl;
-		}
-	}
-	return 0;
+    bool operator <(const st a)const
+    {
+        return first<a.first;
+    }
+};
+vector<st>v;
+int leng[2005];
+int main()
+{
+    std::ios::sync_with_stdio(false);
+    #ifdef test
+    freopen("F:\\Desktop\\question\\in.txt","r",stdin);
+    #endif
+    #ifdef ubuntu
+    freopen("/home/time/debug/debug/in","r",stdin);
+    freopen("/home/time/debug/debug/out","w",stdout);
+    #endif
+    int t;
+    cin>>t;
+    while(t--)
+    {
+        v.clear();
+        memset(leng,0,sizeof(leng));
+        int num[105]={0};
+        int n;
+        cin>>n;
+        int i;
+        wfor(i,0,n)
+        {
+            cin>>num[i];
+        }
+        int maxnum=0;
+        wfor(i,0,n)
+        {
+            int j;
+            int temp=num[i];
+            leng[temp]=max(leng[temp],1);
+            maxnum=max(maxnum,temp);
+            wfor(j,i+1,n)
+            {
+                temp^=num[j];
+                leng[temp]=max(leng[temp],j-i+1);
+                maxnum=max(maxnum,temp);
+            }
+        }
+        wfor(i,0,maxnum+1)
+        {
+            if(leng[i]!=0)
+            {
+                v.push_back(st(i,leng[i]));
+            }
+        }
+        int m;
+        cin>>m;
+        while(m--)
+        {
+            int x;
+            cin>>x;
+            int pos=lower_bound(v.begin(),v.end(),st(x,1))-v.begin();
+            if(pos==v.size())
+                pos--;
+            else if(pos==0)
+                pos++;
+            if(v[pos].first==x)
+                cout<<v[pos].second<<endl;
+            else
+            {
+                if(abs(v[pos].first-x)<abs(v[pos-1].first-x))
+                    cout<<v[pos].second<<endl;
+                else if(abs(v[pos].first-x)>abs(v[pos-1].first-x))
+                    cout<<v[pos-1].second<<endl;
+                else
+                {
+                    cout<<max(v[pos].second,v[pos-1].second)<<endl;
+                }
+            }
+        }
+        cout<<endl;
+    }
+    return 0;
 }
