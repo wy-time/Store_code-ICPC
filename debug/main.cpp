@@ -17,10 +17,30 @@ string slove(string s)
 	int len = s.size();
 	int i;
 	stack<char>st;
+	int flag = 0;
 	for (i = 0; i < len; i++)
 	{
+        if(flag==3)
+        {
+            st.pop();
+            st.pop();
+            char temp=st.top();
+            st.pop();
+            if(temp=='a')
+                st.push('b');
+            else
+                st.push('a');
+            if(s[i]=='c')
+                flag=0;
+            else
+                flag=1;
+        }
 		if (st.empty())
+		{
 			st.push(s[i]);
+            if(s[i]!='c')
+                flag++;
+		}
 		else
 		{
 			if (st.top() == 'a' && s[i] == 'a')
@@ -30,54 +50,33 @@ string slove(string s)
 			{
 				st.pop();
 			} else
-				st.push(s[i]);
-		}
-	}
-	stack<char>st2;
-	int flag = 0;
-	while (!st.empty())
-	{
-		char te = st.top();
-		st.pop();
-		if (flag == 4)
-		{
-			st2.pop();
-			st2.pop();
-			st2.pop();
-			st2.pop();
-		}
-		if (te == 'c')
-		{
-			flag = 0;
-			st2.push(te);
-		} else
-		{
-			if (flag == 4)
 			{
-				st2.push(te);
-				flag = 1;
-			} else
-			{
-				if (!st2.empty())
-				{
-					if (st2.top() != te)
-					{
-						flag++;
-						st2.push(te);
-					}
-				} else
-				{
-					flag++;
-					st2.push(te);
-				}
+                if(s[i]=='c')
+                {
+                    flag=0;
+                }else
+                    flag++;
+                st.push(s[i]);
 			}
 		}
 	}
+    if(flag==3)
+    {
+        st.pop();
+        st.pop();
+        char temp=st.top();
+        st.pop();
+        if(temp=='a')
+            st.push('b');
+        else
+            st.push('a');
+        flag=0;
+    }
 	s = "";
-	while (!st2.empty())
+	while (!st.empty())
 	{
-		s += st2.top();
-		st2.pop();
+		s += st.top();
+		st.pop();
 	}
 	return s;
 }
@@ -101,7 +100,8 @@ int main() {
 			{
 				if (s[i] == t[i] || ((i + 1 < len1) && s[i] == t[i + 1] && s[i + 1] == t[i] && s[i] != 'c' && s[i + 1] != 'c'))
 				{
-                    i++;
+                    if(s[i]!=t[i])
+                        i++;
 				} else
 				{
 					flag = 0;
