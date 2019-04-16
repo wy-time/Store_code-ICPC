@@ -1,7 +1,6 @@
 #include <iostream>
 #include <cmath>
 #include <cstring>
-#include <vector>
 #include <cstdio>
 using namespace std;
 typedef long long ll;
@@ -27,8 +26,8 @@ struct st
         return first < a.first;
     }
 };
-vector<st>v;
 int leng[2005];
+st v[10005];
 int main()
 {
     std::ios::sync_with_stdio(false);
@@ -43,7 +42,7 @@ int main()
     cin >> t;
     while (t--)
     {
-        v.clear();
+        int cnt = 0;
         memset(leng, 0, sizeof(leng));
         int num[105] = {0};
         int n;
@@ -71,7 +70,7 @@ int main()
         {
             if (leng[i] != 0)
             {
-                v.push_back(st(i, leng[i]));
+                v[cnt++] = st(i, leng[i]);
             }
         }
         int m;
@@ -80,8 +79,8 @@ int main()
         {
             int x;
             cin >> x;
-            int pos = lower_bound(v.begin(), v.end(), st(x, 1)) - v.begin();
-            if (pos == v.size())
+            int pos = lower_bound(v, v + cnt, st(x, 1)) - v;
+            if (pos == cnt)
                 pos--;
             else if (pos == 0)
                 pos++;
