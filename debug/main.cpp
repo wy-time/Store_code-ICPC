@@ -84,7 +84,10 @@ int main()
             if (pos == cnt)
                 pos--;
             else if (pos == 0)
-                pos++;
+            {
+                cout<<v[pos].second<<endl;
+                continue;
+            }
             if (abs(v[pos].first - x) < abs(v[pos - 1].first - x))
                 cout << v[pos].second << endl;
             else if (abs(v[pos].first - x) > abs(v[pos - 1].first - x))
