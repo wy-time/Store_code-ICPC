@@ -82,9 +82,9 @@ int main()
         if (sum[pos] == n)
         {
             x = 1;
-            ans = fac[pos + x - 1] * inv[x - 1];
-            ans /= pos;
+            ans = fac[pos + x - 2] * inv[x - 1];
             ans *= (pos + 1);
+            ans%=mod;
         } else
         {
             x = 1e9;
