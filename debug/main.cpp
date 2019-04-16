@@ -82,10 +82,13 @@ int main()
             cin >> x;
             int pos = upper_bound(v, v + cnt, st(x, 1)) - v;
             if (pos == cnt)
-                pos--;
+            {
+                cout << v[pos - 1].second << endl;
+                continue;
+            }
             else if (pos == 0)
             {
-                cout<<v[pos].second<<endl;
+                cout << v[pos].second << endl;
                 continue;
             }
             if (abs(v[pos].first - x) < abs(v[pos - 1].first - x))
