@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string> 
 #include <cstdio>
 using namespace std;
 typedef long long ll;
@@ -19,14 +20,24 @@ int main()
     freopen("/home/time/debug/debug/in","r",stdin);
     freopen("/home/time/debug/debug/out","w",stdout);
     #endif
-    int t;
-    cin>>t;
-    while(t--)
+    int n;
+    cin>>n;
+    while(n--)
     {
+        string s;
+        cin>>s;
+        int len=s.size();
+        int i;
         ll ans=0;
-        ll a,b;
-        cin>>a>>b;
-        ans=max(a,b)*2+min(a,b);
+        wfor(i,0,len)
+        {
+            if(s[i]=='H')
+                ans+=1;
+            else if(s[i]=='C')
+                ans+=12;
+            else
+                ans+=16;
+        }
         cout<<ans<<endl;
     }
     return 0;
