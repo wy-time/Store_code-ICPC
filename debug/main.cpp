@@ -105,8 +105,8 @@ int main()
             fix %= (pos - 2);
             ans = fac[pos - 1 - fix + temp] * inv[1 + temp] % mod;
             ans = ans % mod * fac[pos + temp] % mod * inv[pos + temp - fix] % mod;
-            if(N>pos-2)
-                ans=tans;
+            if (N > pos - 2)
+                ans = tans;
         }
         // cout << ans % mod << endl;
         printf("%lld\n", ans % mod);
