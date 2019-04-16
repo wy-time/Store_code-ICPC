@@ -53,8 +53,8 @@ int main()
     freopen("F:\\Desktop\\question\\in.txt", "r", stdin);
 #endif
 #ifdef ubuntu
-    freopen("/home/time/debug/debug/in", "r", stdin);
-    freopen("/home/time/debug/debug/out", "w", stdout);
+    //freopen("/home/time/debug/debug/in", "r", stdin);
+    //freopen("/home/time/debug/debug/out", "w", stdout);
 #endif
     int t;
     cin >> t;
@@ -66,6 +66,10 @@ int main()
         if (n == 1)
         {
             cout << 1 << endl;
+            continue;
+        } else if (n == 2)
+        {
+            cout << 2 << endl;
             continue;
         }
         int pos = lower_bound(sum + 1, sum + 1 + maxn, n) - sum;
@@ -84,20 +88,20 @@ int main()
             ll cha;
             cha = sum[pos] - n;
             int fixpos = lower_bound(sum + 1, sum + 1 + maxn, cha) - sum;
+            ll tans = 0;
             if (sum[fixpos] == cha)
             {
                 x = fixpos + 1;
                 N = pos - x + 1;
-                ans = fac[x + N - 1] * inv[x - 1] % mod;
-            } else
-            {
-                cha = n - sum[pos - 1];
-                ll fix = cha + 1;
-                int temp = fix / (pos - 2);
-                fix %= (pos - 2);
-                ans = fac[pos - 1 - fix + temp] * inv[pos - 2 - fix + temp] % mod;
-                ans = ans % mod * fac[pos + temp] % mod * inv[pos + temp - fix] % mod;
+                tans = fac[x + N - 1] * inv[x - 1] % mod;
             }
+            cha = n - sum[pos - 1];
+            ll fix = cha + 1;
+            int temp = fix / (pos - 2);
+            fix %= (pos - 2);
+            ans = fac[pos - 1 - fix + temp] * inv[1 + temp] % mod;
+            ans = ans % mod * fac[pos + temp] % mod * inv[pos + temp - fix] % mod;
+            ans = max(tans, ans);
         }
         cout << ans % mod << endl;
     }
