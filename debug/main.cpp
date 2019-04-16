@@ -1,4 +1,5 @@
 #include <iostream>
+#include <algorithm> 
 #include <cmath> 
 #include <cstring> 
 #include <cstdio>
@@ -79,23 +80,18 @@ int main()
         {
             int x;
             cin>>x;
-            int pos=lower_bound(v,v+cnt,st(x,1))-v;
+            int pos=upper_bound(v,v+cnt,st(x,1))-v;
             if(pos==cnt)
                 pos--;
             else if(pos==0)
                 pos++;
-            if(v[pos].first==x)
+            if(abs(v[pos].first-x)<abs(v[pos-1].first-x))
                 cout<<v[pos].second<<endl;
+            else if(abs(v[pos].first-x)>abs(v[pos-1].first-x))
+                cout<<v[pos-1].second<<endl;
             else
             {
-                if(abs(v[pos].first-x)<abs(v[pos-1].first-x))
-                    cout<<v[pos].second<<endl;
-                else if(abs(v[pos].first-x)>abs(v[pos-1].first-x))
-                    cout<<v[pos-1].second<<endl;
-                else
-                {
-                    cout<<max(v[pos].second,v[pos-1].second)<<endl;
-                }
+                cout<<max(v[pos].second,v[pos-1].second)<<endl;
             }
         }
         cout<<endl;
