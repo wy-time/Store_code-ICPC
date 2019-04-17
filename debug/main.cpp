@@ -1,5 +1,4 @@
 #include <iostream>
-#include <iomanip> 
 #include <cmath> 
 #include <cstdio>
 using namespace std;
@@ -11,7 +10,10 @@ typedef long long ll;
 // 	for (; ch < '0' || ch > '9'; ch = getchar());
 // 	for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
 // }
-const double PI=acos(-1.0);
+int gcd(int a,int b)
+{
+    return b==0?a:gcd(b,a%b);
+}
 int main()
 {
     std::ios::sync_with_stdio(false);
@@ -22,18 +24,28 @@ int main()
     freopen("/home/time/debug/debug/in","r",stdin);
     freopen("/home/time/debug/debug/out","w",stdout);
     #endif
-    int n,d;
-    while(cin>>n>>d)
+    int a,b;
+    while(cin>>a>>b)
     {
-        int i;
-        double ans=0;
-        wfor(i,0,n)
+        int x=1;
+        int l=max(0,(int)ceil((-1.0*a+sqrt(1.0*a*a-4.0*b+0.5))/(-2.0)));
+        int r=floor((-1.0*a-sqrt(1.0*a*a-4.0*b+0.5))/(-2.0));
+        int flag=0;
+        wfor(x,l,r+1)
         {
-            int t;
-            cin>>t;
-            ans+=1.0*d*d*sin(1.0*t/180.0*PI)/2;
+            if(a-x<x)
+                break;
+            int n=gcd(a,x);
+            if(x*(a-x)==n*b)
+            {
+                flag=1;
+                break;
+            }
         }
-        cout<<fixed<<setprecision(3)<<ans<<endl;
+        if(flag==0)
+            cout<<"No Solution"<<endl;
+        else 
+            cout<<x<<" "<<a-x<<endl;
     }
     return 0;
 }
