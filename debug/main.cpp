@@ -1,4 +1,6 @@
 #include <iostream>
+#include <iomanip> 
+#include <cmath> 
 #include <cstdio>
 using namespace std;
 typedef long long ll;
@@ -9,6 +11,7 @@ typedef long long ll;
 // 	for (; ch < '0' || ch > '9'; ch = getchar());
 // 	for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
 // }
+const double PI=acos(-1.0);
 int main()
 {
     std::ios::sync_with_stdio(false);
@@ -19,16 +22,18 @@ int main()
     freopen("/home/time/debug/debug/in","r",stdin);
     freopen("/home/time/debug/debug/out","w",stdout);
     #endif
-    int n;
-    while(cin>>n)
+    int n,d;
+    while(cin>>n>>d)
     {
-        n+=1;
-        if(n%2==1)
-            cout<<1<<endl;
-        else
+        int i;
+        double ans=0;
+        wfor(i,0,n)
         {
-            cout<<0<<endl;
+            int t;
+            cin>>t;
+            ans+=1.0*d*d*sin(1.0*t/180.0*PI)/2;
         }
+        cout<<fixed<<setprecision(3)<<ans<<endl;
     }
     return 0;
 }
