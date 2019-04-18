@@ -1,5 +1,6 @@
 #include <iostream>
 #include <algorithm> 
+#include <set> 
 #include <cstdio>
 using namespace std;
 typedef long long ll;
@@ -10,6 +11,7 @@ typedef long long ll;
 // 	for (; ch < '0' || ch > '9'; ch = getchar());
 // 	for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
 // }
+int num[1005];
 int main()
 {
     std::ios::sync_with_stdio(false);
@@ -20,18 +22,52 @@ int main()
     freopen("/home/time/debug/debug/in","r",stdin);
     freopen("/home/time/debug/debug/out","w",stdout);
     #endif
-    int num[4]={0};
+    int n;
+    cin>>n;
     int i;
-    wfor(i,0,4)
+    set<int>v;
+    wfor(i,0,n)
     {
         cin>>num[i];
     }
-    sort(num,num+4,greater<int>());
-    int maxnum=num[0];
-    int a=0,b=0,c=0;
-    a=maxnum-num[1];
-    b=maxnum-num[2];
-    c=maxnum-num[3];
-    cout<<a<<" "<<b<<" "<<c<<" "<<endl;
+    sort(num,num+n);
+    int last=num[0];
+    int ans=-1;
+    int flag=1;
+    int cnt=0;
+    wfor(i,1,n)
+    {
+        int temp=num[i]-last;
+        if(temp!=0)
+        {
+           if(ans==-1)
+               ans=temp;
+           else if(ans==temp)
+               ans=temp;
+           else
+           {
+               flag=0;
+               break;
+           }
+           cnt++;
+        }
+        last=num[i];
+    }
+    if(flag&&ans==-1)
+        ans=0;
+    if(flag)
+    {
+        if(cnt>=2)
+            cout<<ans<<endl;
+        else
+        {
+            if(ans%2==0)
+                cout<<ans/2<<endl;
+            else
+                cout<<ans<<endl;
+        }
+    }
+    else
+        cout<<-1<<endl;
     return 0;
 }
