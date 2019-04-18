@@ -5,53 +5,73 @@ using namespace std;
 typedef long long ll;
 #define wfor(i,j,k) for(i=j;i<k;++i)
 #define mfor(i,j,k) for(i=j;i>=k;--i)
-inline bool read(ll &x) {
-    char ch = getchar(); x = 0;
-    if (ch == EOF) return false;
-    for (; ch < '0' || ch > '9'; ch = getchar());
-    for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
-    return true;
-}
-inline int gcd(int a, int b)
+// void read(int &x) {
+//  char ch = getchar(); x = 0;
+//  for (; ch < '0' || ch > '9'; ch = getchar());
+//  for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
+// }
+ll gcd(ll a, ll b)
 {
     return b == 0 ? a : gcd(b, a % b);
 }
 int main()
 {
-//     std::ios::sync_with_stdio(false);
-// #ifdef test
-//     freopen("F:\\Desktop\\question\\in.txt", "r", stdin);
-// #endif
-// #ifdef ubuntu
-//     freopen("/home/time/debug/debug/in", "r", stdin);
-//     freopen("/home/time/debug/debug/out", "w", stdout);
-// #endif
-    register ll a, b;
-    while (read(a) && read(b))
+    std::ios::sync_with_stdio(false);
+#ifdef test
+    freopen("F:\\Desktop\\question\\in.txt", "r", stdin);
+#endif
+#ifdef ubuntu
+    freopen("/home/time/debug/debug/in", "r", stdin);
+    freopen("/home/time/debug/debug/out", "w", stdout);
+#endif
+    ll a, b;
+    while (cin >> a >> b)
     {
-        register ll x = 1;
-        register int l = max(0, (int)ceil((-1.0 * a + sqrt(1.0 * a * a - 4.0 * b + 0.5)) / (-2.0)));
-        register int r = floor((-1.0 * a - sqrt(1.0 * a * a - 4.0 * b + 0.5)) / (-2.0));
         int flag = 0;
-        ++r;
-        wfor(x, l, r)
+        ll i;
+        ll x, y;
+        for (i = 2; i * i <= a; i++)
         {
-            if (a - x < x)
-                break;
-            ll n = gcd(a, x);
-            if (x * (a - x) == n * b)
+            if (a % i == 0)
             {
-                flag = 1;
-                break;
-            } else
-            {}
+                ll c = i * b;
+                if (a * a - 4 * c >= 0)
+                {
+                    ll dealt = floor(sqrt(1.0 * a * a - 4 * c + 0.5));
+                    if (dealt * dealt == (a * a - 4 * c))
+                    {
+                        x = (-a - dealt) / (-2);
+                        y = a - x;
+                        if (gcd(x, y) != i)
+                            continue;
+                        flag = 1;
+                        break;
+                    }
+                }
+                if (i * i != a)
+                {
+                    c = (a / i) * b;
+                    if (a * a - 4 * c >= 0)
+                    {
+                        ll dealt = floor(sqrt(1.0 * a * a - 4 * c + 0.5));
+                        if (dealt * dealt == (a * a - 4 * c))
+                        {
+                            x = (-a - dealt) / (-2);
+                            y = a - x;
+                            if (gcd(x, y) != (a / i))
+                                continue;
+                            flag = 1;
+                            break;
+                        }
+                    }
+                }
+            }
         }
-        if (flag == 0)
-            // cout << "No Solution" << endl;
-            printf("No Solution\n");
-        else
-            // cout << x << " " << a - x << endl;
-            printf("%lld %lld\n", x, a - x);
+        if (flag == 1)
+        {
+            cout << x << " " << y << endl;
+        } else
+            cout << "No Solution" << endl;
     }
     return 0;
 }
