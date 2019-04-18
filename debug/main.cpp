@@ -28,43 +28,21 @@ int main()
     while (cin >> a >> b)
     {
         int flag = 0;
-        ll i;
         ll x, y;
-        for (i = 1; i * i <= a; i++)
+        ll g=gcd(a,b);
+        b*=g;
+        if (a * a - 4ll * b >= 0)
         {
-            if (a % i == 0)
+            ll dealt = floor(sqrt(1.0 * a * a - 4 * b + 0.5));
+            if (dealt * dealt == (a * a - 4 * b))
             {
-                ll c = i * b;
-                if (a * a - 4 * c >= 0)
+                if((a-dealt)%2!=0||(a+dealt)%2!=0)
                 {
-                    ll dealt = floor(sqrt(1.0 * a * a - 4 * c + 0.5));
-                    if (dealt * dealt == (a * a - 4 * c))
-                    {
-                        x = (-a - dealt) / (-2);
-                        y = a - x;
-                        if (gcd(x, y) != i)
-                            continue;
-                        flag = 1;
-                        break;
-                    }
+                    continue;
                 }
-                if (i * i != a)
-                {
-                    c = (a / i) * b;
-                    if (a * a - 4 * c >= 0)
-                    {
-                        ll dealt = floor(sqrt(1.0 * a * a - 4 * c + 0.5));
-                        if (dealt * dealt == (a * a - 4 * c))
-                        {
-                            x = (-a - dealt) / (-2);
-                            y = a - x;
-                            if (gcd(x, y) != (a / i))
-                                continue;
-                            flag = 1;
-                            break;
-                        }
-                    }
-                }
+                x = (a - dealt) / (2);
+                y=(a+dealt)/2;
+                flag = 1;
             }
         }
         if (flag == 1)
