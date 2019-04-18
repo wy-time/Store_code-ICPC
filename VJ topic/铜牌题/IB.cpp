@@ -30,7 +30,7 @@ int main()
         int flag = 0;
         ll i;
         ll x, y;
-        for (i = 2; i * i <= a; i++)
+        for (i = 1; i * i <= a; i++)
         {
             if (a % i == 0)
             {
