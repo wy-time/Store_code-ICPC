@@ -1,4 +1,5 @@
 #include <iostream>
+#include <algorithm> 
 #include <cstdio>
 using namespace std;
 typedef long long ll;
@@ -19,22 +20,18 @@ int main()
     freopen("/home/time/debug/debug/in","r",stdin);
     freopen("/home/time/debug/debug/out","w",stdout);
     #endif
-    int n;
-    cin>>n;
+    int num[4]={0};
     int i;
-    int temp=255;
-    int cnt=0;
-    wfor(i,0,n)
+    wfor(i,0,4)
     {
-        ll t;
-        cin>>t;
-        while(t)
-        {
-            if((t&temp)==97)
-                cnt++;
-            t>>=8;
-        }
+        cin>>num[i];
     }
-    cout<<cnt<<endl;
+    sort(num,num+4,greater<int>());
+    int maxnum=num[0];
+    int a=0,b=0,c=0;
+    a=maxnum-num[1];
+    b=maxnum-num[2];
+    c=maxnum-num[3];
+    cout<<a<<" "<<b<<" "<<c<<" "<<endl;
     return 0;
 }
