@@ -1,17 +1,14 @@
 #include <iostream>
-#include <algorithm> 
-#include <set> 
 #include <cstdio>
 using namespace std;
 typedef long long ll;
 #define wfor(i,j,k) for(i=j;i<k;++i)
 #define mfor(i,j,k) for(i=j;i>=k;--i)
-// void read(int &x) {
+// void read(ll &x) {
 // 	char ch = getchar(); x = 0;
 // 	for (; ch < '0' || ch > '9'; ch = getchar());
 // 	for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
 // }
-int num[1005];
 int main()
 {
     std::ios::sync_with_stdio(false);
@@ -22,61 +19,57 @@ int main()
     freopen("/home/time/debug/debug/in","r",stdin);
     freopen("/home/time/debug/debug/out","w",stdout);
     #endif
-    int n;
-    cin>>n;
-    int i;
-    set<int>v;
-    wfor(i,0,n)
+    ll a,b,c;
+    ll change[7][3]=
     {
-        cin>>num[i];
-    }
-    sort(num,num+n);
-    int pos=unique(num,num+n)-num;
-    int last=num[0];
-    int ans=-1;
-    int flag=1;
-    int cnt=0;
-    int ff=0;
-    wfor(i,1,pos)
+        {-1,0,0},
+        {0,-1,0},
+        {0,0,-1},
+        {-1,0,0},
+        {0,0,-1},
+        {0,-1,0},
+        {-1,0,0}
+    };
+    cin>>a>>b>>c;
+    ll i;
+    ll ans=0;
+    wfor(i,0,7)
     {
-        int temp=num[i]-last;
-        if(temp!=0)
+        ll tans=0;
+        ll j;
+        ll a1=a;
+        ll b1=b;
+        ll c1=c;
+        wfor(j,i,7)
         {
-           cnt++;
-           if(ans==-1)
-           {
-               ans=temp;
-               ff++;
-           }
-           else if(ans==temp&&ff<2)
-           {
-               ff++;
-               ans=temp;
-           }
-           else
-           {
-               flag=0;
-               break;
-           }
-        }else
-            ff=0;
-        last=num[i];
-    }
-    if(flag&&ans==-1)
-        ans=0;
-    if(flag)
-    {
-        if(cnt>=2)
-            cout<<ans<<endl;
-        else
-        {
-            if(ans%2==0)
-                cout<<ans/2<<endl;
-            else
-                cout<<ans<<endl;
+            a1+=change[j][0];
+            b1+=change[j][1];
+            c1+=change[j][2];
+            if(a1<0||b1<0||c1<0)
+                break;
+            tans++;
         }
+        if(a1<0||b1<0||c1<0)
+        {
+            ans=max(tans,ans);
+            continue;
+        }
+        ll week=min(a1/3,min(b1/2,c1/2));
+        tans+=week*7;
+        a1-=3*week;
+        b1-=2*week;
+        c1-=2*week;
+        wfor(j,0,7)
+        {
+            a1+=change[j][0];
+            b1+=change[j][1];
+            c1+=change[j][2];
+            if(a1<0||b1<0||c1<0)
+                break;
+            tans++;
+        }
+        ans=max(tans,ans);
     }
-    else
-        cout<<-1<<endl;
+    cout<<ans<<endl;
     return 0;
 }
