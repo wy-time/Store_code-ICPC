@@ -31,26 +31,35 @@ int main()
         cin>>num[i];
     }
     sort(num,num+n);
+    int pos=unique(num,num+n)-num;
     int last=num[0];
     int ans=-1;
     int flag=1;
     int cnt=0;
-    wfor(i,1,n)
+    int ff=0;
+    wfor(i,1,pos)
     {
         int temp=num[i]-last;
         if(temp!=0)
         {
+           cnt++;
            if(ans==-1)
+           {
                ans=temp;
-           else if(ans==temp)
+               ff++;
+           }
+           else if(ans==temp&&ff<2)
+           {
+               ff++;
                ans=temp;
+           }
            else
            {
                flag=0;
                break;
            }
-           cnt++;
-        }
+        }else
+            ff=0;
         last=num[i];
     }
     if(flag&&ans==-1)
