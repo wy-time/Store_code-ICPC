@@ -1,14 +1,55 @@
 #include <iostream>
+#include <vector> 
+#include <cstring> 
 #include <cstdio>
 using namespace std;
 typedef long long ll;
 #define wfor(i,j,k) for(i=j;i<k;++i)
 #define mfor(i,j,k) for(i=j;i>=k;--i)
-// void read(ll &x) {
+// void read(int &x) {
 // 	char ch = getchar(); x = 0;
 // 	for (; ch < '0' || ch > '9'; ch = getchar());
 // 	for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
 // }
+const int maxn=1005;
+int vis[105];
+int ma[105][105];
+vector<int>G[105];
+int ans[105];
+int anscnt;
+int res=0;
+void dfs(int beg,int aim,int step,int pos)
+{
+    int len=G[beg].size();
+    int i;
+    if(aim==step)
+    {
+        res++;
+    }
+    wfor(i,pos,len)
+    {
+        int v=G[beg][i];
+        if(!vis[v])
+        {
+            int j;
+            int flag=1;
+            wfor(j,0,anscnt)
+            {
+                if(ma[ans[j]][v]==0)
+                {
+                    flag=0;
+                    break;
+                }
+            }
+            if(flag==1)
+            {
+                ans[anscnt++]=v;
+                dfs(beg,aim,step+1,i+1);
+                anscnt--;
+            }
+        }
+    }
+}
 int main()
 {
     std::ios::sync_with_stdio(false);
@@ -19,57 +60,34 @@ int main()
     freopen("/home/time/debug/debug/in","r",stdin);
     freopen("/home/time/debug/debug/out","w",stdout);
     #endif
-    ll a,b,c;
-    ll change[7][3]=
+    int t;
+    cin>>t;
+    while(t--)
     {
-        {-1,0,0},
-        {0,-1,0},
-        {0,0,-1},
-        {-1,0,0},
-        {0,0,-1},
-        {0,-1,0},
-        {-1,0,0}
-    };
-    cin>>a>>b>>c;
-    ll i;
-    ll ans=0;
-    wfor(i,0,7)
-    {
-        ll tans=0;
-        ll j;
-        ll a1=a;
-        ll b1=b;
-        ll c1=c;
-        wfor(j,i,7)
+        memset(ma,0,sizeof(ma));
+        memset(vis,0,sizeof(vis));
+        res=0;
+        int n,m,s;
+        cin>>n>>m>>s;
+        int i;
+        wfor(i,1,105)
+            G[i].clear();
+        wfor(i,0,m)
         {
-            a1+=change[j][0];
-            b1+=change[j][1];
-            c1+=change[j][2];
-            if(a1<0||b1<0||c1<0)
-                break;
-            tans++;
+            int u,v;
+            cin>>u>>v;
+            G[u].push_back(v);
+            G[v].push_back(u);
+            ma[u][v]=1;
+            ma[v][u]=1;
         }
-        if(a1<0||b1<0||c1<0)
+        wfor(i,1,n+1)
         {
-            ans=max(tans,ans);
-            continue;
+            anscnt=0;
+            dfs(i,s-1,0,0);
+            vis[i]=1;
         }
-        ll week=min(a1/3,min(b1/2,c1/2));
-        tans+=week*7;
-        a1-=3*week;
-        b1-=2*week;
-        c1-=2*week;
-        wfor(j,0,7)
-        {
-            a1+=change[j][0];
-            b1+=change[j][1];
-            c1+=change[j][2];
-            if(a1<0||b1<0||c1<0)
-                break;
-            tans++;
-        }
-        ans=max(tans,ans);
+        cout<<res<<endl;
     }
-    cout<<ans<<endl;
     return 0;
 }
