@@ -1,70 +1,77 @@
-#include<bits/stdc++.h>
- 
-#define LL long long
-#define fi first
-#define se second
-#define mp make_pair
-#define pb push_back
- 
+#include <iostream>
+#include <cstdio>
 using namespace std;
- 
-LL gcd(LL a,LL b){return b?gcd(b,a%b):a;}
-LL lcm(LL a,LL b){return a/gcd(a,b)*b;}
-LL powmod(LL a,LL b,LL MOD){LL ans=1;while(b){if(b%2)ans=ans*a%MOD;a=a*a%MOD;b/=2;}return ans;}
-const int N = 1e6 +11;
-LL n,a[N],b[N],l[N],r[N];
-LL top=0,s[N];
-int main(){
-    ios::sync_with_stdio(false);
-    cin>>n;
-    for(int i=1;i<=n;i++)cin>>a[i];
-    // for(int i=1;i<=n;i++)a[i]=1;
-    for(int i=1;i<=n;i++)b[i]=a[i];
-    for(int i=1;i<=n;i++)a[i]+=a[i-1];
-    for(int i=1;i<=n;i++){
-        while(top&&b[s[top]]>=b[i])top--;
-        if(!top)l[i]=0;
-        else l[i]=s[top];
-        s[++top]=i;
-    }
-    top=0;
-    for(int i=n;i>=1;i--){
-        while(top&&b[s[top]]>=b[i])top--;
-        if(!top)r[i]=n;
-        else r[i]=s[top]-1;
-        s[++top]=i;
-    }
-    LL ans=0;
-    for(int i=1;i<=n;i++)
+typedef long long ll;
+#define wfor(i,j,k) for(i=j;i<k;++i)
+#define mfor(i,j,k) for(i=j;i>=k;--i)
+// void read(int &x) {
+// 	char ch = getchar(); x = 0;
+// 	for (; ch < '0' || ch > '9'; ch = getchar());
+// 	for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
+// }
+const int maxn=1e5+5;
+int num[maxn];
+int main()
+{
+    std::ios::sync_with_stdio(false);
+    #ifdef test
+    freopen("F:\\Desktop\\question\\in.txt","r",stdin);
+    #endif
+    #ifdef ubuntu
+    freopen("/home/time/debug/debug/in","r",stdin);
+    freopen("/home/time/debug/debug/out","w",stdout);
+    #endif
+    int t;
+    cin>>t;
+    while(t--)
     {
-        if(b[i]>0)
-            ans=max(ans,1ll*b[i]*(a[r[i]]-a[l[i]]));
-        else
+        int n;
+        cin>>n;
+        int i;
+        wfor(i,1,n+1)
         {
-            LL temp=b[i];
-            int j;
-            LL ts=b[i];
-            LL tempr=b[i];
-            for(j=i-1;j>l[i];j--)
+            cin>>num[i];
+        }
+        int q;
+        cin>>q;
+        while(q--)
+        {
+            ll ans=0;
+            int l,r;
+            cin>>l>>r;
+            int len=r-l+1;
+            if(len%4==0)
             {
-                ts+=b[j];
-                temp=min(ts,temp);
-            }
-            ts=b[i];
-            for(j=i+1;j<=r[i];j++)
+                ans=0;
+            }else if(len%4==1)
             {
-                ts+=b[j];
-                tempr=min(tempr,ts);
-            }
-            if(temp<0&&tempr<0)
+                ans=num[l];
+                for(i=l+4;i<=r;i+=4)
+                    ans^=num[i];
+            }else if(len%4==2)
             {
-                ans=max(ans,(temp+tempr-b[i])*b[i]);
+                ans=num[l];
+                if(len>1)
+                    ans^=num[l+1];
+                for(i=l+4;i<=r;i+=4)
+                {
+                    ans^=num[i];
+                    if(i+1<=r)
+                        ans^=num[i+1];
+                }
             }else
             {
-                ans=max(ans,min(temp,tempr)*b[i]);
+                if(len>1)
+                {
+                    ans=num[l+1];
+                    for(i=l+1+4;i<=r;i+=4)
+                    {
+                        ans^=num[i];
+                    }
+                }
             }
+            cout<<ans<<endl;
         }
-    }   
-    cout<<ans<<endl;
+    }
     return 0;
 }
