@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstring> 
 #include <cstdio>
 using namespace std;
 typedef long long ll;
@@ -27,6 +28,7 @@ int main()
     scanf("%d", &t);
     while (t--)
     {
+        memset(sum1,0,sizeof(sum1));
         sum1[0][0]=sum1[1][0]=sum1[2][0]=sum1[3][0]=0;
         int n;
         scanf("%d", &n);
@@ -104,6 +106,7 @@ int main()
             // cout << ans << endl;
             printf("%lld\n", ans);
         }
+        cout<<endl;
     }
     return 0;
 }
