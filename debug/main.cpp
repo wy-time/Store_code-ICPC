@@ -1,139 +1,110 @@
 #include <iostream>
-#include <cstring>
-#include <string>
 #include <cstdio>
 using namespace std;
 typedef long long ll;
 #define wfor(i,j,k) for(i=j;i<k;++i)
 #define mfor(i,j,k) for(i=j;i>=k;--i)
-// void read(ll &x) {
-//  char ch = getchar(); x = 0;
-//  for (; ch < '0' || ch > '9'; ch = getchar());
-//  for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
+// void read(int &x) {
+// 	char ch = getchar(); x = 0;
+// 	for (; ch < '0' || ch > '9'; ch = getchar());
+// 	for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
 // }
-ll ma[2][10005];
-const ll mod = 100000007;
-ll slove (string s, ll temp)
+const int maxn=50005;
+int tree[maxn<<2];
+int num[maxn];
+void push_up(int now)
 {
-    ll i;
-    ll len = s.size();
-    ll num;
-    wfor(i, 1, len)
+    tree[now]=tree[now<<1]+tree[now<<1|1];
+}
+void build(int l,int r,int now)
+{
+    if(l==r)
     {
-        num = s[i] - '0';
-        ll have = ma[0][i] + ma[0][i - 1] + ma[1][i] + ma[1][i - 1];
-        ll need = num - have;
-        if (need < 0 || 2 < need || (i == len - 1 && need != 0))
-        {
-            temp = 0;
-            break;
-        }
-        if (need == 1)
-        {
-            ma[0][i + 1] = 1;
-            temp *= 2ll;
-            temp %= mod;
-        } else if (need == 2)
-        {
-            ma[0][i + 1] = 1;
-            ma[1][i + 1] = 1;
-        }
+        tree[now]=num[l];
+        return;
     }
-    memset(ma, 0, sizeof(ma));
-    return temp % mod;
+    int mid=(l+r)>>1;
+    build(l,mid,now<<1);
+    build(mid+1,r,now<<1|1);
+    push_up(now);
+}
+void update(int l,int r,int now,int number,int pos)
+{
+    if(l==r)
+    {
+        tree[now]+=number;
+        return ;
+    }
+    int mid=(l+r)>>1;
+    if(pos<=mid)
+        update(l,mid,now<<1,number,pos);
+    else
+        update(mid+1,r,now<<1|1,number,pos);
+    push_up(now);
+}
+int query(int l,int r,int now,int L,int R)
+{
+    if(l>=L&&r<=R)
+    {
+        return tree[now];
+    }
+    int ans=0;
+    int mid=(l+r)>>1;
+    if(mid>=L)
+        ans+=query(l,mid,now<<1,L,R);
+    if(mid<R)
+        ans+=query(mid+1,r,now<<1|1,L,R);
+    return ans;
 }
 int main()
 {
     std::ios::sync_with_stdio(false);
-// #ifdef test
-//     freopen("F:\\Desktop\\question\\in.txt", "r", stdin);
-// #endif
-// #ifdef ubuntu
-//     freopen("/home/time/debug/debug/in", "r", stdin);
-//     freopen("/home/time/debug/debug/out", "w", stdout);
-// #endif
-    ll t;
-    cin >> t;
-    while (t--)
+    #ifdef test
+    freopen("F:\\Desktop\\question\\in.txt","r",stdin);
+    #endif
+    #ifdef ubuntu
+    freopen("/home/time/debug/debug/in","r",stdin);
+    freopen("/home/time/debug/debug/out","w",stdout);
+    #endif
+    int t;
+    cin>>t;
+    int casecnt=0;
+    while(t--)
     {
-        memset(ma, 0, sizeof(ma));
-        string s;
-        cin >> s;
-        int len = s.size();
-        ll ans = 0;
-        if (s[0] - '0' <= 2)
+        casecnt++;
+        cout<<"Case "<<casecnt<<":"<<endl;
+        int n;
+        cin>>n;
+        int i;
+        wfor(i,1,n+1)
         {
-            ll num = s[0] - '0';
-            ll temp = 1;
-            if (num == 1)
-            {
-                ma[0][1] = 1;
-                temp = 2;
-            } else if (num == 2)
-            {
-                temp = 1;
-                ma[0][1] = 1;
-                ma[1][1] = 1;
-            }
-            if (len == 1 && num != 0)
-            {
-                temp = 0;
-            }
-            ans += slove(s, temp);
+            cin>>num[i];
         }
-        if (s[0] - '0' <= 3 && s[0] - '0' >= 1)
+        build(1,n,1);
+        char op[10];
+        while(cin>>op)
         {
-            ll num = s[0] - '0';
-            ll temp = 1;
-            if (num == 3)
+            if(op[0]=='A')
             {
-                ma[0][1] = 1;
-                ma[1][1] = 1;
-                ma[0][0] = 1;
-                temp = 2;
-            } else if (num == 2)
+                int number,pos;
+                cin>>pos>>number;
+                update(1,n,1,number,pos);
+            }else if(op[0]=='S')
             {
-                ma[0][0] = 1;
-                ma[0][1] = 1;
-                temp = 4;
-            } else if (num == 1)
+                int number,pos;
+                cin>>pos>>number;
+                update(1,n,1,-number,pos);
+            }else if(op[0]=='Q')
             {
-                ma[0][0] = 1;
-                temp = 2;
+                int l,r;
+                cin>>l>>r;
+                int ans=query(1,n,1,l,r);
+                cout<<ans<<endl;
+            }else
+            {
+                break;
             }
-            if (num >= 2 && len == 1)
-            {
-                temp = 0;
-            }
-            ans += slove(s, temp);
-            ans %= mod;
         }
-        if (s[0] - '0' <= 4 && s[0] - '0' >= 2)
-        {
-            ll num = s[0] - '0';
-            ll temp = 1;
-            ma[0][0] = 1;
-            ma[1][0] = 1;
-            if (num == 2)
-            {
-                temp = 1;
-            } else if (num == 3)
-            {
-                ma[0][1] = 1;
-                temp = 2;
-            } else if (num == 4)
-            {
-                ma[0][1] = ma[1][1] = 1;
-                temp = 1;
-            }
-            if (num >= 3 && len == 1)
-            {
-                temp = 0;
-            }
-            ans += slove(s, temp);
-            ans %= mod;
-        }
-        cout << ans << endl;
     }
     return 0;
 }
