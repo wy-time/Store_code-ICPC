@@ -1,5 +1,4 @@
 #include <iostream>
-#include <vector>
 #include <cstdio>
 using namespace std;
 typedef long long ll;
@@ -19,7 +18,6 @@ struct st
 st edge[maxn * 2];
 int head[maxn];
 int cnt;
-int deg[maxn];
 int vis[maxn];
 void add(int beg, int end)
 {
@@ -28,72 +26,41 @@ void add(int beg, int end)
     head[beg] = cnt;
 }
 int ans;
-vector<int>v;
-int slove(int beg, int step, int sum)
+int dfn[maxn];
+int father[maxn];
+void dfs(int beg)
 {
     int i;
-    int sta;
-    if (step != 0)
+    for (i = head[beg]; i; i = edge[i].next)
     {
-        vector<int>po;
-        for (i = head[beg]; i; i = edge[i].next)
+        int v = edge[i].end;
+        if (!dfn[v])
         {
-            int v = edge[i].end;
-            if (!vis[v])
-            {
-                if (deg[v] == 1)
-                {
-                    vis[v] = 1;
-                    sum++;
-                } else
-                {
-                    po.push_back(v);
-                }
-            }
-        }
-        if (sum % 2 != 0)
-        {
-            for (auto it : po)
-            {
-                vis[it] = 1;
-                sta = slove(it, step + 1, sum);
-                if (sta == 1)
-                {
-                    ans += po.size() - 1;
-                    for (auto it2 : po)
-                    {
-                        if (deg[it2] == 1 && it2 != it)
-                        {
-                            v.push_back(it2);
-                        }
-                    }
-                    return 1;
-                }
-                vis[it] = 0;
-            }
-        } else
-        {
-            ans += po.size();
-            for (auto it : po)
-            {
-                deg[it]--;
-                if (deg[it] == 1)
-                {
-                    v.push_back(it);
-                }
-            }
-            return 1;
-        }
-    } else
-    {
-        for (i = head[beg]; i; i = edge[i].next)
-        {
-            int v = edge[i].end;
-            vis[v] = 1;
-            slove(v, step + 1, 2);
+            dfn[v] = dfn[beg] + 1;
+            father[v] = beg;
+            dfs(v);
         }
     }
-    return 0;
+}
+int slove(int beg, int sum)
+{
+    int i;
+    vis[beg] = 1;
+    sum++;
+    for (i = head[beg]; i; i = edge[i].next)
+    {
+        int v = edge[i].end;
+        if (!vis[v] && dfn[v] > dfn[beg])
+        {
+            sum += slove(v, 0);
+        }
+    }
+    if (sum % 2 == 0)
+    {
+        if (father[beg] != beg)
+            ans++;
+    }
+    return sum;
 }
 int main()
 {
@@ -114,30 +81,16 @@ int main()
         cin >> u >> k;
         add(u, k);
         add(k, u);
-        deg[u]++;
-        deg[k]++;
     }
     if (n % 2 != 0)
     {
         cout << -1 << endl;
     } else
     {
-        wfor(i, 1, n + 1)
-        {
-            if (deg[i] == 1)
-                v.push_back(i);
-        }
-        int len = v.size();
-        wfor(i, 0, len)
-        {
-            int it = v[i];
-            if (!vis[it])
-            {
-                vis[it] = 1;
-                slove(it, 0, 0);
-            }
-            len = v.size();
-        }
+        dfn[1] = 1;
+        father[1] = 1;
+        dfs(1);
+        slove(1, 0);
         cout << ans << endl;
     }
     return 0;
