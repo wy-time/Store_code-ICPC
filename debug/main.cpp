@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector> 
 #include <cstdio>
 using namespace std;
 typedef long long ll;
@@ -9,67 +10,90 @@ typedef long long ll;
 // 	for (; ch < '0' || ch > '9'; ch = getchar());
 // 	for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
 // }
-const int maxn=100005;
-int num[maxn];
-ll tree[maxn<<2];
-ll add[maxn<<2];
-void push_up(int id)
+const int maxn=1e5+5;
+struct st
 {
-    tree[id]=tree[id<<1]+tree[id<<1|1];
+    int end;
+    int next;
+};
+st edge[maxn*2];
+int head[maxn];
+int cnt;
+int deg[maxn];
+int vis[maxn];
+void add(int beg,int end)
+{
+    edge[++cnt].next=head[beg];
+    edge[cnt].end=end;
+    head[beg]=cnt;
 }
-void build(int l,int r,int id)
+int ans;
+vector<int>v;
+int slove(int beg,int step,int sum)
 {
-    if(l==r)
+    int i;
+    int sta;
+    if(step!=0)
     {
-        tree[id]=num[l];
-        return ;
-    }
-    int mid=(l+r)>>1;
-    build(l,mid,id<<1);
-    build(mid+1,r,id<<1|1);
-    push_up(id);
-}
-void push_down(int id,int ln,int rn)
-{
-    if(add[id]!=0)
+        vector<int>po;
+        for(i=head[beg];i;i=edge[i].next)
+        {
+            int v=edge[i].end;
+            if(!vis[v])
+            {
+                if(deg[v]==1)
+                {
+                    vis[v]=1;
+                    sum++;
+                }else
+                {
+                    po.push_back(v);
+                }
+            }
+        }
+        if(sum%2!=0)
+        {
+            for(auto it:po)
+            {
+                vis[it]=1;
+                sta=slove(it,step+1,sum);
+                if(sta==1)
+                {
+                    ans+=po.size()-1;
+                    for(auto it2:po)
+                    {
+                        if(deg[it2]==1&&it2!=it)
+                        {
+                            v.push_back(it2);
+                        }
+                    }
+                    return 1;
+                }
+                vis[it]=0;
+            }
+        }else
+        {
+            ans+=po.size();
+            for(auto it:po)
+            {
+                deg[it]--;
+                if(deg[it]==1)
+                {
+                    v.push_back(it);
+                }
+            }
+            return 1;
+        }
+    }else
     {
-        tree[id<<1]+=add[id]*(ll)ln;
-        tree[id<<1|1]+=add[id]*(ll)rn;
-        add[id<<1]+=add[id];
-        add[id<<1|1]+=add[id];
-        add[id]=0;
+        for(i=head[beg];i;i=edge[i].next)
+        {
+            int v=edge[i].end;
+            vis[v]=1;
+            slove(v,step+1,2);
+        }
     }
-}
-void update(int l,int r,int L,int R,int id,ll number)
-{
-    if(l>=L&&r<=R)
-    {
-        tree[id]+=number*(ll)(r-l+1);
-        add[id]+=number;
-        return ;
-    }
-    int mid=(l+r)>>1;
-    push_down(id,mid-l+1,r-mid);
-    if(mid>=L)
-        update(l,mid,L,R,id<<1,number);
-    if(mid<R)
-        update(mid+1,r,L,R,id<<1|1,number);
-    push_up(id);
-}
-ll query(int l,int r,int L,int R,int id)
-{
-    if(l>=L&&r<=R)
-    {
-        return tree[id];
-    }
-    ll ans=0;
-    int mid=(l+r)>>1;
-    push_down(id,mid-l+1,r-mid);
-    if(mid>=L)
-        ans+=query(l,mid,L,R,id<<1);
-    if(mid<R)
-        ans+=query(mid+1,r,L,R,id<<1|1);
-    return ans;
+    return 0;
 }
 int main()
 {
@@ -81,31 +105,40 @@ int main()
     freopen("/home/time/debug/debug/in","r",stdin);
     freopen("/home/time/debug/debug/out","w",stdout);
     #endif
-    int n,q;
-    cin>>n>>q;
+    int n;
+    cin>>n;
     int i;
-    wfor(i,1,n+1)
+    wfor(i,1,n)
     {
-        cin>>num[i];
+        int u,k;
+        cin>>u>>k;
+        add(u,k);
+        add(k,u);
+        deg[u]++;
+        deg[k]++;
     }
-    build(1,n,1);
-    wfor(i,0,q)
+    if(n%2!=0)
     {
-        char op;
-        cin>>op;
-        if(op=='Q')
+        cout<<-1<<endl;
+    }else
+    {
+        wfor(i,1,n+1)
         {
-            int l,r;
-            cin>>l>>r;
-            ll ans=query(1,n,l,r,1);
-            cout<<ans<<endl;
-        }else
-        {
-            int l,r;
-            ll number;
-            cin>>l>>r>>number;
-            update(1,n,l,r,1,number);
+            if(deg[i]==1)
+                v.push_back(i);
         }
+        int len=v.size();
+        wfor(i,0,len)
+        {
+            int it=v[i];
+            if(!vis[it])
+            {
+                vis[it]=1;
+                slove(it,0,0);
+            }
+            len=v.size();
+        }
+        cout<<ans<<endl;
     }
     return 0;
 }
