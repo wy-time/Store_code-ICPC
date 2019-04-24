@@ -9,37 +9,37 @@ typedef long long ll;
 //  for (; ch < '0' || ch > '9'; ch = getchar());
 //  for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
 // }
-const int maxn = 50005;
-int tree[maxn << 2];
+const int maxn = 200005;
 int num[maxn];
+int tree[maxn << 2];
 void push_up(int now)
 {
-    tree[now] = tree[now << 1] + tree[now << 1 | 1];
+    tree[now] = max(tree[now << 1], tree[now << 1 | 1]);
 }
 void build(int l, int r, int now)
 {
     if (l == r)
     {
         tree[now] = num[l];
-        return;
+        return ;
     }
     int mid = (l + r) >> 1;
     build(l, mid, now << 1);
     build(mid + 1, r, now << 1 | 1);
     push_up(now);
 }
-void update(int l, int r, int now, int number, int pos)
+void update(int l, int r, int now, int id, int number)
 {
     if (l == r)
     {
-        tree[now] += number;
+        tree[now] = number;
         return ;
     }
     int mid = (l + r) >> 1;
-    if (pos <= mid)
-        update(l, mid, now << 1, number, pos);
+    if (id <= mid)
+        update(l, mid, now << 1, id, number);
     else
-        update(mid + 1, r, now << 1 | 1, number, pos);
+        update(mid + 1, r, now << 1 | 1, id, number);
     push_up(now);
 }
 int query(int l, int r, int now, int L, int R)
@@ -51,9 +51,9 @@ int query(int l, int r, int now, int L, int R)
     int ans = 0;
     int mid = (l + r) >> 1;
     if (mid >= L)
-        ans += query(l, mid, now << 1, L, R);
+        ans = max(ans, query(l, mid, now << 1, L, R));
     if (mid < R)
-        ans += query(mid + 1, r, now << 1 | 1, L, R);
+        ans = max(ans, query(mid + 1, r, now << 1 | 1, L, R));
     return ans;
 }
 int main()
@@ -66,35 +66,20 @@ int main()
 //     freopen("/home/time/debug/debug/in", "r", stdin);
 //     freopen("/home/time/debug/debug/out", "w", stdout);
 // #endif
-    int t;
-    cin >> t;
-    int casecnt = 0;
-    while (t--)
+    int n, m;
+    while (cin >> n >> m)
     {
-        casecnt++;
-        cout << "Case " << casecnt << ":" << endl;
-        int n;
-        cin >> n;
         int i;
         wfor(i, 1, n + 1)
         {
             cin >> num[i];
         }
         build(1, n, 1);
-        char op[10];
-        while (cin >> op)
+        wfor(i, 0, m)
         {
-            if (op[0] == 'A')
-            {
-                int number, pos;
-                cin >> pos >> number;
-                update(1, n, 1, number, pos);
-            } else if (op[0] == 'S')
-            {
-                int number, pos;
-                cin >> pos >> number;
-                update(1, n, 1, -number, pos);
-            } else if (op[0] == 'Q')
+            char op;
+            cin >> op;
+            if (op == 'Q')
             {
                 int l, r;
                 cin >> l >> r;
@@ -102,7 +87,9 @@ int main()
                 cout << ans << endl;
             } else
             {
-                break;
+                int id, number;
+                cin >> id >> number;
+                update(1, n, 1, id, number);
             }
         }
     }
