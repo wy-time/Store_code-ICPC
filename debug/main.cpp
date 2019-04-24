@@ -1,4 +1,7 @@
 #include <iostream>
+#include <set> 
+#include <cstring> 
+#include <algorithm> 
 #include <cstdio>
 using namespace std;
 typedef long long ll;
@@ -9,58 +12,54 @@ typedef long long ll;
 // 	for (; ch < '0' || ch > '9'; ch = getchar());
 // 	for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
 // }
-const int maxn=1e5+5;
+const int maxn=100005;
 struct st
 {
-    int end;
-    int next;
+    int l;
+    int r;
 };
-st edge[maxn*2];
-int head[maxn];
-int cnt;
-int vis[maxn];
-void add(int beg,int end)
+st num[maxn];
+int temp[maxn*2];
+int tree[maxn];
+int taget[maxn];
+void push_down(int id)
 {
-    edge[++cnt].next=head[beg];
-    edge[cnt].end=end;
-    head[beg]=cnt;
-}
-int ans;
-int dfn[maxn];
-int father[maxn];
-void dfs(int beg)
-{
-    int i;
-    for(i=head[beg];i;i=edge[i].next)
+    if(taget[id])
     {
-        int v=edge[i].end;
-        if(!dfn[v])
-        {
-            dfn[v]=dfn[beg]+1;
-            father[v]=beg;
-            dfs(v);
-        }
+        tree[id<<1]=taget[id];
+        tree[id<<1|1]=taget[id];
+        taget[id<<1]=taget[id<<1|1]=taget[id];
+        taget[id]=0;
     }
 }
-int slove(int beg,int sum)
+void updata(int l,int r,int L,int R,int number,int id)
 {
-    int i;
-    vis[beg]=1;
-    sum++;
-    for(i=head[beg];i;i=edge[i].next)
+    if(l>=L&&r<=R)
     {
-        int v=edge[i].end;
-        if(!vis[v]&&dfn[v]>dfn[beg])
-        {
-            sum+=slove(v,0);
-        }
+        tree[id]=number;
+        taget[id]=number;
     }
-    if(sum%2==0)
+    push_down(id);
+    int mid=(l+r)>>1;
+    if(mid>=L)
+        updata(l,mid,L,R,number,id<<1);
+    if(mid<r)
+        updata(mid+1,r,L,R,number,id<<1|1);
+}
+int query(int l,int r,int pos,int id)
+{
+    if(l==r)
     {
-        if(father[beg]!=beg)
-            ans++;
+        return tree[l];
     }
-    return sum;
+    push_down(id);
+    int mid=(l+r)>>1;
+    int ans=0;
+    if(mid>=pos)
+        ans=query(l,mid,pos,id<<1);
+    else
+        ans=query(mid+1,r,pos,id<<1|1);
+    return ans;
 }
 int main()
 {
@@ -72,26 +71,37 @@ int main()
     freopen("/home/time/debug/debug/in","r",stdin);
     freopen("/home/time/debug/debug/out","w",stdout);
     #endif
-    int n;
-    cin>>n;
-    int i;
-    wfor(i,1,n)
+    int t;
+    cin>>t;
+    while(t--)
     {
-        int u,k;
-        cin>>u>>k;
-        add(u,k);
-        add(k,u);
-    }
-    if(n%2!=0)
-    {
-        cout<<-1<<endl;
-    }else
-    {
-        dfn[1]=1;
-        father[1]=1;
-        dfs(1);
-        slove(1,0);
-        cout<<ans<<endl;
+        memset(tree,0,sizeof(tree));
+        int n;
+        cin>>n;
+        int i;
+        int cnt=0;
+        wfor(i,0,n)
+        {
+            cin>>num[i].l>>num[i].r;
+            temp[cnt++]=num[i].l;
+            temp[cnt++]=num[i].r;
+        }
+        sort(temp,temp+cnt);
+        unique(temp,temp+cnt);
+        wfor(i,0,n)
+        {
+            num[i].l=lower_bound(temp,temp+cnt,num[i].l)-temp;
+            num[i].r=lower_bound(temp,temp+cnt,num[i].r)-temp;
+            updata(1,2*n+5,num[i].l+1,num[i].r+1,i+1,1);
+        }
+        set<int>st;
+        wfor(i,1,2*n+5)
+        {
+            int t=query(1,2*n+5,i,1);
+            if(t!=0)
+                st.insert(t);
+        }
+        cout<<st.size()<<endl;
     }
     return 0;
 }
