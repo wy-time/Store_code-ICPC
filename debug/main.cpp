@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cmath> 
 #include <cstdio>
 using namespace std;
 typedef long long ll;
@@ -9,40 +10,19 @@ typedef long long ll;
 // 	for (; ch < '0' || ch > '9'; ch = getchar());
 // 	for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
 // }
-const int maxn=50005;
-int tree[maxn<<2][2];
+int bit[33];
+void init()
+{
+    int i;
+    wfor(i,0,32)
+    {
+        bit[i]=1<<i;
+    }
+}
+const int maxn=5e3+5;
 int num[maxn];
-void push_up(int id)
-{
-    tree[id][0]=max(tree[id<<1][0],tree[id<<1|1][0]);
-    tree[id][1]=min(tree[id<<1][1],tree[id<<1|1][1]);
-}
-void build(int l,int r,int id)
-{
-    if(l==r)
-    {
-        tree[id][0]=tree[id][1]=num[l];
-        return ;
-    }
-    int mid=(l+r)>>1;
-    build(l,mid,id<<1);
-    build(mid+1,r,id<<1|1);
-    push_up(id);
-}
-void query(int l,int r,int L,int R,int id,int &x,int &y)
-{
-    if(l>=L&&r<=R)
-    {
-        x=max(x,tree[id][0]);
-        y=min(y,tree[id][1]);
-        return ;
-    }
-    int mid=(l+r)>>1;
-    if(mid>=L)
-        query(l,mid,L,R,id<<1,x,y);
-    if(mid<R)
-        query(mid+1,r,L,R,id<<1|1,x,y);
-}
+int maxnum[maxn][30];
+int minnum[maxn][30];
 int main()
 {
     std::ios::sync_with_stdio(false);
@@ -56,17 +36,37 @@ int main()
     int n,q;
     cin>>n>>q;
     int i;
+    init();
     wfor(i,1,n+1)
     {
         cin>>num[i];
     }
-    build(1,n,1);
+    int j;
+    int en=log2(n);
+    wfor(i,1,n+1)
+    {
+        maxnum[i][0]=num[i];
+        minnum[i][0]=num[i];
+    }
+    wfor(j,1,en+2)
+    {
+        wfor(i,1,n+1)
+        {
+            if(i+bit[j-1]<=n)
+            {
+                maxnum[i][j]=max(maxnum[i][j-1],maxnum[i+bit[j-1]][j-1]);
+                minnum[i][j]=min(minnum[i][j-1],minnum[i+bit[j-1]][j-1]);
+            }
+        }
+    }
     wfor(i,0,q)
     {
         int l,r;
         cin>>l>>r;
-        int x=0,y=1e8;
-        query(1,n,l,r,1,x,y);
+        int len=r-l+1;
+        int t=log2(len);
+        int x=max(maxnum[l][t],maxnum[r-bit[t]+1][t]);
+        int y=min(minnum[l][t],minnum[r-bit[t]+1][t]);
         cout<<x-y<<endl;
     }
     return 0;
