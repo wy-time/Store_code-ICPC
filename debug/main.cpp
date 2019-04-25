@@ -1,7 +1,5 @@
 #include <iostream>
-#include <set> 
 #include <cstring> 
-#include <algorithm> 
 #include <cstdio>
 using namespace std;
 typedef long long ll;
@@ -13,54 +11,49 @@ typedef long long ll;
 // 	for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
 // }
 const int maxn=100005;
-struct st
+int tree[maxn<<2];
+int target[maxn<<2];
+void push_up(int id)
 {
-    int l;
-    int r;
-};
-st num[maxn];
-int temp[maxn*2];
-int tree[maxn];
-int taget[maxn];
-void push_down(int id)
-{
-    if(taget[id])
-    {
-        tree[id<<1]=taget[id];
-        tree[id<<1|1]=taget[id];
-        taget[id<<1]=taget[id<<1|1]=taget[id];
-        taget[id]=0;
-    }
+    tree[id]=tree[id<<1]+tree[id<<1|1];
 }
-void updata(int l,int r,int L,int R,int number,int id)
-{
-    if(l>=L&&r<=R)
-    {
-        tree[id]=number;
-        taget[id]=number;
-        return ;
-    }
-    push_down(id);
-    int mid=(l+r)>>1;
-    if(mid>=L)
-        updata(l,mid,L,R,number,id<<1);
-    if(mid<R)
-        updata(mid+1,r,L,R,number,id<<1|1);
-}
-int query(int l,int r,int pos,int id)
+void bulid(int l,int r,int id)
 {
     if(l==r)
     {
-        return tree[id];
+        tree[id]=1;
+        return ;
     }
-    push_down(id);
     int mid=(l+r)>>1;
-    int ans=0;
-    if(mid>=pos)
-        ans=query(l,mid,pos,id<<1);
-    else
-        ans=query(mid+1,r,pos,id<<1|1);
-    return ans;
+    bulid(l,mid,id<<1);
+    bulid(mid+1,r,id<<1|1);
+    push_up(id);
+}
+void push_down(int ln,int rn,int id)
+{
+    if(target[id])
+    {
+        tree[id<<1]=ln*target[id];
+        tree[id<<1|1]=rn*target[id];
+        target[id<<1]=target[id<<1|1]=target[id];
+        target[id]=0;
+    }
+}
+void updata(int l,int r,int L,int R,int id,int number)
+{
+    if(l>=L&&r<=R)
+    {
+        tree[id]=(r-l+1)*number;
+        target[id]=number;
+        return ;
+    }
+    int mid=(l+r)>>1;
+    push_down(mid-l+1,r-mid,id);
+    if(mid>=L)
+        updata(l,mid,L,R,id<<1,number);
+    if(mid<R)
+        updata(mid+1,r,L,R,id<<1|1,number);
+    push_up(id);
 }
 int main()
 {
@@ -74,35 +67,26 @@ int main()
     #endif
     int t;
     cin>>t;
+    int casecnt=0;
     while(t--)
     {
-        memset(tree,0,sizeof(tree));
+        casecnt++;
         int n;
         cin>>n;
+        memset(target,0,sizeof(target));
+        bulid(1,n,1);
+        int q;
+        cin>>q;
         int i;
-        int cnt=0;
-        wfor(i,0,n)
+        wfor(i,0,q)
         {
-            cin>>num[i].l>>num[i].r;
-            temp[cnt++]=num[i].l;
-            temp[cnt++]=num[i].r;
+            int l,r,z;
+            cin>>l>>r>>z;
+            updata(1,n,l,r,1,z);
         }
-        sort(temp,temp+cnt);
-        unique(temp,temp+cnt);
-        wfor(i,0,n)
-        {
-            num[i].l=lower_bound(temp,temp+cnt,num[i].l)-temp;
-            num[i].r=lower_bound(temp,temp+cnt,num[i].r)-temp;
-            updata(1,2*n+5,num[i].l+1,num[i].r+1,i+1,1);
-        }
-        set<int>st;
-        wfor(i,1,2*n+5)
-        {
-            int t=query(1,2*n+5,i,1);
-            if(t!=0)
-                st.insert(t);
-        }
-        cout<<st.size()<<endl;
+        int ans=tree[1];
+        cout<<"Case "<<casecnt<<": The total value of the hook is ";
+        cout<<ans<<"."<<endl;
     }
     return 0;
 }
