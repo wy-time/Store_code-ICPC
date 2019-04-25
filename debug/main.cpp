@@ -1,7 +1,4 @@
 #include <iostream>
-#include <algorithm> 
-#include <map> 
-#include <cstring> 
 #include <cstdio>
 using namespace std;
 typedef long long ll;
@@ -12,47 +9,39 @@ typedef long long ll;
 // 	for (; ch < '0' || ch > '9'; ch = getchar());
 // 	for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
 // }
-const int maxn =8005;
-int tree[maxn<<2];
-int target[maxn<<2];
-void push_down(int id)
+const int maxn=50005;
+int tree[maxn<<2][2];
+int num[maxn];
+void push_up(int id)
 {
-    if(target[id])
-    {
-        tree[id<<1]=tree[id<<1|1]=target[id];
-        target[id<<1]=target[id<<1|1]=target[id];
-        target[id]=0;
-    }
+    tree[id][0]=max(tree[id<<1][0],tree[id<<1|1][0]);
+    tree[id][1]=min(tree[id<<1][1],tree[id<<1|1][1]);
 }
-void updata(int l,int r,int L,int R,int id,int number)
-{
-    if(l>=L&&r<=R)
-    {
-        tree[id]=number;
-        target[id]=number;
-        return ;
-    }
-    push_down(id);
-    int mid=(l+r)>>1;
-    if(mid>=L)
-        updata(l,mid,L,R,id<<1,number);
-    if(mid<R)
-        updata(mid+1,r,L,R,id<<1|1,number);
-}
-int query(int l,int r,int id,int pos)
+void build(int l,int r,int id)
 {
     if(l==r)
     {
-        return tree[id];
+        tree[id][0]=tree[id][1]=num[l];
+        return ;
     }
-    push_down(id);
-    int ans=0;
     int mid=(l+r)>>1;
-    if(mid>=pos)
-        ans=query(l,mid,id<<1,pos);
-    else
-        ans=query(mid+1,r,id<<1|1,pos);
-    return ans;
+    build(l,mid,id<<1);
+    build(mid+1,r,id<<1|1);
+    push_up(id);
+}
+void query(int l,int r,int L,int R,int id,int &x,int &y)
+{
+    if(l>=L&&r<=R)
+    {
+        x=max(x,tree[id][0]);
+        y=min(y,tree[id][1]);
+        return ;
+    }
+    int mid=(l+r)>>1;
+    if(mid>=L)
+        query(l,mid,L,R,id<<1,x,y);
+    if(mid<R)
+        query(mid+1,r,L,R,id<<1|1,x,y);
 }
 int main()
 {
@@ -64,46 +53,21 @@ int main()
     freopen("/home/time/debug/debug/in","r",stdin);
     freopen("/home/time/debug/debug/out","w",stdout);
     #endif
-    int n;
-    while(cin>>n)
+    int n,q;
+    cin>>n>>q;
+    int i;
+    wfor(i,1,n+1)
     {
-        memset(tree,0,sizeof(tree));
-        int i;
-        map<int,int>ma;
-        int maxnum=0;
-        wfor(i,0,n)
-        {
-            int l,r,id;
-            cin>>l>>r>>id;
-            l++;
-            id++;
-            maxnum=max(maxnum,r);
-            updata(1,8002,l,r,1,id);
-        }
-        int last=0;
-        wfor(i,1,maxnum+1)
-        {
-            int tem=query(1,8002,1,i);
-            if(tem==0)
-            {
-                last=0;
-                continue;
-            }
-            if(tem!=last)
-            {
-                if(ma.count(tem-1)==0)
-                    ma.insert(make_pair(tem-1,1));
-                else
-                    ma[tem-1]++;
-                last=tem;
-            }
-        }
-        map<int,int>::iterator it;
-        for(it=ma.begin();it!=ma.end();it++)
-        {
-            cout<<it->first<<" "<<it->second<<endl;
-        }
-        cout<<endl;
+        cin>>num[i];
+    }
+    build(1,n,1);
+    wfor(i,0,q)
+    {
+        int l,r;
+        cin>>l>>r;
+        int x=0,y=1e8;
+        query(1,n,l,r,1,x,y);
+        cout<<x-y<<endl;
     }
     return 0;
 }
