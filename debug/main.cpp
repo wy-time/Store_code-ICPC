@@ -38,19 +38,20 @@ void updata(int l,int r,int L,int R,int number,int id)
     {
         tree[id]=number;
         taget[id]=number;
+        return ;
     }
     push_down(id);
     int mid=(l+r)>>1;
     if(mid>=L)
         updata(l,mid,L,R,number,id<<1);
-    if(mid<r)
+    if(mid<R)
         updata(mid+1,r,L,R,number,id<<1|1);
 }
 int query(int l,int r,int pos,int id)
 {
     if(l==r)
     {
-        return tree[l];
+        return tree[id];
     }
     push_down(id);
     int mid=(l+r)>>1;
