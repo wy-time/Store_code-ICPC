@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstring> 
 #include <cmath> 
 #include <cstdio>
 using namespace std;
@@ -81,6 +82,8 @@ int main()
     while(cin>>n)
     {
         casecnt++;
+        memset(tree,0,sizeof(tree));
+        memset(maxnum,0,sizeof(maxnum));
         cout<<"Case #"<<casecnt<<":"<<endl;
         int i;
         wfor(i,1,n+1)
@@ -94,12 +97,14 @@ int main()
         {
             int t,l,r;
             cin>>t>>l>>r;
+            if(l>r)
+                swap(l,r);
             if(t==0)
             {
                 updata(1,n,l,r,1);
             }else
             {
-                int ans=query(1,n,l,r,1);
+                ll ans=query(1,n,l,r,1);
                 cout<<ans<<endl;
             }
         }
