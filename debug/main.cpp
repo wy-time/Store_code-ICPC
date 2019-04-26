@@ -1,6 +1,6 @@
 #include <iostream>
+#include <stack> 
 #include <cstring> 
-#include <cmath> 
 #include <cstdio>
 using namespace std;
 typedef long long ll;
@@ -11,61 +11,56 @@ typedef long long ll;
 // 	for (; ch < '0' || ch > '9'; ch = getchar());
 // 	for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
 // }
-const int maxn=1e5+5;
-ll tree[maxn<<2];
-ll maxnum[maxn<<2];
-ll num[maxn];
+const int maxn=50005;
+int tree[maxn<<2];
 void push_up(int id)
 {
-    maxnum[id]=max(maxnum[id<<1],maxnum[id<<1|1]);
     tree[id]=tree[id<<1]+tree[id<<1|1];
 }
-void bulid(int l,int r,int id)
+void updata(int l,int r,int id,int pos,int number)
 {
     if(l==r)
     {
-        tree[id]=num[l];
-        maxnum[id]=num[l];
+        tree[id]=number;
         return ;
     }
     int mid=(l+r)>>1;
-    bulid(l,mid,id<<1);
-    bulid(mid+1,r,id<<1|1);
+    if(mid>=pos)
+        updata(l,mid,id<<1,pos,number);
+    else
+        updata(mid+1,r,id<<1|1,pos,number);
     push_up(id);
 }
-void updata(int l,int r,int L,int R,int id)
+int flag=0;
+void query(int l,int r,int id,int pos,int &x,int &y)
 {
-    if(maxnum[id]<=1)
+    if(flag)
+        return;
+    if(tree[id]==0)
     {
         return ;
     }
     if(l==r)
     {
-        tree[id]=sqrt(tree[id]);
-        maxnum[id]=tree[id];
+        if(tree[id]==1)
+        {
+            if(l==pos)
+            {
+                flag=1;
+                return ;
+            }
+            if(l<=pos)
+                x=max(x,l);
+            else
+                y=min(y,l);
+        }
         return ;
     }
     int mid=(l+r)>>1;
-    if(mid>=L)
-        updata(l,mid,L,R,id<<1);
-    push_up(id);
-    if(mid<R)
-        updata(mid+1,r,L,R,id<<1|1);
-    push_up(id);
-}
-ll query(int l,int r,int L,int R,int id)
-{
-    if(l>=L&&r<=R)
-    {
-        return tree[id];
-    }
-    ll ans=0;
-    int mid=(l+r)>>1;
-    if(mid>=L)
-        ans+=query(l,mid,L,R,id<<1);
-    if(mid<R)
-        ans+=query(mid+1,r,L,R,id<<1|1);
-    return ans;
+    if(mid>=x)
+        query(l,mid,id<<1,pos,x,y);
+    if(mid<y)
+        query(mid+1,r,id<<1|1,pos,x,y);
 }
 int main()
 {
@@ -77,36 +72,55 @@ int main()
     freopen("/home/time/debug/debug/in","r",stdin);
     freopen("/home/time/debug/debug/out","w",stdout);
     #endif
-    int n;
-    int casecnt=0;
-    while(cin>>n)
+    int n,m;
+    cin>>n>>m;
+    int i;
+    stack<int>last;
+    wfor(i,0,m)
     {
-        casecnt++;
-        memset(tree,0,sizeof(tree));
-        memset(maxnum,0,sizeof(maxnum));
-        cout<<"Case #"<<casecnt<<":"<<endl;
-        int i;
-        wfor(i,1,n+1)
+        char c;
+        cin>>c;
+        if(c=='D')
         {
-            cin>>num[i];
-        }
-        bulid(1,n,1);
-        int m;
-        cin>>m;
-        wfor(i,0,m)
+            int pos;
+            cin>>pos;
+            last.push(pos);
+            updata(1,n,1,pos,1);
+        }else if(c=='Q')
         {
-            int t,l,r;
-            cin>>t>>l>>r;
-            if(l>r)
-                swap(l,r);
-            if(t==0)
+            int pos;
+            cin>>pos;
+            int x=-1,y=1e9;
+            flag=0;
+            query(1,n,1,pos,x,y);
+            if(flag)
             {
-                updata(1,n,l,r,1);
+                cout<<0<<endl;
             }else
             {
-                ll ans=query(1,n,l,r,1);
+                int ans=0;
+                if(x==-1&&y==1e9)
+                {
+                    ans=n;
+                }else if(x==-1)
+                {
+                    ans=pos;
+                    ans+=y-pos-1;
+                }else if(y==1e9)
+                {
+                    ans=pos-x;
+                    ans+=n-pos;
+                }else
+                {
+                    ans+=pos-x;
+                    ans+=y-pos-1;
+                }
                 cout<<ans<<endl;
             }
+        }else
+        {
+            updata(1,n,1,last.top(),0);
+            last.pop();
         }
     }
     return 0;
