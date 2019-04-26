@@ -62,6 +62,7 @@ void query(int l,int r,int id,int pos,int &x,int &y)
     if(mid<y)
         query(mid+1,r,id<<1|1,pos,x,y);
 }
+int des[maxn];
 int main()
 {
     std::ios::sync_with_stdio(false);
@@ -73,54 +74,63 @@ int main()
     freopen("/home/time/debug/debug/out","w",stdout);
     #endif
     int n,m;
-    cin>>n>>m;
-    int i;
-    stack<int>last;
-    wfor(i,0,m)
+    while(cin>>n>>m)
     {
-        char c;
-        cin>>c;
-        if(c=='D')
+        int i;
+        stack<int>last;
+        memset(tree,0,sizeof(tree));
+        wfor(i,0,m)
         {
-            int pos;
-            cin>>pos;
-            last.push(pos);
-            updata(1,n,1,pos,1);
-        }else if(c=='Q')
-        {
-            int pos;
-            cin>>pos;
-            int x=-1,y=1e9;
-            flag=0;
-            query(1,n,1,pos,x,y);
-            if(flag)
+            char c;
+            cin>>c;
+            if(c=='D')
             {
-                cout<<0<<endl;
-            }else
+                int pos;
+                cin>>pos;
+                last.push(pos);
+                des[pos]=1;
+                updata(1,n,1,pos,1);
+            }else if(c=='Q')
             {
-                int ans=0;
-                if(x==-1&&y==1e9)
+                int pos;
+                cin>>pos;
+                int x=-1,y=1e9;
+                flag=0;
+                query(1,n,1,pos,x,y);
+                if(flag)
                 {
-                    ans=n;
-                }else if(x==-1)
-                {
-                    ans=pos;
-                    ans+=y-pos-1;
-                }else if(y==1e9)
-                {
-                    ans=pos-x;
-                    ans+=n-pos;
+                    cout<<0<<endl;
                 }else
                 {
-                    ans+=pos-x;
-                    ans+=y-pos-1;
+                    int ans=0;
+                    if(x==-1&&y==1e9)
+                    {
+                        ans=n;
+                    }else if(x==-1)
+                    {
+                        ans=pos;
+                        ans+=y-pos-1;
+                    }else if(y==1e9)
+                    {
+                        ans=pos-x;
+                        ans+=n-pos;
+                    }else
+                    {
+                        ans+=pos-x;
+                        ans+=y-pos-1;
+                    }
+                    cout<<ans<<endl;
                 }
-                cout<<ans<<endl;
+            }else
+            {
+                while(des[last.top()]==0)
+                {
+                    last.pop();
+                }
+                updata(1,n,1,last.top(),0);
+                des[last.top()]=0;
+                last.pop();
             }
-        }else
-        {
-            updata(1,n,1,last.top(),0);
-            last.pop();
         }
     }
     return 0;
