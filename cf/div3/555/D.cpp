@@ -21,7 +21,7 @@ int main()
 	freopen("/home/time/debug/debug/in", "r", stdin);
 	freopen("/home/time/debug/debug/out", "w", stdout);
 #endif
-	int n, k;
+	ll n, k;
 	cin >> n >> k;
 	int i;
 	wfor(i, 1, k + 1)
@@ -38,8 +38,9 @@ int main()
 		}
 	}
 	if (n > 0)
-	{
 		n %= k;
+	if (n > 0)
+	{
 		mfor(i, k , 1)
 		{
 			int j;
