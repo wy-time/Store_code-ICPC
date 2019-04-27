@@ -10,76 +10,120 @@ typedef long long ll;
 // 	for (; ch < '0' || ch > '9'; ch = getchar());
 // 	for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
 // }
-const int maxn=50005;
-struct st
+const int maxn=100005;
+const int mod=10007;
+int tree[maxn<<2][3];
+int mul[maxn<<2];
+int add[maxn<<2];
+int chan[maxn<<2];
+void push_up(int id)
 {
-    int end;
-    int next;
-};
-st edge[maxn];
-int head[maxn];
-int cnt;
-void add(int beg,int end)
-{
-    edge[++cnt].next=head[beg];
-    edge[cnt].end=end;
-    head[beg]=cnt;
+    tree[id][0]=tree[id<<1][0]+tree[id<<1|1][0];
+    tree[id][1]=tree[id<<1][1]+tree[id<<1|1][1];
+    tree[id][2]=tree[id<<1][2]+tree[id<<1|1][2];
+    tree[id][0]%=mod;
+    tree[id][1]%=mod;
+    tree[id][2]%=mod;
 }
-int interval[maxn];
-int mapping[maxn];
-int init(int beg,int sum)
+void add_proc(int id,int number,int t)
 {
-    int i;
-    sum++;
-    mapping[beg]=sum;
-    for(i=head[beg];i;i=edge[i].next)
+    tree[id][2]+=t*number%mod*number%mod*number%mod;
+    tree[id][2]%=mod;
+    tree[id][2]+=3*tree[id][1]%mod*number%mod;
+    tree[id][2]%=mod;
+    tree[id][2]+=3*tree[id][0]%mod*number%mod*number%mod;
+    tree[id][1]+=t*number%mod*number%mod;
+    tree[id][1]%=mod;
+    tree[id][1]+=2*number*tree[id][0]%mod;
+    tree[id][0]+=t*number%mod;
+    tree[id][0]%=mod;
+    tree[id][1]%=mod;
+    tree[id][2]%=mod;
+}
+void chan_proc(int id,int number,int t)
+{
+    tree[id][0]=number*t%mod;
+    tree[id][1]=t*number%mod*number%mod;
+    tree[id][2]=t*number%mod*number%mod*number%mod;
+}
+void push_down(int ln,int rn,int id)
+{
+    if(chan[id])
     {
-        int v=edge[i].end;
-        sum=init(v,sum);
+        add[id]=0;
+        mul[id]=0;
+        chan_proc(id<<1,chan[id],ln);
+        chan_proc(id<<1|1,chan[id],rn);
+        chan[id<<1]=chan[id<<1|1]=chan[id];
+        chan[id]=0;
     }
-    interval[mapping[beg]]=sum;
-    return sum;
-}
-int deg[maxn];
-int tree[maxn<<2];
-int target[maxn<<2];
-void push_down(int id)
-{
-    if(target[id])
+    if(mul[id])
     {
-        tree[id<<1]=tree[id<<1|1]=target[id];
-        target[id<<1]=target[id<<1|1]=target[id];
-        target[id]=0;
+        tree[id<<1][0]=tree[id<<1][0]*mul[id]%mod,tree[id<<1|1][0]=tree[id<<1|1][0]*mul[id]%mod;
+        tree[id<<1][1]=tree[id<<1][1]*mul[id]%mod*mul[id]%mod;
+        tree[id<<1|1][1]=tree[id<<1|1][1]*mul[id]%mod*mul[id]%mod;
+        tree[id<<1][2]=tree[id<<1][2]*mul[id]%mod*mul[id]%mod*mul[id]%mod;
+        tree[id<<1|1][2]=tree[id<<1|1][2]*mul[id]%mod*mul[id]%mod*mul[id]%mod;
+        mul[id<<1]=mul[id<<1|1]=mul[id];
+        mul[id]=0;
+    }
+    if(add[id])
+    {
+        add_proc(id<<1,add[id],ln);
+        add_proc(id<<1|1,add[id],rn);
+        add[id<<1]=add[id<<1|1]=add[id];
+        add[id]=0;
     }
 }
-void updata(int l,int r,int L,int R,int id,int number)
+void updata(int l,int r,int L,int R,int id,int op,int number)
 {
     if(l>=L&&r<=R)
     {
-        tree[id]=number;
-        target[id]=number;
-        return;
+        if(op==1)
+        {
+            add_proc(id,number,r-l+1);
+            add[id]=number;
+        }else if(op==2)
+        {
+            tree[id][0]*=number;
+            tree[id][1]*=number*number%mod;
+            tree[id][2]*=number*number%mod*number%mod;
+            tree[id][0]%=mod;
+            tree[id][1]%=mod;
+            tree[id][2]%=mod;
+            add[id]*=number;
+            add[id]%=mod;
+            mul[id]=number;
+        }else if(op==3)
+        {
+            chan_proc(id,number,r-l+1);
+            mul[id]=0;
+            add[id]=0;
+            chan[id]=number;
+        }
+        return ;
     }
-    push_down(id);
     int mid=(l+r)>>1;
+    push_down(mid-l+1,r-mid,id);
     if(mid>=L)
-        updata(l,mid,L,R,id<<1,number);
+        updata(l,mid,L,R,id<<1,op,number);
     if(mid<R)
-        updata(mid+1,r,L,R,id<<1|1,number);
+        updata(mid+1,r,L,R,id<<1|1,op,number);
+    push_up(id);
 }
-int query(int l,int r,int id,int pos)
+int query(int l,int r,int L,int R,int id,int p)
 {
-    if(l==r)
+    if(l>=L&&r<=R)
     {
-        return tree[id];
+        return tree[id][p];
     }
-    push_down(id);
     int mid=(l+r)>>1;
-    int ans=-1;
-    if(mid>=pos)
-        ans=query(l,mid,id<<1,pos);
-    else
-        ans=query(mid+1,r,id<<1|1,pos);
+    push_down(mid-l+1,r-mid,id);
+    int ans=0;
+    if(mid>=L)
+        ans=(ans+query(l,mid,L,R,id<<1,p))%mod;
+    if(mid<R)
+        ans=(ans+query(mid+1,r,L,R,id<<1|1,p))%mod;
     return ans;
 }
 int main()
@@ -92,56 +136,27 @@ int main()
     freopen("/home/time/debug/debug/in","r",stdin);
     freopen("/home/time/debug/debug/out","w",stdout);
     #endif
-    int t;
-    cin>>t;
-    int casecnt=0;
-    while(t--)
+    int n,m;
+    while(cin>>n>>m)
     {
-        casecnt++;
-        cout<<"Case #"<<casecnt<<":"<<endl;
-        memset(deg,0,sizeof(deg));
-        memset(tree,-1,sizeof(tree));
-        memset(target,0,sizeof(target));
-        memset(head,0,sizeof(head));
-        cnt=0;
-        int n;
-        cin>>n;
+        if(m==0&&n==0)
+            break;
+        memset(tree,0,sizeof(tree));
+        memset(add,0,sizeof(add));
+        memset(mul,0,sizeof(mul));
+        memset(chan,0,sizeof(chan));
         int i;
-        wfor(i,0,n-1)
-        {
-            int u,v;
-            cin>>u>>v;
-            add(v,u);
-            deg[u]++;
-        }
-        wfor(i,1,n)
-        {
-            if(deg[i]==0)
-            {
-                init(i,0);
-                break;
-            }
-        }
-        int m;
-        cin>>m;
         wfor(i,0,m)
         {
-            char c;
-            cin>>c;
-            if(c=='T')
+            int op,l,r,c;
+            cin>>op>>l>>r>>c;
+            if(op!=4)
             {
-                int x,y;
-                cin>>x>>y;
-                int l=mapping[x];
-                int r=interval[l];
-                updata(1,n,l,r,1,y);
+                updata(1,n,l,r,1,op,c%mod);
             }else
             {
-                int x;
-                cin>>x;
-                int pos=mapping[x];
-                int ans=query(1,n,1,pos);
-                cout<<ans<<endl;
+                int ans=query(1,n,l,r,1,c-1);
+                cout<<ans%mod<<endl;
             }
         }
     }
