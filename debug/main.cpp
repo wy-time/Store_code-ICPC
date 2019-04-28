@@ -39,40 +39,48 @@ void add_proc(ll id, ll number, ll t)
     tree[id][0] %= mod;
     tree[id][1] %= mod;
     tree[id][2] %= mod;
+    add[id]=number;
 }
 void chan_proc(ll id, ll number, ll t)
 {
     tree[id][0] = number * t % mod;
     tree[id][1] = t * number % mod * number % mod;
     tree[id][2] = t * number % mod * number % mod * number % mod;
+    mul[id] = 1;
+    add[id] = 0;
+    chan[id]=number;
+}
+void mul_proc(int id,int number)
+{
+    tree[id][0] *= number;
+    tree[id][1] *= number * number % mod;
+    tree[id][2] *= number * number % mod * number % mod;
+    tree[id][0] %= mod;
+    tree[id][1] %= mod;
+    tree[id][2] %= mod;
+    add[id] *= number;
+    add[id] %= mod;
+    mul[id] = number;
 }
 void push_down(ll ln, ll rn, ll id)
 {
-
-    if (mul[id])
+    if (chan[id])
     {
-        tree[id << 1][0] = tree[id << 1][0] * mul[id] % mod;
-        tree[id << 1 | 1][0] = tree[id << 1 | 1][0] * mul[id] % mod;
-        tree[id << 1][1] = tree[id << 1][1] * mul[id] % mod * mul[id] % mod;
-        tree[id << 1 | 1][1] = tree[id << 1 | 1][1] * mul[id] % mod * mul[id] % mod;
-        tree[id << 1][2] = tree[id << 1][2] * mul[id] % mod * mul[id] % mod * mul[id] % mod;
-        tree[id << 1 | 1][2] = tree[id << 1 | 1][2] * mul[id] % mod * mul[id] % mod * mul[id] % mod;
-        mul[id << 1] = mul[id << 1 | 1] = mul[id];
-        mul[id] = 0;
+        chan_proc(id << 1, chan[id], ln);
+        chan_proc(id << 1 | 1, chan[id], rn);
+        chan[id]=0;
+    }
+    if (mul[id]!=1)
+    {
+        mul_proc(id<<1,mul[id]);
+        mul_proc(id<<1|1,mul[id]);
+        mul[id] = 1;
     }
     if (add[id])
     {
         add_proc(id << 1, add[id], ln);
         add_proc(id << 1 | 1, add[id], rn);
-        add[id << 1] = add[id << 1 | 1] = add[id];
         add[id] = 0;
-    }
-    if (chan[id])
-    {
-        chan_proc(id << 1, chan[id], ln);
-        chan_proc(id << 1 | 1, chan[id], rn);
-        chan[id << 1] = chan[id << 1 | 1] = chan[id];
-        chan[id] = 0;
     }
 }
 void updata(ll l, ll r, ll L, ll R, ll id, ll op, ll number)
@@ -82,24 +90,12 @@ void updata(ll l, ll r, ll L, ll R, ll id, ll op, ll number)
         if (op == 1)
         {
             add_proc(id, number, r - l + 1);
-            add[id] = number;
         } else if (op == 2)
         {
-            tree[id][0] *= number;
-            tree[id][1] *= number * number % mod;
-            tree[id][2] *= number * number % mod * number % mod;
-            tree[id][0] %= mod;
-            tree[id][1] %= mod;
-            tree[id][2] %= mod;
-            add[id] *= number;
-            add[id] %= mod;
-            mul[id] = number;
+            mul_proc(id,number);
         } else if (op == 3)
         {
             chan_proc(id, number, r - l + 1);
-            mul[id] = 0;
-            add[id] = 0;
-            chan[id] = number;
         }
         return ;
     }
@@ -129,13 +125,13 @@ ll query(ll l, ll r, ll L, ll R, ll id, ll p)
 int main()
 {
     std::ios::sync_with_stdio(false);
-// #ifdef test
-//     freopen("F:\\Desktop\\question\\in.txt", "r", stdin);
-// #endif
-// #ifdef ubuntu
-//     freopen("/home/time/debug/debug/in", "r", stdin);
-//     freopen("/home/time/debug/debug/out", "w", stdout);
-// #endif
+#ifdef test
+    freopen("F:\\Desktop\\question\\in.txt", "r", stdin);
+#endif
+#ifdef ubuntu
+    freopen("/home/time/debug/debug/in", "r", stdin);
+    freopen("/home/time/debug/debug/out", "w", stdout);
+#endif
     ll n, m;
     while (cin >> n >> m)
     {
@@ -143,7 +139,7 @@ int main()
             break;
         memset(tree, 0, sizeof(tree));
         memset(add, 0, sizeof(add));
-        memset(mul, 0, sizeof(mul));
+        fill(mul,mul+n,1);
         memset(chan, 0, sizeof(chan));
         ll i;
         wfor(i, 0, m)
