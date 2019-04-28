@@ -1,164 +1,145 @@
 #include <iostream>
-#include <cstring>
+#include <cstring> 
 #include <cstdio>
 using namespace std;
 typedef long long ll;
 #define wfor(i,j,k) for(i=j;i<k;++i)
 #define mfor(i,j,k) for(i=j;i>=k;--i)
-// void read(ll &x) {
-//  char ch = getchar(); x = 0;
-//  for (; ch < '0' || ch > '9'; ch = getchar());
-//  for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
+// void read(int &x) {
+// 	char ch = getchar(); x = 0;
+// 	for (; ch < '0' || ch > '9'; ch = getchar());
+// 	for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
 // }
-const ll maxn = 100005;
-const ll mod = 10007;
-ll tree[maxn << 2][3];
-ll mul[maxn << 2];
-ll add[maxn << 2];
-ll chan[maxn << 2];
-void push_up(ll id)
+const int maxn=50005;
+int tree[maxn<<2];
+int add[maxn<<2];
+void push_up(int id)
 {
-    tree[id][0] = tree[id << 1][0] + tree[id << 1 | 1][0];
-    tree[id][1] = tree[id << 1][1] + tree[id << 1 | 1][1];
-    tree[id][2] = tree[id << 1][2] + tree[id << 1 | 1][2];
-    tree[id][0] %= mod;
-    tree[id][1] %= mod;
-    tree[id][2] %= mod;
+    tree[id]=tree[id<<1]+tree[id<<1|1];
 }
-void add_proc(ll id, ll number, ll t)
+void push_down(int id)
 {
-    tree[id][2] += t * number % mod * number % mod * number % mod;
-    tree[id][2] %= mod;
-    tree[id][2] += 3 * tree[id][1] % mod * number % mod;
-    tree[id][2] %= mod;
-    tree[id][2] += 3 * tree[id][0] % mod * number % mod * number % mod;
-    tree[id][1] += t * number % mod * number % mod;
-    tree[id][1] %= mod;
-    tree[id][1] += 2 * number * tree[id][0] % mod;
-    tree[id][0] += t * number % mod;
-    tree[id][0] %= mod;
-    tree[id][1] %= mod;
-    tree[id][2] %= mod;
-    add[id] += number;
-    add[id] %= mod;
-}
-void chan_proc(ll id, ll number, ll t)
-{
-    tree[id][0] = number * t % mod;
-    tree[id][1] = t * number % mod * number % mod;
-    tree[id][2] = t * number % mod * number % mod * number % mod;
-    mul[id] = 1;
-    add[id] = 0;
-    chan[id] = number;
-}
-void mul_proc(int id, int number)
-{
-    tree[id][0] *= number;
-    tree[id][1] *= number * number % mod;
-    tree[id][2] *= number * number % mod * number % mod;
-    tree[id][0] %= mod;
-    tree[id][1] %= mod;
-    tree[id][2] %= mod;
-    add[id] *= number;
-    add[id] %= mod;
-    mul[id] *= number;
-    mul[id] %= mod;
-}
-void push_down(ll ln, ll rn, ll id)
-{
-    if (chan[id])
+    if(add[id])
     {
-        chan_proc(id << 1, chan[id], ln);
-        chan_proc(id << 1 | 1, chan[id], rn);
-        chan[id] = 0;
-    }
-    if (mul[id] != 1)
-    {
-        mul_proc(id << 1, mul[id]);
-        mul_proc(id << 1 | 1, mul[id]);
-        mul[id] = 1;
-    }
-    if (add[id])
-    {
-        add_proc(id << 1, add[id], ln);
-        add_proc(id << 1 | 1, add[id], rn);
-        add[id] = 0;
+        tree[id<<1]=0;
+        tree[id<<1|1]=0;
+        add[id<<1]=add[id<<1|1]=1;
+        add[id]=0;
     }
 }
-void updata(ll l, ll r, ll L, ll R, ll id, ll op, ll number)
+int x,y;
+void query(int l,int r,int L,int R,int id,int &sum)
 {
-    if (l >= L && r <= R)
+    if(sum==0)
+        return;
+    if(l>=L&&r<=R)
     {
-        if (op == 1)
+        int emp=r-l+1-tree[id];
+        if(emp==0)
+            return ;
+        x=min(x,r);
+        y=max(y,l);
+    }
+    if(l==r)
+    {
+        if(tree[id]==0)
         {
-            add_proc(id, number, r - l + 1);
-        } else if (op == 2)
-        {
-            mul_proc(id, number);
-        } else if (op == 3)
-        {
-            chan_proc(id, number, r - l + 1);
+            x=min(x,l);
+            y=max(y,l);
+            sum--;
+            tree[id]=1;
         }
         return ;
     }
-    ll mid = (l + r) >> 1;
-    push_down(mid - l + 1, r - mid, id);
-    if (mid >= L)
-        updata(l, mid, L, R, id << 1, op, number);
-    if (mid < R)
-        updata(mid + 1, r, L, R, id << 1 | 1, op, number);
+    int mid=(l+r)>>1;
+    push_down(id);
+    if(mid>=L)
+        query(l,mid,L,R,id<<1,sum);
+    if(mid<R)
+        query(mid+1,r,L,R,id<<1|1,sum);
     push_up(id);
 }
-ll query(ll l, ll r, ll L, ll R, ll id, ll p)
+void updata(int l,int r,int L,int R,int id)
 {
-    if (l >= L && r <= R)
+    if(l>=L&&r<=R)
     {
-        return tree[id][p];
+        tree[id]=0;
+        add[id]=1;
+        return ;
     }
-    ll mid = (l + r) >> 1;
-    push_down(mid - l + 1, r - mid, id);
-    ll ans = 0;
-    if (mid >= L)
-        ans = (ans + query(l, mid, L, R, id << 1, p)) % mod;
-    if (mid < R)
-        ans = (ans + query(mid + 1, r, L, R, id << 1 | 1, p)) % mod;
+    int mid=(l+r)>>1;
+    push_down(id);
+    if(mid>=L)
+        updata(l,mid,L,R,id<<1);
+    if(mid<R)
+        updata(mid+1,r,L,R,id<<1|1);
+    push_up(id);
+}
+int query2(int l,int r,int L,int R,int id)
+{
+    if(l>=L&&r<=R)
+    {
+        return tree[id];
+    }
+    int mid=(l+r)>>1;
+    int ans=0;
+    push_down(id);
+    if(mid>=L)
+        ans+=query2(l,mid,L,R,id<<1);
+    if(mid<R)
+        ans+=query2(mid+1,r,L,R,id<<1|1);
     return ans;
 }
 int main()
 {
     std::ios::sync_with_stdio(false);
-// #ifdef test
-//     freopen("F:\\Desktop\\question\\in.txt", "r", stdin);
-// #endif
-// #ifdef ubuntu
-//     freopen("/home/time/debug/debug/in", "r", stdin);
-//     freopen("/home/time/debug/debug/out", "w", stdout);
-// #endif
-    ll n, m;
-    while (cin >> n >> m)
+    #ifdef test
+    freopen("F:\\Desktop\\question\\in.txt","r",stdin);
+    #endif
+    #ifdef ubuntu
+    freopen("/home/time/debug/debug/in","r",stdin);
+    freopen("/home/time/debug/debug/out","w",stdout);
+    #endif
+    int t;
+    cin>>t;
+    while(t--)
     {
-        if (m == 0 && n == 0)
-            break;
-        memset(tree, 0, sizeof(tree));
-        memset(add, 0, sizeof(add));
-        fill(mul, mul + n, 1);
-        memset(chan, 0, sizeof(chan));
-        ll i;
-        wfor(i, 0, m)
+        memset(tree,0,sizeof(tree));
+        memset(add,0,sizeof(add));
+        int n,m;
+        cin>>n>>m;
+        int i;
+        wfor(i,0,m)
         {
-            ll op, l, r, c;
-            cin >> op >> l >> r >> c;
-            if (l > r)
-                swap(l, r);
-            if (op != 4)
+            int op;
+            cin>>op;
+            if(op==1)
             {
-                updata(1, n, l, r, 1, op, c % mod);
-            } else
+                int pos,num;
+                cin>>pos>>num;
+                x=1e9;
+                y=-1;
+                query(1,n,pos+1,n,1,num);
+                if(y==-1)
+                    cout<<"Can not put any one."<<endl;
+                else
+                {
+                    x--;
+                    y--;
+                    cout<<x<<" "<<y<<endl;
+                }
+            }else 
             {
-                ll ans = query(1, n, l, r, 1, c - 1);
-                cout << ans % mod << endl;
+                int l,r;
+                cin>>l>>r;
+                l++;
+                r++;
+                int ans=query2(1,n,l,r,1);
+                cout<<ans<<endl;
+                updata(1,n,l,r,1);
             }
         }
+        cout<<endl;
     }
     return 0;
 }
