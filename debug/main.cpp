@@ -39,7 +39,8 @@ void add_proc(ll id, ll number, ll t)
     tree[id][0] %= mod;
     tree[id][1] %= mod;
     tree[id][2] %= mod;
-    add[id]=number;
+    add[id] += number;
+    add[id] %= mod;
 }
 void chan_proc(ll id, ll number, ll t)
 {
@@ -48,9 +49,9 @@ void chan_proc(ll id, ll number, ll t)
     tree[id][2] = t * number % mod * number % mod * number % mod;
     mul[id] = 1;
     add[id] = 0;
-    chan[id]=number;
+    chan[id] = number;
 }
-void mul_proc(int id,int number)
+void mul_proc(int id, int number)
 {
     tree[id][0] *= number;
     tree[id][1] *= number * number % mod;
@@ -60,7 +61,8 @@ void mul_proc(int id,int number)
     tree[id][2] %= mod;
     add[id] *= number;
     add[id] %= mod;
-    mul[id] = number;
+    mul[id] *= number;
+    mul[id] %= mod;
 }
 void push_down(ll ln, ll rn, ll id)
 {
@@ -68,12 +70,12 @@ void push_down(ll ln, ll rn, ll id)
     {
         chan_proc(id << 1, chan[id], ln);
         chan_proc(id << 1 | 1, chan[id], rn);
-        chan[id]=0;
+        chan[id] = 0;
     }
-    if (mul[id]!=1)
+    if (mul[id] != 1)
     {
-        mul_proc(id<<1,mul[id]);
-        mul_proc(id<<1|1,mul[id]);
+        mul_proc(id << 1, mul[id]);
+        mul_proc(id << 1 | 1, mul[id]);
         mul[id] = 1;
     }
     if (add[id])
@@ -92,7 +94,7 @@ void updata(ll l, ll r, ll L, ll R, ll id, ll op, ll number)
             add_proc(id, number, r - l + 1);
         } else if (op == 2)
         {
-            mul_proc(id,number);
+            mul_proc(id, number);
         } else if (op == 3)
         {
             chan_proc(id, number, r - l + 1);
@@ -125,13 +127,13 @@ ll query(ll l, ll r, ll L, ll R, ll id, ll p)
 int main()
 {
     std::ios::sync_with_stdio(false);
-#ifdef test
-    freopen("F:\\Desktop\\question\\in.txt", "r", stdin);
-#endif
-#ifdef ubuntu
-    freopen("/home/time/debug/debug/in", "r", stdin);
-    freopen("/home/time/debug/debug/out", "w", stdout);
-#endif
+// #ifdef test
+//     freopen("F:\\Desktop\\question\\in.txt", "r", stdin);
+// #endif
+// #ifdef ubuntu
+//     freopen("/home/time/debug/debug/in", "r", stdin);
+//     freopen("/home/time/debug/debug/out", "w", stdout);
+// #endif
     ll n, m;
     while (cin >> n >> m)
     {
@@ -139,7 +141,7 @@ int main()
             break;
         memset(tree, 0, sizeof(tree));
         memset(add, 0, sizeof(add));
-        fill(mul,mul+n,1);
+        fill(mul, mul + n, 1);
         memset(chan, 0, sizeof(chan));
         ll i;
         wfor(i, 0, m)
