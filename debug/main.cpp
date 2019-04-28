@@ -150,6 +150,8 @@ int main()
         {
             ll op, l, r, c;
             cin >> op >> l >> r >> c;
+            if(l>r)
+                swap(l,r);
             if (op != 4)
             {
                 updata(1, n, l, r, 1, op, c % mod);
