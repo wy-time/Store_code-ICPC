@@ -48,15 +48,7 @@ void chan_proc(int id,int number,int t)
 }
 void push_down(int ln,int rn,int id)
 {
-    if(chan[id])
-    {
-        add[id]=0;
-        mul[id]=0;
-        chan_proc(id<<1,chan[id],ln);
-        chan_proc(id<<1|1,chan[id],rn);
-        chan[id<<1]=chan[id<<1|1]=chan[id];
-        chan[id]=0;
-    }
+    
     if(mul[id])
     {
         tree[id<<1][0]=tree[id<<1][0]*mul[id]%mod,tree[id<<1|1][0]=tree[id<<1|1][0]*mul[id]%mod;
@@ -73,6 +65,13 @@ void push_down(int ln,int rn,int id)
         add_proc(id<<1|1,add[id],rn);
         add[id<<1]=add[id<<1|1]=add[id];
         add[id]=0;
+    }
+    if(chan[id])
+    {
+        chan_proc(id<<1,chan[id],ln);
+        chan_proc(id<<1|1,chan[id],rn);
+        chan[id<<1]=chan[id<<1|1]=chan[id];
+        chan[id]=0;
     }
 }
 void updata(int l,int r,int L,int R,int id,int op,int number)
