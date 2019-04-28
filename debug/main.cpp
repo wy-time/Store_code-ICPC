@@ -129,13 +129,13 @@ ll query(ll l, ll r, ll L, ll R, ll id, ll p)
 int main()
 {
     std::ios::sync_with_stdio(false);
-#ifdef test
-    freopen("F:\\Desktop\\question\\in.txt", "r", stdin);
-#endif
-#ifdef ubuntu
-    freopen("/home/time/debug/debug/in", "r", stdin);
-    freopen("/home/time/debug/debug/out", "w", stdout);
-#endif
+// #ifdef test
+//     freopen("F:\\Desktop\\question\\in.txt", "r", stdin);
+// #endif
+// #ifdef ubuntu
+//     freopen("/home/time/debug/debug/in", "r", stdin);
+//     freopen("/home/time/debug/debug/out", "w", stdout);
+// #endif
     ll n, m;
     while (cin >> n >> m)
     {
@@ -150,8 +150,8 @@ int main()
         {
             ll op, l, r, c;
             cin >> op >> l >> r >> c;
-            if(l>r)
-                swap(l,r);
+            if (l > r)
+                swap(l, r);
             if (op != 4)
             {
                 updata(1, n, l, r, 1, op, c % mod);
