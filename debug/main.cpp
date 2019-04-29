@@ -1,5 +1,4 @@
 #include <iostream>
-#include <cstring> 
 #include <cstdio>
 using namespace std;
 typedef long long ll;
@@ -10,85 +9,152 @@ typedef long long ll;
 // 	for (; ch < '0' || ch > '9'; ch = getchar());
 // 	for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
 // }
-const int maxn=50005;
-int tree[maxn<<2];
-int add[maxn<<2];
+const int maxn=5e4+5;
+struct node
+{
+    int sum;
+    int maxnum;
+    int minnum;
+    int change;
+};
+node tree[maxn<<2];
+int n;
 void push_up(int id)
 {
-    tree[id]=tree[id<<1]+tree[id<<1|1];
+    tree[id].sum=tree[id<<1].sum+tree[id<<1|1].sum;
+    tree[id].maxnum=max(tree[id<<1].maxnum,tree[id<<1|1].maxnum);
+    tree[id].minnum=min(tree[id<<1].minnum,tree[id<<1|1].minnum);
 }
-void push_down(int id)
+void build(int l,int r,int id)
 {
-    if(add[id])
+    if(l==r)
     {
-        tree[id<<1]=0;
-        tree[id<<1|1]=0;
-        add[id<<1]=add[id<<1|1]=1;
-        add[id]=0;
+        tree[id].sum=1;
+        tree[id].maxnum=l;
+        tree[id].minnum=l;
+        tree[id].change=0;
+        return ;
+    }
+    int mid=(l+r)>>1;
+    build(l,mid,id<<1);
+    build(mid+1,r,id<<1|1);
+    push_up(id);
+}
+void push_down(int l,int r,int id)
+{
+    if(tree[id].change==1)
+    {
+        int mid=(l+r)>>1;
+        tree[id<<1].sum=mid-l+1;
+        tree[id<<1|1].sum=r-mid;
+        tree[id<<1].maxnum=max(mid,tree[id<<1].maxnum);
+        tree[id<<1].minnum=min(l,tree[id<<1].minnum);
+        tree[id<<1|1].maxnum=max(tree[id<<1|1].maxnum,r);
+        tree[id<<1|1].minnum=min(tree[id<<1|1].minnum,mid+1);
+        tree[id<<1].change=tree[id<<1|1].change=1;
+        tree[id].change=0;
+    }
+    if(tree[id].change==2)
+    {
+        tree[id<<1].sum=0;
+        tree[id<<1|1].sum=0;
+        tree[id<<1].maxnum=-2;
+        tree[id<<1].minnum=1e9;
+        tree[id<<1|1].maxnum=-2;
+        tree[id<<1|1].minnum=1e9;
+        tree[id<<1].change=tree[id<<1|1].change=2;
+        tree[id].change=0;
     }
 }
-int x,y;
-void query(int l,int r,int L,int R,int id,int &sum)
+void updata_clean(int l,int r,int L,int R,int id)
 {
-    if(sum==0)
-        return;
     if(l>=L&&r<=R)
     {
-        int emp=r-l+1-tree[id];
-        if(emp==0)
+        tree[id].sum=r-l+1;
+        tree[id].maxnum=max(r,tree[id].maxnum);
+        tree[id].minnum=min(l,tree[id].minnum);
+        tree[id].change=1;
+        return ;
+    }
+    int mid=(l+r)>>1;
+    push_down(l,r,id);
+    if(mid>=L)
+        updata_clean(l,mid,L,R,id<<1);
+    if(mid<R)
+        updata_clean(mid+1,r,L,R,id<<1|1);
+    push_up(id);
+}
+int query_disc(int l,int r,int L,int R,int id)
+{
+    if(l>=L&&r<=R)
+    {
+        return tree[id].sum;
+    }
+    int mid=(l+r)>>1;
+    push_down(l,r,id);
+    int ans=0;
+    if(mid>=L)
+        ans+=query_disc(l,mid,L,R,id<<1);
+    if(mid<R)
+        ans+=query_disc(mid+1,r,L,R,id<<1|1);
+    return ans;
+}
+void updata_use(int l,int r,int L,int R,int id)
+{
+    if(l>=L&&r<=R)
+    {
+        tree[id].sum=0;
+        tree[id].maxnum=-2;
+        tree[id].minnum=1e9;
+        tree[id].change=2;
+        return;
+    }
+    int mid=(l+r)>>1;
+    push_down(l,r,id);
+    if(mid>=L)
+        updata_use(l,mid,L,R,id<<1);
+    if(mid<R)
+        updata_use(mid+1,r,L,R,id<<1|1);
+    push_up(id);
+}
+int x,y;
+void query_in(int l,int r,int L,int R,int id,int &number)
+{
+    if(number==0)
+        return ;
+    if(l>=L&&r<=R)
+    {
+        int have=tree[id].sum;
+        if(have<=0)
             return ;
-        x=min(x,r);
-        y=max(y,l);
+        if(have<=number)
+        {
+            x=min(x,tree[id].minnum);
+            y=max(y,tree[id].maxnum);
+            updata_use(1,n,x,y,1);
+            number-=have;
+            return ;
+        }
     }
     if(l==r)
     {
-        if(tree[id]==0)
+        if(tree[id].sum==1)
         {
+            number--;
             x=min(x,l);
             y=max(y,l);
-            sum--;
-            tree[id]=1;
+            tree[id].sum=0;
+            tree[id].maxnum=-2;
+            tree[id].minnum=1e9;
+            return ;
         }
-        return ;
     }
     int mid=(l+r)>>1;
-    push_down(id);
+    push_down(l,r,id);
     if(mid>=L)
-        query(l,mid,L,R,id<<1,sum);
+        query_in(l,mid,L,R,id<<1,number);
     if(mid<R)
-        query(mid+1,r,L,R,id<<1|1,sum);
-    push_up(id);
-}
-void updata(int l,int r,int L,int R,int id)
-{
-    if(l>=L&&r<=R)
-    {
-        tree[id]=0;
-        add[id]=1;
-        return ;
-    }
-    int mid=(l+r)>>1;
-    push_down(id);
-    if(mid>=L)
-        updata(l,mid,L,R,id<<1);
-    if(mid<R)
-        updata(mid+1,r,L,R,id<<1|1);
-    push_up(id);
-}
-int query2(int l,int r,int L,int R,int id)
-{
-    if(l>=L&&r<=R)
-    {
-        return tree[id];
-    }
-    int mid=(l+r)>>1;
-    int ans=0;
-    push_down(id);
-    if(mid>=L)
-        ans+=query2(l,mid,L,R,id<<1);
-    if(mid<R)
-        ans+=query2(mid+1,r,L,R,id<<1|1);
-    return ans;
+        query_in(mid+1,r,L,R,id<<1|1,number);
 }
 int main()
 {
@@ -104,10 +170,9 @@ int main()
     cin>>t;
     while(t--)
     {
-        memset(tree,0,sizeof(tree));
-        memset(add,0,sizeof(add));
-        int n,m;
+        int m;
         cin>>n>>m;
+        build(1,n,1);
         int i;
         wfor(i,0,m)
         {
@@ -115,14 +180,16 @@ int main()
             cin>>op;
             if(op==1)
             {
-                int pos,num;
-                cin>>pos>>num;
+                int pos,number;
+                cin>>pos>>number;
                 x=1e9;
                 y=-1;
-                query(1,n,pos+1,n,1,num);
+                pos++;
+                query_in(1,n,pos,n,1,number);
                 if(y==-1)
+                {
                     cout<<"Can not put any one."<<endl;
-                else
+                }else
                 {
                     x--;
                     y--;
@@ -134,9 +201,9 @@ int main()
                 cin>>l>>r;
                 l++;
                 r++;
-                int ans=query2(1,n,l,r,1);
-                cout<<ans<<endl;
-                updata(1,n,l,r,1);
+                int ans=query_disc(1,n,l,r,1);
+                cout<<r-l+1-ans<<endl;
+                updata_clean(1,n,l,r,1);
             }
         }
         cout<<endl;
