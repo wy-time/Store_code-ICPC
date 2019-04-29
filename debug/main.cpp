@@ -1,5 +1,5 @@
 #include <iostream>
-#include <cstring> 
+#include <cstring>
 #include <cstdio>
 using namespace std;
 typedef long long ll;
@@ -172,7 +172,7 @@ int main()
     cin >> t;
     while (t--)
     {
-        memset(tree,0,sizeof(0));
+        memset(tree, 0, sizeof(tree));
         int m;
         cin >> n >> m;
         build(1, n, 1);
