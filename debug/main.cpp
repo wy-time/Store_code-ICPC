@@ -26,7 +26,7 @@ struct node
 };
 node tree1[maxn<<2];
 node tree2[maxn<<2];
-void push_up(int id,node *tree)
+void push_up(int id,node *tree,int interval)
 {
     tree[id].len=max(tree[id<<1].len,max(tree[id<<1|1].len,tree[id<<1].rlen+tree[id<<1|1].llen));
     if(tree[id].len==tree[id<<1].len)
@@ -67,7 +67,7 @@ void push_up(int id,node *tree)
         else
             tree[id].right=tree[id<<1|1].right;
     }
-    if(tree[id].llen==tree[id].len)
+    if(tree[id].len==interval)
         tree[id].isall=1;
     else
         tree[id].isall=0;
@@ -91,8 +91,8 @@ void build(int l,int r,int id)
     int mid=(l+r)>>1;
     build(l,mid,id<<1);
     build(mid+1,r,id<<1|1);
-    push_up(id,tree1);
-    push_up(id,tree2);
+    push_up(id,tree1,r-l+1);
+    push_up(id,tree2,r-l+1);
 }
 void down_proc(int id,node*tree)
 {
@@ -139,7 +139,7 @@ void updata(int l,int r,int L,int R,int id,node*tree)
         updata(l,mid,L,R,id<<1,tree);
     if(mid<R)
         updata(mid+1,r,L,R,id<<1|1,tree);
-    push_up(id,tree);
+    push_up(id,tree,r-l+1);
 }
 void study(int l,int r,int L,int R,int id,node*tree)
 {
@@ -154,7 +154,7 @@ void study(int l,int r,int L,int R,int id,node*tree)
         study(l,mid,L,R,id<<1,tree);
     if(mid<R)
         study(mid+1,r,L,R,id<<1|1,tree);
-    push_up(id,tree);
+    push_up(id,tree,r-l+1);
 }
 void find_time(int l,int r,int id,int len,int &x,node *tree)
 {
