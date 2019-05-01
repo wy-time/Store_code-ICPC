@@ -146,7 +146,7 @@ void study(int l,int r,int L,int R,int id,node*tree)
     push_down(l,r,id,tree);
     if(mid>=L)
         study(l,mid,L,R,id<<1,tree);
-    if(mid>R)
+    if(mid<R)
         study(mid+1,r,L,R,id<<1|1,tree);
     push_up(id,tree);
 }
