@@ -49,7 +49,10 @@ void push_up(int id,node *tree)
     }else
     {
         tree[id].llen=tree[id<<1].llen+tree[id<<1|1].llen;
-        tree[id].left=tree[id<<1|1].left;
+        if(tree[id<<1|1].llen!=0)
+            tree[id].left=tree[id<<1|1].left;
+        else
+            tree[id].left=tree[id<<1].left;
     }
 
     if(tree[id<<1|1].isall==0)
@@ -59,7 +62,10 @@ void push_up(int id,node *tree)
     }else
     {
         tree[id].rlen=tree[id<<1|1].rlen+tree[id<<1].rlen;
-        tree[id].right=tree[id<<1].right;
+        if(tree[id<<1].rlen!=0)
+            tree[id].right=tree[id<<1].right;
+        else
+            tree[id].right=tree[id<<1|1].right;
     }
     if(tree[id].llen==tree[id].len)
         tree[id].isall=1;
@@ -91,7 +97,7 @@ void build(int l,int r,int id)
 void down_proc(int id,node*tree)
 {
     tree[id].len=tree[id].llen=tree[id].rlen=0;
-    tree[id].l=tree[id].r=tree[id].left=tree[id].right=-1;
+    tree[id].l=tree[id].r=tree[id].left=tree[id].right=0;
     tree[id].isall=0;
     tree[id].chan=1;
 }
@@ -159,6 +165,8 @@ void find_time(int l,int r,int id,int len,int &x,node *tree)
     {
         x=min(x,tree[id].l);
     }
+    if(l==r)
+        return ;
     int mid=(l+r)>>1;
     push_down(l,r,id,tree);
     find_time(l,mid,id<<1,len,x,tree);
