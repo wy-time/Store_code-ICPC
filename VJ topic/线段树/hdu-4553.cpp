@@ -26,21 +26,32 @@ struct node
 };
 node tree1[maxn << 2];
 node tree2[maxn << 2];
-void push_up(int id, node *tree)
+void push_up(int id, node *tree, int interval)
 {
     tree[id].len = max(tree[id << 1].len, max(tree[id << 1 | 1].len, tree[id << 1].rlen + tree[id << 1 | 1].llen));
+    int flag = 0;
     if (tree[id].len == tree[id << 1].len)
     {
         tree[id].l = tree[id << 1].l;
         tree[id].r = tree[id << 1].r;
+        flag = 1;
     } else if (tree[id].len == tree[id << 1 | 1].len)
     {
         tree[id].l = tree[id << 1 | 1].l;
         tree[id].r = tree[id << 1 | 1].r;
+        flag = 1;
     } else
     {
         tree[id].l = tree[id << 1].right;
         tree[id].r = tree[id << 1 | 1].left;
+    }
+    if (flag == 1 && tree[id].len != 0)
+    {
+        if (tree[id].len == tree[id << 1].rlen + tree[id << 1 | 1].llen && tree[id << 1].rlen != 0 && tree[id << 1 | 1].llen != 0)
+        {
+            tree[id].l = min(tree[id].l, tree[id << 1].right);
+            tree[id].r = tree[id].l + tree[id].len - 1;
+        }
     }
     if (tree[id << 1].isall == 0)
     {
@@ -49,7 +60,10 @@ void push_up(int id, node *tree)
     } else
     {
         tree[id].llen = tree[id << 1].llen + tree[id << 1 | 1].llen;
-        tree[id].left = tree[id << 1 | 1].left;
+        if (tree[id << 1 | 1].llen != 0)
+            tree[id].left = tree[id << 1 | 1].left;
+        else
+            tree[id].left = tree[id << 1].left;
     }
 
     if (tree[id << 1 | 1].isall == 0)
@@ -59,9 +73,12 @@ void push_up(int id, node *tree)
     } else
     {
         tree[id].rlen = tree[id << 1 | 1].rlen + tree[id << 1].rlen;
-        tree[id].right = tree[id << 1].right;
+        if (tree[id << 1].rlen != 0)
+            tree[id].right = tree[id << 1].right;
+        else
+            tree[id].right = tree[id << 1 | 1].right;
     }
-    if (tree[id].llen == tree[id].len)
+    if (tree[id].len == interval)
         tree[id].isall = 1;
     else
         tree[id].isall = 0;
@@ -85,13 +102,13 @@ void build(int l, int r, int id)
     int mid = (l + r) >> 1;
     build(l, mid, id << 1);
     build(mid + 1, r, id << 1 | 1);
-    push_up(id, tree1);
-    push_up(id, tree2);
+    push_up(id, tree1, r - l + 1);
+    push_up(id, tree2, r - l + 1);
 }
 void down_proc(int id, node*tree)
 {
     tree[id].len = tree[id].llen = tree[id].rlen = 0;
-    tree[id].l = tree[id].r = tree[id].left = tree[id].right = -1;
+    tree[id].l = tree[id].r = tree[id].left = tree[id].right = 0;
     tree[id].isall = 0;
     tree[id].chan = 1;
 }
@@ -133,7 +150,7 @@ void updata(int l, int r, int L, int R, int id, node*tree)
         updata(l, mid, L, R, id << 1, tree);
     if (mid < R)
         updata(mid + 1, r, L, R, id << 1 | 1, tree);
-    push_up(id, tree);
+    push_up(id, tree, r - l + 1);
 }
 void study(int l, int r, int L, int R, int id, node*tree)
 {
@@ -148,7 +165,7 @@ void study(int l, int r, int L, int R, int id, node*tree)
         study(l, mid, L, R, id << 1, tree);
     if (mid < R)
         study(mid + 1, r, L, R, id << 1 | 1, tree);
-    push_up(id, tree);
+    push_up(id, tree, r - l + 1);
 }
 void find_time(int l, int r, int id, int len, int &x, node *tree)
 {
@@ -159,6 +176,8 @@ void find_time(int l, int r, int id, int len, int &x, node *tree)
     {
         x = min(x, tree[id].l);
     }
+    if (l == r)
+        return ;
     int mid = (l + r) >> 1;
     push_down(l, r, id, tree);
     find_time(l, mid, id << 1, len, x, tree);
@@ -195,11 +214,6 @@ int main()
             if (s[0] == 'D')
             {
                 int x = 1e9;
-                if (tim > n)
-                {
-                    cout << "fly with yourself" << endl;
-                    continue;
-                }
                 find_time(1, n, 1, tim, x, tree1);
                 if (x == 1e9)
                 {
@@ -212,11 +226,6 @@ int main()
             } else if (s[0] == 'N')
             {
                 int x = 1e9;
-                if (tim > n)
-                {
-                    cout << "wait for me" << endl;
-                    continue;
-                }
                 find_time(1, n, 1, tim, x, tree1);
                 if (x == 1e9)
                 {

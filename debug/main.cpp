@@ -29,28 +29,28 @@ node tree2[maxn << 2];
 void push_up(int id, node *tree, int interval)
 {
     tree[id].len = max(tree[id << 1].len, max(tree[id << 1 | 1].len, tree[id << 1].rlen + tree[id << 1 | 1].llen));
-    int flag=0;
+    int flag = 0;
     if (tree[id].len == tree[id << 1].len)
     {
         tree[id].l = tree[id << 1].l;
         tree[id].r = tree[id << 1].r;
-        flag=1;
+        flag = 1;
     } else if (tree[id].len == tree[id << 1 | 1].len)
     {
         tree[id].l = tree[id << 1 | 1].l;
         tree[id].r = tree[id << 1 | 1].r;
-        flag=1;
+        flag = 1;
     } else
     {
         tree[id].l = tree[id << 1].right;
         tree[id].r = tree[id << 1 | 1].left;
     }
-    if(flag==1&&tree[id].len!=0)
+    if (flag == 1 && tree[id].len != 0)
     {
-        if(tree[id].len==tree[id << 1].rlen + tree[id << 1 | 1].llen&&tree[id<<1].rlen!=0&&tree[id<<1|1].llen!=0)
+        if (tree[id].len == tree[id << 1].rlen + tree[id << 1 | 1].llen && tree[id << 1].rlen != 0 && tree[id << 1 | 1].llen != 0)
         {
-            tree[id].l=min(tree[id].l,tree[id<<1].right);
-            tree[id].r=tree[id].l+tree[id].len-1;
+            tree[id].l = min(tree[id].l, tree[id << 1].right);
+            tree[id].r = tree[id].l + tree[id].len - 1;
         }
     }
     if (tree[id << 1].isall == 0)
@@ -186,13 +186,13 @@ void find_time(int l, int r, int id, int len, int &x, node *tree)
 int main()
 {
     std::ios::sync_with_stdio(false);
-    #ifdef test
-    freopen("F:\\Desktop\\question\\in.txt","r",stdin);
-    #endif
-    #ifdef ubuntu
-    freopen("/home/time/debug/debug/in","r",stdin);
-    freopen("/home/time/debug/debug/out","w",stdout);
-    #endif
+    // #ifdef test
+    // freopen("F:\\Desktop\\question\\in.txt","r",stdin);
+    // #endif
+    // #ifdef ubuntu
+    // freopen("/home/time/debug/debug/in","r",stdin);
+    // freopen("/home/time/debug/debug/out","w",stdout);
+    // #endif
     int t;
     int casecnt = 0;
     cin >> t;
