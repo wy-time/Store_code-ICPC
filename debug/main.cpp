@@ -24,11 +24,9 @@ struct node
     int isall;
     int chan;
 };
-<<< <<< < HEAD
 node tree1[maxn << 2];
 node tree2[maxn << 2];
 void push_up(int id, node *tree, int interval)
->>> >>> > 32790e42ed76ed07277ac62229abf54ba34b34f1
 {
     tree[id].len = max(tree[id << 1].len, max(tree[id << 1 | 1].len, tree[id << 1].rlen + tree[id << 1 | 1].llen));
     if (tree[id].len == tree[id << 1].len)
@@ -69,10 +67,8 @@ void push_up(int id, node *tree, int interval)
         else
             tree[id].right = tree[id << 1 | 1].right;
     }
-    <<< <<< < HEAD
     if (tree[id].len == interval)
         tree[id].isall = 1;
-    >>> >>> > 32790e42ed76ed07277ac62229abf54ba34b34f1
     else
         tree[id].isall = 0;
 }
@@ -92,13 +88,11 @@ void build(int l, int r, int id)
         init(id, tree2, l);
         return ;
     }
-    <<< <<< < HEAD
     int mid = (l + r) >> 1;
     build(l, mid, id << 1);
     build(mid + 1, r, id << 1 | 1);
     push_up(id, tree1, r - l + 1);
     push_up(id, tree2, r - l + 1);
-    >>> >>> > 32790e42ed76ed07277ac62229abf54ba34b34f1
 }
 void down_proc(int id, node*tree)
 {
@@ -139,7 +133,6 @@ void updata(int l, int r, int L, int R, int id, node*tree)
         down_proc(id, tree);
         return;
     }
-    <<< <<< < HEAD
     int mid = (l + r) >> 1;
     push_down(l, r, id, tree);
     if (mid >= L)
@@ -147,7 +140,6 @@ void updata(int l, int r, int L, int R, int id, node*tree)
     if (mid < R)
         updata(mid + 1, r, L, R, id << 1 | 1, tree);
     push_up(id, tree, r - l + 1);
-    >>> >>> > 32790e42ed76ed07277ac62229abf54ba34b34f1
 }
 void study(int l, int r, int L, int R, int id, node*tree)
 {
@@ -156,7 +148,6 @@ void study(int l, int r, int L, int R, int id, node*tree)
         time_proc(l, r, id, tree);
         return ;
     }
-    <<< <<< < HEAD
     int mid = (l + r) >> 1;
     push_down(l, r, id, tree);
     if (mid >= L)
@@ -164,7 +155,6 @@ void study(int l, int r, int L, int R, int id, node*tree)
     if (mid < R)
         study(mid + 1, r, L, R, id << 1 | 1, tree);
     push_up(id, tree, r - l + 1);
-    >>> >>> > 32790e42ed76ed07277ac62229abf54ba34b34f1
 }
 void find_time(int l, int r, int id, int len, int &x, node *tree)
 {
