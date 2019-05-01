@@ -171,6 +171,11 @@ void find_time(int l, int r, int id, int len, int &x, node *tree)
 {
     if (tree[id].len < len)
     {
+        int pa=id/2;
+        if(tree[pa<<1].rlen+tree[pa<<1|1].llen>=len)
+        {
+            x=min(tree[pa<<1].right,x);
+        }
         return ;
     } else
     {
@@ -186,13 +191,13 @@ void find_time(int l, int r, int id, int len, int &x, node *tree)
 int main()
 {
     std::ios::sync_with_stdio(false);
-    // #ifdef test
-    // freopen("F:\\Desktop\\question\\in.txt","r",stdin);
-    // #endif
-    // #ifdef ubuntu
-    // freopen("/home/time/debug/debug/in","r",stdin);
-    // freopen("/home/time/debug/debug/out","w",stdout);
-    // #endif
+    #ifdef test
+    freopen("F:\\Desktop\\question\\in.txt","r",stdin);
+    #endif
+    #ifdef ubuntu
+    freopen("/home/time/debug/debug/in","r",stdin);
+    freopen("/home/time/debug/debug/out","w",stdout);
+    #endif
     int t;
     int casecnt = 0;
     cin >> t;
