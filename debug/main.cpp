@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstring> 
 #include <cstdio>
 using namespace std;
 typedef long long ll;
@@ -28,50 +29,23 @@ int main()
         int n, m, k;
         // cin >> n >> m >> k;
         scanf("%d %d %d", &n, &m, &k);
+        memset(ma,0,sizeof(ma));
         int i, j;
-        wfor(i, 0, n)
+        int cnt = (n-2)*(m-2)-k;
+        mfor(j,m-1,2)
         {
-            wfor(j, 0, m)
+            wfor(i,1,n-1)
             {
-                ma[i][j] = 1;
-            }
-        }
-        int cnt = 0;
-        wfor(i, 0, n)
-        {
-            wfor(j, 0, m)
-            {
-                if (i == 0 && j % 2 != 0 && cnt < k)
+                if(cnt>0)
                 {
-                    if (j != 0 && j != m - 1)
-                        ma[i][j] = 3;
-                    else
-                        ma[i][j] = 2;
-                    cnt++;
-                } else if (i != 0 && i != n - 1 && cnt < k)
-                {
-                    if (ma[i - 1][j] == 1)
-                    {
-                        cnt++;
-                        if (j != 0 && j != m - 1)
-                            ma[i][j] = 4;
-                        else
-                            ma[i][j] = 3;
-                    }
-                } else if (i == n - 1 && cnt < k)
-                {
-                    if (ma[i - 1][j] == 1)
-                    {
-                        cnt++;
-                        if (j != 0 && j != m - 1)
-                            ma[i][j] = 3;
-                        else
-                            ma[i][j] = 2;
-                    }
+                    ma[i][j]=1;
+                    cnt--;
                 }
-                if (cnt >= k)
+                if(cnt<=0)
                     break;
             }
+            if(cnt<=0)
+                break;
         }
         wfor(i, 0, n)
         {
