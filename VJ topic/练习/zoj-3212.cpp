@@ -13,13 +13,13 @@ int ma[16][16];
 int main()
 {
 //     std::ios::sync_with_stdio(false);
-#ifdef test
-    freopen("F:\\Desktop\\question\\in.txt", "r", stdin);
-#endif
-#ifdef ubuntu
-    freopen("/home/time/debug/debug/in", "r", stdin);
-    freopen("/home/time/debug/debug/out", "w", stdout);
-#endif
+// #ifdef test
+//     freopen("F:\\Desktop\\question\\in.txt", "r", stdin);
+// #endif
+// #ifdef ubuntu
+//     freopen("/home/time/debug/debug/in", "r", stdin);
+//     freopen("/home/time/debug/debug/out", "w", stdout);
+// #endif
     int t;
     // cin >> t;
     scanf("%d", &t);
