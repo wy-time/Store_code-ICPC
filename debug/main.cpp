@@ -1,5 +1,4 @@
 #include <iostream>
-#include <algorithm> 
 #include <cstdio>
 using namespace std;
 typedef long long ll;
@@ -10,20 +9,7 @@ typedef long long ll;
 // 	for (; ch < '0' || ch > '9'; ch = getchar());
 // 	for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
 // }
-const int maxn=105;
-struct st
-{
-    int num;
-    int id;
-};
-struct rule
-{
-    bool operator ()(const st&a,const st&b)
-    {
-        return a.num>b.num;
-    }
-};
-st num[maxn];
+int ma[16][16];
 int main()
 {
     std::ios::sync_with_stdio(false);
@@ -38,16 +24,61 @@ int main()
     cin>>t;
     while(t--)
     {
-        int n;
-        cin>>n;
-        int i;
+        int n,m,k;
+        cin>>n>>m>>k;
+        int i,j;
         wfor(i,0,n)
         {
-            cin>>num[i].num;
-            num[i].id=i;
+            wfor(j,0,m)
+            {
+                ma[i][j]=1;
+            }
         }
-        sort(num,num+n,rule());
-        cout<<num[0].id+1<<" "<<num[1].num<<endl;
+        int cnt=0;
+        wfor(i,0,n)
+        {
+            wfor(j,0,m)
+            {
+                if(i==0&&j%2!=0&&cnt<k)
+                {
+                    if(j!=0&&j!=m-1)
+                        ma[i][j]=3;
+                    else
+                        ma[i][j]=2;
+                    cnt++;
+                }else if(i!=0&&i!=n-1&&cnt<k)
+                {
+                    if(ma[i-1][j]==1)
+                    {
+                        cnt++;
+                        if(j!=0&&j!=m-1)
+                            ma[i][j]=4;
+                        else
+                            ma[i][j]=3;
+                    }
+                }else if(i==n-1&&cnt<k)
+                {
+                    if(ma[i-1][j]==1)
+                    {
+                        cnt++;
+                        if(j!=0&&j!=m-1)
+                            ma[i][j]=3;
+                        else
+                            ma[i][j]=2;
+                    }
+                }
+                if(cnt>=k)
+                    break;
+            }
+        }
+        wfor(i,0,n)
+        {
+            wfor(j,0,m-1)
+            {
+                cout<<ma[i][j]<<" ";
+            }
+            cout<<ma[i][j]<<endl;
+        }
     }
     return 0;
 }
