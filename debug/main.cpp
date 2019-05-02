@@ -18,7 +18,7 @@ struct st
     int cost;
 };
 st edge[maxn];
-int pre[105];
+int pre[1005];
 int findx(int x)
 {
     int t=x;
@@ -47,8 +47,10 @@ struct rule
     {
         if(a.cost!=b.cost)
             return a.cost<b.cost;
-        else
+        else if(a.u!=b.u)
             return a.u<b.u;
+        else
+            return a.v<b.v;
     }
 };
 struct ANS
