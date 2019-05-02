@@ -120,16 +120,9 @@ int main()
                 ans[anscnt++].v = v;
             }
         }
-        int root = findx(1);
         int flag = 0;
-        wfor(i, 1, n + 1)
-        {
-            if (findx(i) != root)
-            {
-                flag = 1;
-                break;
-            }
-        }
+        if (anscnt != n - 1)
+            flag = 1;
         if (flag == 1)
         {
             cout << -1 << endl;
