@@ -1,16 +1,16 @@
 #include <iostream>
 #include <cstring>
-#include <string>
+// #include <string>
 #include <cstdio>
 using namespace std;
 typedef long long ll;
 #define wfor(i,j,k) for(i=j;i<k;++i)
 #define mfor(i,j,k) for(i=j;i>=k;--i)
-// void read(int &x) {
-//  char ch = getchar(); x = 0;
-//  for (; ch < '0' || ch > '9'; ch = getchar());
-//  for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
-// }
+void read(int &x) {
+    char ch = getchar(); x = 0;
+    for (; ch < '0' || ch > '9'; ch = getchar());
+    for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
+}
 const int maxn = 100005;
 struct node
 {
@@ -171,12 +171,13 @@ void find_time(int l, int r, int id, int len, int &x, node *tree)
 {
     if (tree[id].len < len)
     {
-        int pa=id/2;
-        if(tree[pa<<1].rlen+tree[pa<<1|1].llen>=len)
+        int pa = id / 2;
+        if (tree[pa << 1].rlen + tree[pa << 1 | 1].llen >= len)
         {
-            x=min(tree[pa<<1].right,x);
-        }
-        return ;
+            if (tree[pa << 1].rlen != 0 && tree[pa << 1 | 1].llen != 0)
+                x = min(tree[pa << 1].right, x);
+        } else
+            return ;
     } else
     {
         x = min(x, tree[id].l);
@@ -190,42 +191,50 @@ void find_time(int l, int r, int id, int len, int &x, node *tree)
 }
 int main()
 {
-    std::ios::sync_with_stdio(false);
-    #ifdef test
-    freopen("F:\\Desktop\\question\\in.txt","r",stdin);
-    #endif
-    #ifdef ubuntu
-    freopen("/home/time/debug/debug/in","r",stdin);
-    freopen("/home/time/debug/debug/out","w",stdout);
-    #endif
+    // std::ios::sync_with_stdio(false);
+    // #ifdef test
+    // freopen("F:\\Desktop\\question\\in.txt","r",stdin);
+    // #endif
+    // #ifdef ubuntu
+    // freopen("/home/time/debug/debug/in","r",stdin);
+    // freopen("/home/time/debug/debug/out","w",stdout);
+    // #endif
     int t;
     int casecnt = 0;
-    cin >> t;
+    // cin >> t;
+    read(t);
     while (t--)
     {
         casecnt++;
         int n, m;
-        cin >> n >> m;
+        // cin >> n >> m;
+        read(n);
+        read(m);
         memset(tree1, 0, sizeof(tree1));
         memset(tree2, 0, sizeof(tree2));
         build(1, n, 1);
         int i;
-        cout << "Case " << casecnt << ":" << endl;
+        // cout << "Case " << casecnt << ":" << endl;
+        printf("Case %d:\n", casecnt);
         wfor(i, 0, m)
         {
-            string s;
+            char s[15];
             int tim;
-            cin >> s >> tim;
+            // cin >> s >> tim;.
+            scanf("%s", s);
+            read(tim);
             if (s[0] == 'D')
             {
                 int x = 1e9;
                 find_time(1, n, 1, tim, x, tree1);
                 if (x == 1e9)
                 {
-                    cout << "fly with yourself" << endl;
+                    // cout << "fly with yourself" << endl;
+                    printf("fly with yourself\n");
                 } else
                 {
-                    cout << x << ",let's fly" << endl;
+                    // cout << x << ",let's fly" << endl;
+                    printf("%d,let's fly\n", x);
                     updata(1, n, x, x + tim - 1, 1, tree1);
                 }
             } else if (s[0] == 'N')
@@ -237,16 +246,19 @@ int main()
                     find_time(1, n, 1, tim, x, tree2);
                     if (x == 1e9)
                     {
-                        cout << "wait for me" << endl;
+                        // cout << "wait for me" << endl;
+                        printf("wait for me\n");
                     } else
                     {
-                        cout << x << ",don't put my gezi" << endl;
+                        // cout << x << ",don't put my gezi" << endl;
+                        printf("%d,don't put my gezi\n", x);
                         updata(1, n, x, x + tim - 1, 1, tree1);
                         updata(1, n, x, x + tim - 1, 1, tree2);
                     }
                 } else
                 {
-                    cout << x << ",don't put my gezi" << endl;
+                    // cout << x << ",don't put my gezi" << endl;
+                    printf("%d,don't put my gezi\n", x);
                     updata(1, n, x, x + tim - 1, 1, tree1);
                     updata(1, n, x, x + tim - 1, 1, tree2);
                 }
@@ -254,10 +266,12 @@ int main()
             {
                 int l, r;
                 l = tim;
-                cin >> r;
+                // cin >> r;
+                read(r);
                 study(1, n, l, r, 1, tree1);
                 study(1, n, l, r, 1, tree2);
-                cout << "I am the hope of chinese chengxuyuan!!" << endl;
+                // cout << "I am the hope of chinese chengxuyuan!!" << endl;
+                printf("I am the hope of chinese chengxuyuan!!\n");
             }
         }
     }
