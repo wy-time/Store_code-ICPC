@@ -73,9 +73,33 @@ int main()
             break;
         int cnt=0;
         int pos=num.id;
-        int be=max(num.id-k-1,-1);
-        int end=num.id+k+1>n-1?-1:num.id+k+1;
+        while(cnt<=k)
+        {
+            if(_next[pos]==-1)
+            {
+                pos=-1;
+                break;
+            }
+            pos=_next[pos];
+            cnt++;
+        }
+        int end=pos;
+        cnt=0;
+        pos=num.id;
+        while(cnt<=k)
+        {
+            if(pre[pos]==-1)
+            {
+                pos=-1;
+                break;
+            }
+            pos=pre[pos];
+            cnt++;
+        }
+        int be=pos;
+        pos=num.id;
         int temp=0;
+        cnt=0;
         while(cnt<=k)
         {
             temp=-1;
