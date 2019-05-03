@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstring> 
 #include <queue> 
 #include <algorithm> 
 #include <cstdio>
@@ -25,6 +26,9 @@ struct rule
         return a.num<b.num;
     }
 };
+priority_queue<st,vector<st>,rule>qu;
+int _next[maxn];
+int pre[maxn];
 int main()
 {
     std::ios::sync_with_stdio(false);
@@ -38,13 +42,20 @@ int main()
     int n,k;
     cin>>n>>k;
     int i;
-    priority_queue<st,vector<st>,rule>qu;
     st num;
     wfor(i,0,n)
     {
         cin>>num.num;
         num.id=i;
         qu.push(num);
+        if(i!=0)
+            pre[i]=i-1;
+        else
+            pre[i]=-1;
+        if(i!=n-1)
+            _next[i]=i+1;
+        else
+            _next[i]=-1;
     }
     int flag=1;
     wfor(i,0,n)
@@ -58,34 +69,53 @@ int main()
             num=qu.top();
             qu.pop();
         }
+        if(ans[num.id]!=0)
+            break;
         int cnt=0;
         int pos=num.id;
-        if(ans[pos]==0)
-            ans[pos]=flag;
-        while(cnt<k)
+        int be=max(num.id-k-1,-1);
+        int end=num.id+k+1>n-1?-1:num.id+k+1;
+        int temp=0;
+        while(cnt<=k)
         {
+            temp=-1;
             if(ans[pos]==0)
             {
                 ans[pos]=flag;
                 cnt++;
+                temp=pos;
             }
-            pos++;
-            if(pos>=n)
+            pos=_next[pos];
+            if(temp!=-1)
+            {
+                _next[temp]=end;
+                pre[temp]=be;
+            }
+            if(pos==-1)
                 break;
         }
         cnt=0;
-        pos=num.id;
-        while(cnt<k)
+        pos=max(num.id-1,-1);
+        while(cnt<k&&pos!=-1)
         {
+            temp=-1;
             if(ans[pos]==0)
             {
                 ans[pos]=flag;
                 cnt++;
+                temp=pos;
             }
-            pos--;
-            if(pos<0)
+            pos=pre[pos];
+            if(temp!=-1)
+            {
+                _next[temp]=end;
+                pre[temp]=be;
+            }
+            if(pos==-1)
                 break;
         }
+        _next[be]=end;
+        pre[end]=be;
         flag=flag==1?2:1;
     }
     wfor(i,0,n)
