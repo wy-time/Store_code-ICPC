@@ -1,4 +1,5 @@
 #include <iostream>
+#include <algorithm> 
 #include <cstdio>
 using namespace std;
 typedef long long ll;
@@ -9,6 +10,20 @@ typedef long long ll;
 // 	for (; ch < '0' || ch > '9'; ch = getchar());
 // 	for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
 // }
+struct st
+{
+    int a;
+    int b;
+};
+struct rule
+{
+    bool operator ()(const st &x,const st&y)
+    {
+        return x.a-x.b>y.a-y.b;
+    }
+};
+const int maxn=1e5+5;
+st num[maxn];
 int main()
 {
     std::ios::sync_with_stdio(false);
@@ -19,23 +34,20 @@ int main()
     freopen("/home/time/debug/debug/in","r",stdin);
     freopen("/home/time/debug/debug/out","w",stdout);
     #endif
-    int t;
-    cin>>t;
-    while(t--)
+    int n;
+    cin>>n;
+    int i;
+    wfor(i,0,n)
     {
-        int n;
-        cin>>n;
-        int cnt=0;
-        while(n>1)
-        {
-            if(n%10==0)
-            {
-                n/=10;
-            }else
-                n++;
-            cnt++;
-        }
-        cout<<cnt<<endl;
+        cin>>num[i].a>>num[i].b;
     }
+    sort(num,num+n,rule());
+    ll ans=0;
+    wfor(i,0,n)
+    {
+        ans+=num[i].a*i;
+        ans+=num[i].b*(n-i-1);
+    }
+    cout<<ans<<endl;
     return 0;
 }
