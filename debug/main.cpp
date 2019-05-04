@@ -9,30 +9,6 @@ typedef long long ll;
 // 	for (; ch < '0' || ch > '9'; ch = getchar());
 // 	for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
 // }
-struct st
-{
-    int num;
-    int tim;
-    int last;
-    bool operator <(const st&x)const
-    {
-        if(x.num!=num)
-        {
-            return num>x.num;
-        }else if(tim!=x.tim)
-            return tim<x.tim;
-        else 
-            return last<x.last;
-    }
-    bool operator ==(const st&x)const
-    {
-        if(x.num==num&&x.tim==tim&&x.last==last)
-        {
-            return true;
-        }else
-            return false;
-    }
-};
 int main()
 {
     std::ios::sync_with_stdio(false);
@@ -43,16 +19,23 @@ int main()
     freopen("/home/time/debug/debug/in","r",stdin);
     freopen("/home/time/debug/debug/out","w",stdout);
     #endif
-    st a,b;
-    cin>>a.num>>a.tim>>a.last;
-    cin>>b.num>>b.tim>>b.last;
-    if(a==b)
+    int t;
+    cin>>t;
+    while(t--)
     {
-        cout<<"God"<<endl;
-    }else if(a<b)
-    {
-        cout<<1<<endl;
-    }else 
-        cout<<2<<endl;
+        int n;
+        cin>>n;
+        int cnt=0;
+        while(n>1)
+        {
+            if(n%10==0)
+            {
+                n/=10;
+            }else
+                n++;
+            cnt++;
+        }
+        cout<<cnt<<endl;
+    }
     return 0;
 }
