@@ -108,8 +108,7 @@ Matix mul(Matix a, Matix b)
         {
             wfor(k, 0, cnt)
             {
-                c.m[i][j] += a.m[i][k] * b.m[k][j] % mod;
-                c.m[i][j] %= mod;
+                c.m[i][j] = (c.m[i][j]+a.m[i][k] * b.m[k][j])% mod;
             }
         }
     }
