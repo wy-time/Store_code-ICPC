@@ -1,92 +1,85 @@
 #include <iostream>
-#include <queue>
-#include <cstring>
-#include <string>
+#include <queue> 
+#include <map> 
+#include <cstring> 
+#include <string> 
 #include <cstdio>
 using namespace std;
 typedef long long ll;
 #define wfor(i,j,k) for(i=j;i<k;++i)
 #define mfor(i,j,k) for(i=j;i>=k;--i)
-// void read(ll &x) {
-//  char ch = getchar(); x = 0;
-//  for (; ch < '0' || ch > '9'; ch = getchar());
-//  for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
+// void read(int &x) {
+// 	char ch = getchar(); x = 0;
+// 	for (; ch < '0' || ch > '9'; ch = getchar());
+// 	for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
 // }
-const ll maxn = 105;
-const ll mod = 100000;
-ll ma[200];
+int cnt=0;
 struct st
 {
-    ll next[4];
-    ll fail;
-    ll is_string;
+    int next[55];
+    int fail;
+    int is_jail;
     void init()
     {
-        memset(next, -1, sizeof(next));
-        fail = -1;
-        is_string = 0;
+        memset(next,-1,sizeof(next));
+        fail=-1;
+        is_jail=0;
     }
 };
-st trie[maxn];
-void init()
-{
-    ma['A'] = 0;
-    ma['C'] = 1;
-    ma['G'] = 2;
-    ma['T'] = 3;
-}
-ll cnt = 0;
+st trie[105];
+map<char,int>ma;
+int num;
 void build(string s)
 {
-    ll len = s.size();
-    ll i;
-    ll now = 0;
-    wfor(i, 0, len)
+    int len=s.size();
+    int i;
+    int now=0;
+    wfor(i,0,len)
     {
-        ll id = ma[s[i]];
-        if (trie[now].next[id] == -1)
+        int pos=ma[s[i]];
+        if(trie[now].next[pos]==-1)
         {
-            trie[++cnt].init();
-            trie[now].next[id] = cnt;
+            trie[++num].init();
+            trie[now].next[pos]=num;
         }
-        now = trie[now].next[id];
+        now=trie[now].next[pos];
     }
-    trie[now].is_string = 1;
+    trie[now].is_jail=1;
 }
 void cal_fail()
 {
-    ll i;
-    ll now = 0;
-    queue<ll>qu;
-    wfor(i, 0, 4)
+    queue<int>qu;
+    int now=0;
+    int i;
+    wfor(i,0,cnt)
     {
-        if (trie[now].next[i] != -1)
+        if(trie[now].next[i]!=-1)
         {
-            trie[trie[now].next[i]].fail = 0;
-            qu.push(trie[now].next[i]);
+            int pos=trie[now].next[i];
+            trie[pos].fail=0;
+            qu.push(pos);
         }
     }
-    while (!qu.empty())
+    while(!qu.empty())
     {
-        ll father = qu.front();
+        int father=qu.front();
         qu.pop();
-        wfor(i, 0, 4)
+        wfor(i,0,cnt)
         {
-            ll child = trie[father].next[i];
-            if (child != -1)
+            int now=trie[father].fail;
+            int child=trie[father].next[i];
+            if(child!=-1)
             {
-                now = trie[father].fail;
-                while (now != -1 && trie[now].next[i] == -1)
+                while(now!=-1&&trie[now].next[i]==-1)
+                    now=trie[now].fail;
+                if(now==-1)
                 {
-                    now = trie[now].fail;
-                }
-                if (now == -1)
-                    trie[child].fail = 0;
-                else
+                    trie[child].fail=0;
+                }else
                 {
-                    trie[child].fail = trie[now].next[i];
-                    if (trie[trie[now].next[i]].is_string != 0)
-                        trie[child].is_string = 1;
+                    trie[child].fail=trie[now].next[i];
+                    if(trie[trie[now].next[i]].is_jail!=0)
+                        trie[child].is_jail=1;
                 }
                 qu.push(child);
             }
@@ -95,105 +88,110 @@ void cal_fail()
 }
 struct Matix
 {
-    ll m[105][105];
+    int m[105][105];
 };
-Matix mul(Matix a, Matix b)
+void get_matix(Matix &ans)
+{
+    int i,j;
+    wfor(i,0,num)
+    {
+        if(trie[i].is_jail==0)
+        {
+            wfor(j,0,cnt)
+            {
+                if(trie[i].next[j]==-1)
+                {
+                    int now=i;
+                    while(now!=-1&&trie[now].next[j]==-1)
+                        now=trie[now].fail;
+                    if(now!=-1)
+                    {
+                        if(trie[trie[now].next[j]].is_jail==0)
+                            ans.m[i][trie[now].next[j]]++;
+                    }else
+                        ans.m[i][0]++;
+                }else
+                {
+                    int pos=trie[i].next[j];
+                    if(trie[pos].is_jail==0)
+                        ans.m[i][pos]++;
+                }
+            }
+        }
+    }
+}
+Matix mul(Matix a,Matix b)
 {
     Matix c;
-    memset(c.m, 0, sizeof(c.m));
-    ll i, j, k;
-    wfor(i, 0, cnt)
+    memset(c.m,0,sizeof(c));
+    int i,j,k;
+    wfor(i,0,num)
     {
-        wfor(j, 0, cnt)
+        wfor(j,0,num)
         {
-            wfor(k, 0, cnt)
+            wfor(k,0,num)
             {
-                c.m[i][j] = (c.m[i][j]+a.m[i][k] * b.m[k][j])% mod;
+                c.m[i][j]+=a.m[i][k]*b.m[k][j];
             }
         }
     }
     return c;
 }
-Matix ksm(Matix a, ll b)
+Matix ksm(Matix a,int b)
 {
     Matix ans;
-    memset(ans.m, 0, sizeof(ans.m));
-    ll i;
-    wfor(i, 0, cnt)
+    memset(ans.m,0,sizeof(ans.m));
+    int i;
+    wfor(i,0,num)
     {
-        ans.m[i][i] = 1;
+        ans.m[i][i]=1;
     }
-    while (b)
+    while(b)
     {
-        if (b & 1)
-        {
-            ans = mul(ans, a);
-        }
-        b >>= 1;
-        a = mul(a, a);
+        if(b&1)
+            ans=mul(a,ans);
+        b>>=1;
+        a=mul(a,a);
     }
     return ans;
 }
 int main()
 {
     std::ios::sync_with_stdio(false);
-#ifdef test
-    freopen("F:\\Desktop\\question\\in.txt", "r", stdin);
-#endif
-#ifdef ubuntu
-    freopen("/home/time/debug/debug/in", "r", stdin);
-    freopen("/home/time/debug/debug/out", "w", stdout);
-#endif
-    ll n, m;
-    cin >> n >> m;
-    init();
-    ll i;
+    #ifdef test
+    freopen("F:\\Desktop\\question\\in.txt","r",stdin);
+    #endif
+    #ifdef ubuntu
+    freopen("/home/time/debug/debug/in","r",stdin);
+    freopen("/home/time/debug/debug/out","w",stdout);
+    #endif
+    int n,m,p;
+    cin>>n>>m>>p;
     trie[0].init();
-    wfor(i, 0, n)
+    string s;
+    cin>>s;
+    int len=s.size();
+    int i;
+    wfor(i,0,len)
     {
-        string s;
-        cin >> s;
+        if(ma.count(s[i])==0)
+            ma.insert(make_pair(s[i],cnt++));
+    }
+    wfor(i,0,p)
+    {
+        cin>>s;
         build(s);
     }
     cal_fail();
-    cnt++;
-    Matix x;
-    memset(x.m, 0, sizeof(x.m));
-    wfor(i, 0, cnt)
+    Matix ans;
+    memset(ans.m,0,sizeof(ans));
+    get_matix(ans);
+    ans=ksm(ans,m);
+    ll out=0;
+    wfor(i,0,num)
     {
-        ll j;
-        if (trie[i].is_string == 0)
-        {
-            wfor(j, 0, 4)
-            {
-                ll now = i;
-                if (trie[now].next[j] == -1)
-                {
-                    while (now != -1 && trie[now].next[j] == -1)
-                        now = trie[now].fail;
-                    if (now != -1)
-                    {
-                        if (trie[now].next[j] != -1 && trie[trie[now].next[j]].is_string == 0)
-                        {
-                            x.m[i][trie[now].next[j]]++;
-                        }
-                    } else
-                        x.m[i][0]++;
-                } else
-                {
-                    if (trie[trie[now].next[j]].is_string == 0)
-                        x.m[i][trie[now].next[j]]++;
-                }
-            }
-        }
+        out+=ans.m[0][i];
     }
-    x = ksm(x, m);
-    ll ans = 0;
-    wfor(i, 0, cnt)
-    {
-        ans += x.m[0][i];
-        ans %= mod;
-    }
-    cout << ans << endl;
+    cout<<out<<endl;
     return 0;
 }

@@ -21,203 +21,215 @@
 # Debug Line 历史记录 (从新到旧)：
 
 # 寄存器:
-"0	LINE	0
-	                
-|3,0,0,1,1,0,1553753576,"                "
+""0	CHAR	0
+	m
+|3,1,0,0,1,0,1557140264,"m"
 "1	LINE	0
-	                rescost=max(rescost,it.w);
-|3,0,1,1,1,0,1553753589,"                rescost=max(rescost,it.w);"
+	        wfor()
+|3,0,1,1,1,0,1557139866,"        wfor()"
 "2	LINE	0
-	                rescost=max(rescost,it.w);
-|3,0,2,1,1,0,1553753588,"                rescost=max(rescost,it.w);"
-"3	LINE	0
-	                
-|3,0,3,1,1,0,1553753532,"                "
-"4	LINE	0
-	            int j;
-|3,0,4,1,1,0,1553753510,"            int j;"
-"5	LINE	0
 	
-|3,0,5,1,1,0,1553753480,""
+|3,0,2,1,1,0,1557139628,""
+"3	LINE	0
+	                        if)
+|3,0,3,1,1,0,1557139627,"                        if)"
+"4	LINE	0
+	                    
+|3,0,4,1,1,0,1557139546,"                    "
+"5	LINE	0
+	                    if(trie[i].next[j])
+|3,0,5,1,1,0,1557139278,"                    if(trie[i].next[j])"
 "6	LINE	0
-	        anscnt=0;
-|3,0,6,1,1,0,1553753400,"        anscnt=0;"
+	                    
+|3,0,6,1,1,0,1557139269,"                    "
 "7	LINE	0
-	            anscnt++;
-|3,0,7,1,1,0,1553753367,"            anscnt++;"
+	        
+|3,0,7,1,1,0,1557139263,"        "
 "8	LINE	0
-	int anscnt=0;
-|3,0,8,1,1,0,1553753365,"int anscnt=0;"
-"9	LINE	0
-	st ans[maxn];
-|3,0,9,1,1,0,1553753354,"st ans[maxn];"
-""-	CHAR	0
-	)
-|3,1,36,0,1,0,1553753610,")"
+	        }
+	        
+|3,0,8,1,2,0,1557139262,"        }","        "
+"9	CHAR	0
+	wfor(j,0,cnt)
+	        {
+	            if(trie[i].next[j]==-1)
+	            {
+	                
+	            }else
+	            {
+	                
+	            }
+	        }
+|3,0,9,0,10,0,1557139252,"wfor(j,0,cnt)","        {","            if(trie[i].next[j]==-1)","            {","                ","            }else","            {","                ","            }","        }"
+"-	CHAR	0
+	m
+|3,0,36,0,1,0,1557140062,"m"
 
 # 文件标记:
-'0  92  1  ~/debug/debug/main.cpp
-|4,48,92,1,1553753780,"~/debug/debug/main.cpp"
-'1  108  0  ~/debug/debug/main.cpp
-|4,49,108,0,1553753619,"~/debug/debug/main.cpp"
+'0  67  0  ~/debug/debug/main.cpp
+|4,48,67,0,1557140267,"~/debug/debug/main.cpp"
+'1  193  0  ~/debug/debug/main.cpp
+|4,49,193,0,1557140115,"~/debug/debug/main.cpp"
+'2  195  0  ~/debug/debug/main.cpp
+|4,50,195,0,1557140099,"~/debug/debug/main.cpp"
 
 # 跳转列表 (从新到旧):
--'  92  1  ~/debug/debug/main.cpp
-|4,39,92,1,1553753780,"~/debug/debug/main.cpp"
--'  41  0  ~/debug/debug/main.cpp
-|4,39,41,0,1553753779,"~/debug/debug/main.cpp"
--'  107  10  ~/debug/debug/main.cpp
-|4,39,107,10,1553753778,"~/debug/debug/main.cpp"
+-'  67  0  ~/debug/debug/main.cpp
+|4,39,67,0,1557140267,"~/debug/debug/main.cpp"
+-'  183  0  ~/debug/debug/main.cpp
+|4,39,183,0,1557140255,"~/debug/debug/main.cpp"
+-'  193  0  ~/debug/debug/main.cpp
+|4,39,193,0,1557140254,"~/debug/debug/main.cpp"
 -'  1  0  ~/debug/debug/main.cpp
-|4,39,1,0,1553753775,"~/debug/debug/main.cpp"
--'  108  0  ~/debug/debug/main.cpp
-|4,39,108,0,1553753619,"~/debug/debug/main.cpp"
--'  28  11  ~/debug/debug/main.cpp
-|4,39,28,11,1553753399,"~/debug/debug/main.cpp"
--'  2  9  ~/debug/debug/main.cpp
-|4,39,2,9,1553753350,"~/debug/debug/main.cpp"
--'  29  0  ~/debug/debug/main.cpp
-|4,39,29,0,1553753349,"~/debug/debug/main.cpp"
--'  58  12  ~/debug/debug/main.cpp
-|4,39,58,12,1553753144,"~/debug/debug/main.cpp"
--'  68  4  ~/debug/debug/main.cpp
-|4,39,68,4,1553753125,"~/debug/debug/main.cpp"
--'  97  0  ~/debug/debug/main.cpp
-|4,39,97,0,1553752974,"~/debug/debug/main.cpp"
--'  42  0  ~/debug/debug/main.cpp
-|4,39,42,0,1553752965,"~/debug/debug/main.cpp"
+|4,39,1,0,1557140252,"~/debug/debug/main.cpp"
+-'  31  0  ~/debug/debug/main.cpp
+|4,39,31,0,1557140105,"~/debug/debug/main.cpp"
+-'  49  0  ~/debug/debug/main.cpp
+|4,39,49,0,1557140104,"~/debug/debug/main.cpp"
+-'  195  0  ~/debug/debug/main.cpp
+|4,39,195,0,1557140099,"~/debug/debug/main.cpp"
+-'  121  4  ~/debug/debug/main.cpp
+|4,39,121,4,1557139262,"~/debug/debug/main.cpp"
+-'  102  12  ~/debug/debug/main.cpp
+|4,39,102,12,1557139259,"~/debug/debug/main.cpp"
+-'  103  16  ~/debug/debug/main.cpp
+|4,39,103,16,1557139257,"~/debug/debug/main.cpp"
 -'  63  0  ~/debug/debug/main.cpp
-|4,39,63,0,1553752953,"~/debug/debug/main.cpp"
--'  91  0  ~/debug/debug/main.cpp
-|4,39,91,0,1553752949,"~/debug/debug/main.cpp"
--'  94  0  ~/debug/debug/main.cpp
-|4,39,94,0,1553752947,"~/debug/debug/main.cpp"
--'  85  0  ~/debug/debug/main.cpp
-|4,39,85,0,1553752707,"~/debug/debug/main.cpp"
--'  33  20  ~/debug/debug/main.cpp
-|4,39,33,20,1553752704,"~/debug/debug/main.cpp"
--'  56  23  ~/debug/debug/main.cpp
-|4,39,56,23,1553752690,"~/debug/debug/main.cpp"
--'  109  0  ~/debug/debug/main.cpp
-|4,39,109,0,1553752645,"~/debug/debug/main.cpp"
--'  47  8  ~/debug/debug/main.cpp
-|4,39,47,8,1553752643,"~/debug/debug/main.cpp"
--'  46  24  ~/debug/debug/main.cpp
-|4,39,46,24,1553752473,"~/debug/debug/main.cpp"
--'  25  13  ~/debug/debug/main.cpp
-|4,39,25,13,1553752329,"~/debug/debug/main.cpp"
--'  23  16  ~/debug/debug/main.cpp
-|4,39,23,16,1553752114,"~/debug/debug/main.cpp"
--'  21  9  ~/debug/debug/main.cpp
-|4,39,21,9,1553752097,"~/debug/debug/main.cpp"
--'  86  4  ~/debug/debug/main.cpp
-|4,39,86,4,1553752090,"~/debug/debug/main.cpp"
--'  34  17  ~/debug/debug/main.cpp
-|4,39,34,17,1553752019,"~/debug/debug/main.cpp"
--'  36  6  ~/debug/debug/main.cpp
-|4,39,36,6,1553751913,"~/debug/debug/main.cpp"
+|4,39,63,0,1557139133,"~/debug/debug/main.cpp"
+-'  92  1  ~/debug/debug/main.cpp
+|4,39,92,1,1557139129,"~/debug/debug/main.cpp"
+-'  41  0  ~/debug/debug/main.cpp
+|4,39,41,0,1557139085,"~/debug/debug/main.cpp"
+-'  185  0  ~/debug/debug/main.cpp
+|4,39,185,0,1557139080,"~/debug/debug/main.cpp"
+-'  84  30  ~/debug/debug/main.cpp
+|4,39,84,30,1557138980,"~/debug/debug/main.cpp"
+-'  76  12  ~/debug/debug/main.cpp
+|4,39,76,12,1557138909,"~/debug/debug/main.cpp"
+-'  176  0  ~/debug/debug/main.cpp
+|4,39,176,0,1557138638,"~/debug/debug/main.cpp"
+-'  56  31  ~/debug/debug/main.cpp
+|4,39,56,31,1557138634,"~/debug/debug/main.cpp"
+-'  2  9  ~/debug/debug/main.cpp
+|4,39,2,9,1557138492,"~/debug/debug/main.cpp"
+-'  51  3  ~/debug/debug/main.cpp
+|4,39,51,3,1557138491,"~/debug/debug/main.cpp"
+-'  40  24  ~/debug/debug/main.cpp
+|4,39,40,24,1557138309,"~/debug/debug/main.cpp"
+-'  3  12  ~/debug/debug/main.cpp
+|4,39,3,12,1557137901,"~/debug/debug/main.cpp"
+-'  171  4  ~/debug/debug/main.cpp
+|4,39,171,4,1557137899,"~/debug/debug/main.cpp"
+-'  172  0  ~/debug/debug/main.cpp
+|4,39,172,0,1557137863,"~/debug/debug/main.cpp"
+-'  5  9  ~/debug/debug/main.cpp
+|4,39,5,9,1557137848,"~/debug/debug/main.cpp"
+-'  4  9  ~/debug/debug/main.cpp
+|4,39,4,9,1557137845,"~/debug/debug/main.cpp"
+-'  6  9  ~/debug/debug/main.cpp
+|4,39,6,9,1557137785,"~/debug/debug/main.cpp"
 
 # 文件内的标记历史记录 (从新到旧):
 
 > ~/debug/debug/main.cpp
-	*	1553753780	0
-	"	92	1
-	^	107	10
-	.	107	9
-	+	23	16
-	+	84	19
-	+	85	19
-	+	108	0
-	+	90	0
-	+	106	0
-	+	90	15
-	+	93	35
-	+	94	20
-	+	97	16
-	+	37	0
-	+	65	0
-	+	41	0
-	+	63	0
-	+	43	26
-	+	46	23
-	+	46	25
-	+	37	22
-	+	25	13
-	+	97	18
-	+	87	14
-	+	92	14
-	+	97	16
-	+	41	0
-	+	46	21
-	+	46	31
-	+	46	8
-	+	40	16
-	+	44	0
-	+	46	0
-	+	61	0
-	+	57	22
-	+	64	12
-	+	57	0
-	+	60	0
-	+	59	24
-	+	62	20
-	+	61	24
-	+	29	13
-	+	56	14
-	+	37	31
-	+	56	23
-	+	16	11
-	+	33	20
-	+	57	30
-	+	29	0
-	+	2	15
-	+	60	12
-	+	61	0
-	+	29	13
-	+	57	20
-	+	97	0
-	+	97	16
-	+	97	12
-	+	42	0
-	+	97	0
-	+	105	0
-	+	29	0
-	+	29	2
-	+	56	27
-	+	105	0
-	+	37	0
-	+	37	22
-	+	37	0
-	+	21	8
-	+	2	0
-	+	29	0
-	+	27	0
-	+	57	0
-	+	56	34
-	+	28	11
-	+	97	0
-	+	95	19
-	+	48	24
-	+	49	38
-	+	50	0
-	+	55	0
-	+	53	28
-	+	54	0
-	+	48	16
-	+	50	28
-	+	52	25
-	+	54	38
-	+	96	19
-	+	105	0
-	+	99	0
-	+	104	0
-	+	102	23
-	+	89	16
-	+	104	0
+	*	1557140267	0
+	"	67	0
+	^	66	17
+	.	66	16
+	+	86	12
+	+	70	42
+	+	71	0
+	+	85	0
+	+	86	0
+	+	73	16
+	+	76	0
+	+	75	0
+	+	86	0
+	+	68	0
+	+	69	0
+	+	77	36
+	+	74	0
+	+	77	38
+	+	84	54
+	+	84	30
+	+	78	0
+	+	83	0
+	+	80	0
+	+	81	56
+	+	82	45
+	+	185	14
+	+	89	0
+	+	92	0
+	+	91	19
+	+	92	1
+	+	158	0
+	+	186	13
+	+	195	0
+	+	93	0
+	+	122	0
+	+	96	9
+	+	95	11
+	+	122	1
+	+	96	0
+	+	121	0
+	+	121	8
+	+	121	24
+	+	98	0
+	+	121	0
+	+	100	12
 	+	103	0
-	+	101	38
-	+	89	7
-	+	101	36
-	+	107	9
-	a	41	0
-	b	92	0
+	+	101	0
+	+	120	0
+	+	121	0
+	+	115	43
+	+	116	42
+	+	117	40
+	+	105	55
+	+	106	42
+	+	107	0
+	+	111	0
+	+	107	30
+	+	109	60
+	+	110	32
+	+	111	25
+	+	112	37
+	+	170	18
+	+	123	0
+	+	139	0
+	+	126	27
+	+	128	0
+	+	137	0
+	+	130	0
+	+	128	15
+	+	130	0
+	+	136	0
+	+	132	0
+	+	135	0
+	+	134	39
+	+	138	12
+	+	140	0
+	+	157	0
+	+	142	13
+	+	143	33
+	+	145	0
+	+	148	0
+	+	147	21
+	+	149	0
+	+	155	0
+	+	151	15
+	+	152	26
+	+	153	13
+	+	154	18
+	+	156	14
+	+	187	18
+	+	188	18
+	+	180	13
+	+	189	12
+	+	190	0
+	+	193	0
+	+	192	24
+	+	194	19
+	+	66	16
+	a	49	0
+	b	183	0
+	c	31	0
