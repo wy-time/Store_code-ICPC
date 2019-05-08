@@ -94,59 +94,61 @@ int main()
     freopen("/home/time/debug/debug/out","w",stdout);
     #endif
     int n,d,f;
-    cin>>n>>f>>d;
-    cnt=-1;
-    memset(head,-1,sizeof(head));
-    int i;
-    wfor(i,0,f)
+    while(cin>>n>>f>>d)
     {
-        int t;
-        cin>>t;
-        add(0,i+1,t);
-        add(i+1,0,0);
-    }
-    wfor(i,0,d)
-    {
-        int t;
-        cin>>t;
-        add(1000,i+1+f,0);
-        add(i+1+f,1000,t);
-    }
-    int pos=d+f;
-    wfor(i,0,n)
-    {
-        add(i+1+pos,i+1+pos+205,1);
-        add(i+1+pos+205,i+1+pos,0);
-    }
-    wfor(i,0,n)
-    {
-        int j;
-        wfor(j,0,f)
+        cnt=-1;
+        memset(head,-1,sizeof(head));
+        int i;
+        wfor(i,0,f)
         {
-            char c;
-            cin>>c;
-            if(c=='Y')
+            int t;
+            cin>>t;
+            add(0,i+1,t);
+            add(i+1,0,0);
+        }
+        wfor(i,0,d)
+        {
+            int t;
+            cin>>t;
+            add(1000,i+1+f,0);
+            add(i+1+f,1000,t);
+        }
+        int pos=d+f;
+        wfor(i,0,n)
+        {
+            add(i+1+pos,i+1+pos+205,1);
+            add(i+1+pos+205,i+1+pos,0);
+        }
+        wfor(i,0,n)
+        {
+            int j;
+            wfor(j,0,f)
             {
-                add(j+1,i+1+pos,1);
-                add(i+1+pos,j+1,0);
+                char c;
+                cin>>c;
+                if(c=='Y')
+                {
+                    add(j+1,i+1+pos,1);
+                    add(i+1+pos,j+1,0);
+                }
             }
         }
-    }
-    wfor(i,0,n)
-    {
-        int j;
-        wfor(j,0,d)
+        wfor(i,0,n)
         {
-            char c;
-            cin>>c;
-            if(c=='Y')
+            int j;
+            wfor(j,0,d)
             {
-                add(j+1+f,i+1+pos+205,0);
-                add(i+1+pos+205,j+1+f,1);
+                char c;
+                cin>>c;
+                if(c=='Y')
+                {
+                    add(j+1+f,i+1+pos+205,0);
+                    add(i+1+pos+205,j+1+f,1);
+                }
             }
         }
+        int ans=dinic(0,1000);
+        cout<<ans<<endl;
     }
-    int ans=dinic(0,1000);
-    cout<<ans<<endl;
     return 0;
 }
