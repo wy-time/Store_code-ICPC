@@ -34,7 +34,7 @@ int main()
 		s[(i << 1) - 1] = '#';
 		s[i << 1] = '$';
 		s[i << 1 | 1] = '\0';
-		int res = cal_plen();
+		int res = cal_plen();//最长子串的长度是半径减1，起始位置是中间位置减去半径再除以2。
 		cout << res << endl;
 	}
 	return 0;
