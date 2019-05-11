@@ -9,42 +9,66 @@ typedef long long ll;
 // 	for (; ch < '0' || ch > '9'; ch = getchar());
 // 	for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
 // }
+char ma[55][55];
 int main()
 {
-	std::ios::sync_with_stdio(false);
-#ifdef test
-	freopen("F:\\Desktop\\question\\in.txt", "r", stdin);
-#endif
-#ifdef ubuntu
-	freopen("/home/time/debug/debug/in", "r", stdin);
-	freopen("/home/time/debug/debug/out", "w", stdout);
-#endif
-	int n, m, r;
-	cin >> n >> m >> r;
-	int i;
-	int minn = 0x7f7f7f7f;
-	int maxn = 0;
-	wfor(i, 0, n)
-	{
-		int t;
-		cin >> t;
-		minn = min(minn, t);
-	}
-	wfor(i, 0, m)
-	{
-		int t;
-		cin >> t;
-		maxn = max(maxn, t);
-	}
-	if (minn >= maxn)
-		cout << r << endl;
-	else
-	{
-		int cnt = r / minn;
-        r-=cnt*minn;
-		r += maxn * cnt;
-		cout << r << endl;
-	}
-	return 0;
+    std::ios::sync_with_stdio(false);
+    #ifdef test
+    freopen("F:\\Desktop\\question\\in.txt","r",stdin);
+    #endif
+    #ifdef ubuntu
+    freopen("/home/time/debug/debug/in","r",stdin);
+    freopen("/home/time/debug/debug/out","w",stdout);
+    #endif
+    int n;
+    cin>>n;
+    int i;
+    wfor(i,0,n)
+    {
+        int j;
+        wfor(j,0,n)
+        {
+            cin>>ma[i][j];
+        }
+    }
+    int flag=1;
+    wfor(i,0,n)
+    {
+        int j;
+        if(flag==0)
+        {
+            break;
+        }
+        wfor(j,0,n)
+        {
+            if(ma[i][j]=='.')
+            {
+                if(i+2<n&&j-1>=0&&j+1<n)
+                {
+                    if(ma[i+1][j]=='.'&&ma[i+2][j]=='.'&&ma[i+1][j+1]=='.'&&ma[i+1][j-1]=='.')
+                    {
+                        ma[i+1][j]='#';
+                        ma[i+2][j]='#';
+                        ma[i+1][j+1]='#';
+                        ma[i+1][j-1]='#';
+                        ma[i][j]='#';
+                    }else
+                    {
+                        flag=0;
+                        break;
+                    }
+                }else
+                {
+                    flag=0;
+                    break;
+                }
+            }
+        }
+    }
+    if(flag==0)
+    {
+        cout<<"NO"<<endl;
+    }else
+        cout<<"YES"<<endl;
+    return 0;
 }
-
