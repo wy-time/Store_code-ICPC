@@ -38,7 +38,7 @@ void push_down(ll l,ll r,ll id)
         tree[id<<1]=fir*n+(n*n-n)/2;
         target[id<<1]=fir;
         n=r-mid;
-        fir=mid+fir;
+        fir=mid+1-l+fir;
         tree[id<<1|1]=fir*n+(n*n-n)/2;
         target[id<<1|1]=fir;
         target[id]=0;
