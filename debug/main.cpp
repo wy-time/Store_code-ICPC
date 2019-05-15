@@ -4,79 +4,30 @@ using namespace std;
 typedef long long ll;
 #define wfor(i,j,k) for(i=j;i<k;++i)
 #define mfor(i,j,k) for(i=j;i>=k;--i)
-// void read(ll &x) {
+// void read(int &x) {
 // 	char ch = getchar(); x = 0;
 // 	for (; ch < '0' || ch > '9'; ch = getchar());
 // 	for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
 // }
-const ll maxn=1e5+5;
-ll tree[maxn<<2];
-ll target[maxn<<2];
-void push_up(ll id)
+const int maxn=4e5+5;
+int prime[maxn];
+void get_prime()
 {
-    tree[id]=tree[id<<1]+tree[id<<1|1];
-}
-void build(ll l,ll r,ll id)
-{
-    if(l==r)
+    int i;
+    wfor(i,2,maxn)
     {
-        tree[id]=l;
-        return ;
-    }
-    ll mid=(l+r)>>1;
-    build(l,mid,id<<1);
-    build(mid+1,r,id<<1|1);
-    push_up(id);
-}
-void push_down(ll l,ll r,ll id)
-{
-    if(target[id]!=0)
-    {
-        ll mid=(l+r)>>1;
-        ll fir=target[id];
-        ll n=mid-l+1;
-        tree[id<<1]=fir*n+(n*n-n)/2;
-        target[id<<1]=fir;
-        n=r-mid;
-        fir=mid+1-l+fir;
-        tree[id<<1|1]=fir*n+(n*n-n)/2;
-        target[id<<1|1]=fir;
-        target[id]=0;
+        if(!prime[i])
+            prime[++prime[0]]=i;
+        int j;
+        for(j=1;j<=prime[0]&&i*prime[j]<maxn;j++)
+        {
+            prime[i*prime[j]]=1;
+            if(i%prime[j]==0)
+                break;
+        }
     }
 }
-void updata(ll l,ll r,ll L,ll R,ll id)
-{
-    if(l>=L&&r<=R)
-    {
-        ll n=r-l+1;
-        ll fir=l-L+1;
-        tree[id]=fir*n+(n*n-n)/2;
-        target[id]=fir;
-        return;
-    }
-    ll mid=(l+r)>>1;
-    push_down(l,r,id);
-    if(mid>=L)
-        updata(l,mid,L,R,id<<1);
-    if(mid<R)
-        updata(mid+1,r,L,R,id<<1|1);
-    push_up(id);
-}
-ll query(ll l,ll r,ll L,ll R,ll id)
-{
-    if(l>=L&&r<=R)
-    {
-        return tree[id];
-    }
-    ll mid=(l+r)>>1;
-    push_down(l,r,id);
-    ll ans=0;
-    if(mid>=L)
-        ans+=query(l,mid,L,R,id<<1);
-    if(mid<R)
-        ans+=query(mid+1,r,L,R,id<<1|1);
-    return ans;
-}
+int ans[maxn];
 int main()
 {
     std::ios::sync_with_stdio(false);
@@ -87,22 +38,43 @@ int main()
     freopen("/home/time/debug/debug/in","r",stdin);
     freopen("/home/time/debug/debug/out","w",stdout);
     #endif
-    ll n,m;
-    cin>>n>>m;
-    ll i;
-    build(1,n,1);
-    wfor(i,0,m)
+    get_prime();
+    int n;
+    cin>>n;
+    int i;
+    int cnt[3]={0};
+    wfor(i,0,n)
     {
-        ll op,l,r;
-        cin>>op>>l>>r;
-        if(op==1)
+        int t;
+        cin>>t;
+        cnt[t]++;
+    }
+    int now=0;
+    wfor(i,0,n)
+    {
+        int pos=lower_bound(prime+1,prime+prime[0]+1,now)-prime;
+        if(prime[pos]==now)
+            pos++;
+        if(cnt[2]!=0&now+2<=prime[pos])
         {
-            updata(1,n,l,r,1);
+            now+=2;
+            cnt[2]--;
+            ans[i]=2;
+        }else if(cnt[1]!=0&&now+1<=prime[pos])
+        {
+            now++;
+            cnt[1]--;
+            ans[i]=1;
         }else
         {
-            ll ans=query(1,n,l,r,1);
-            cout<<ans<<endl;
+            now+=2;
+            cnt[2]--;
+            ans[i]=2;
         }
+    }
+    wfor(i,0,n)
+    {
+        cout<<ans[i]<<" ";
     }
     return 0;
 }
