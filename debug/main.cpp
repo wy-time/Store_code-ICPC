@@ -25,24 +25,34 @@ int main()
     string s;
     cin>>s;
     int i;
-    char last=s[0];
-    int lastpos=0;
-    int flag=0;
-    wfor(i,1,n)
+    int cnt=(n-11)/2;
+    int len=n;
+    wfor(i,0,len)
     {
-        if(s[i]>last)
-        {
-            last=s[i];
-            lastpos=i;
-        }else if(s[i]<last)
-        {
-            cout<<"YES"<<endl;
-            cout<<lastpos+1<<" "<<i+1<<endl;
-            flag=1;
+        if(cnt<=0)
             break;
+        if(s[i]=='8')
+        {
+            s.erase(i,1);
+            i--;
+            len--;
+            cnt--;
         }
     }
-    if(flag!=1)
+    n=(n-11)/2;
+    wfor(i,0,n)
+    {
+        if(s[i]!='8')
+        {
+            s.erase(i,1);
+            i--;
+            n--;
+        }else
+            break;
+    }
+    if(s[0]=='8')
+        cout<<"YES"<<endl;
+    else
         cout<<"NO"<<endl;
     return 0;
 }
