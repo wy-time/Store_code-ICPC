@@ -9,7 +9,7 @@ typedef long long ll;
 //  for (; ch < '0' || ch > '9'; ch = getchar());
 //  for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
 // }
-const int maxn = 4e5 + 5;
+const int maxn = 1e6 + 5;
 int prime[maxn];
 void get_prime()
 {

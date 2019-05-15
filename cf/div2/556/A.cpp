@@ -36,13 +36,15 @@ int main()
 		cin >> t;
 		maxn = max(maxn, t);
 	}
-	if (minn >= maxnn)
+	if (minn >= maxn)
 		cout << r << endl;
 	else
 	{
 		int cnt = r / minn;
+		r -= cnt * minn;
 		r += maxn * cnt;
 		cout << r << endl;
 	}
 	return 0;
 }
+
