@@ -10,11 +10,8 @@ typedef long long ll;
 // 	for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
 // }
 const ll maxn=3e5+5;
-ll p[maxn];
-ll gcd(ll a,ll b)
-{
-    return b==0?a:gcd(b,a%b);
-}
+ll dp[maxn][3];
+ll num[maxn];
 int main()
 {
     std::ios::sync_with_stdio(false);
@@ -25,39 +22,24 @@ int main()
     freopen("/home/time/debug/debug/in","r",stdin);
     freopen("/home/time/debug/debug/out","w",stdout);
     #endif
-    ll n,m;
-    cin>>n>>m;
+    ll n,x;
+    cin>>n>>x;
     ll i;
-    ll g=0;
-    ll t;
-    cin>>t;
-    ll last=t;
-    ll beg=t;
-    wfor(i,1,n)
+    wfor(i,1,n+1)
     {
-        cin>>t;
-        g=gcd(t-last,g);
-        last=t;
+        cin>>num[i];
     }
+    dp[0][0]=0;
+    dp[0][1]=0;
+    dp[0][2]=0;
     ll ans=0;
-    ll flag=0;
-    wfor(i,0,m)
+    wfor(i,1,n+1)
     {
-        cin>>p[i];
+        dp[i][0]=max(0ll,dp[i-1][0]+num[i]);
+        dp[i][1]=max(0ll,max(dp[i-1][0],dp[i-1][1])+num[i]*x);
+        dp[i][2]=max(0ll,max(dp[i-1][0],max(dp[i-1][1],dp[i-1][2]))+num[i]);
+        ans=max(dp[i][2],max(dp[i][1],max(dp[i][0],ans)));
     }
-    wfor(i,0,m)
-    {
-        if(g%p[i]==0)
-        {
-            flag=1;
-            ans=i+1;
-        }
-    }
-    if(flag==1)
-    {
-        cout<<"YES"<<endl;
-        cout<<beg<<" "<<ans<<endl;
-    }else
-        cout<<"NO"<<endl;
+    cout<<ans<<endl;
     return 0;
 }
