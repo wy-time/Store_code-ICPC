@@ -1,4 +1,6 @@
 #include <iostream>
+#include <cmath> 
+#include <bitset> 
 #include <cstdio>
 using namespace std;
 typedef long long ll;
@@ -19,24 +21,39 @@ int main()
     freopen("/home/time/debug/debug/in","r",stdin);
     freopen("/home/time/debug/debug/out","w",stdout);
     #endif
-    int n,m;
-    cin>>n>>m;
+    unsigned long n;
+    cin>>n;
+    bitset<20> bs(n);
+    int len=log2(n);
     int i;
-    int che[2]={0};
-    int key[2]={0};
-    wfor(i,0,n)
+    int ans[50]={0};
+    int cnt=0;
+    int num=0;
+    mfor(i,len,0)
     {
-        int t;
-        cin>>t;
-        che[t%2]++;
+        if(bs.count()==len+1)
+            break;
+        if(bs[i]==0)
+        {
+            ans[cnt++]=i+1;
+            bs^=((1<<(i+1))-1);
+            num++;
+            if(bs.count()==len+1)
+                break;
+            num++;
+            n=bs.to_ulong();
+            n++;
+            bitset<20>temp(n);
+            bs=temp;
+        }
     }
-    wfor(i,0,m)
+    if(cnt==0)
+        cout<<0<<endl;
+    else
     {
-        int t;
-        cin>>t;
-        key[t%2]++;
+        cout<<num<<endl;
+        wfor(i,0,cnt)
+            cout<<ans[i]<<" ";
     }
-    int ans=min(che[0],key[1])+min(che[1],key[0]);
-    cout<<ans<<endl;
     return 0;
 }
