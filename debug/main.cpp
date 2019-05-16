@@ -28,15 +28,48 @@ int main()
     ll now=a*b/gcd(a,b);
     ll k=0;
     ll ans=0;
-    while(a+k<=now&&b+k<=now&&k<10000000)
+    if(a>b)
+        swap(a,b);
+    ll i;
+    for(i=2;i*i<=b-a;i++)
     {
-        ll t=(a+k)*(b+k)/gcd(a+k,b+k);
-        if(t<now)
+        if((b-a)%i==0)
         {
-            now=t;
-            ans=k;
+            if(a%i==b%i)
+            {
+                if(a%i==0)
+                    k=0;
+                else
+                {
+                    k=i-a%i;
+                }
+                ll t=(a+k)*(b+k)/gcd(a+k,b+k);
+                if(t<now)
+                {
+                    now=t;
+                    ans=k;
+                }
+            }
+            if(i*i!=b-a)
+            {
+                ll x=(b-a)/i;
+                if(a%x==b%x)
+                {
+                    if(a%x==0)
+                        k=0;
+                    else
+                    {
+                        k=x-a%x;
+                    }
+                    ll t=(a+k)*(b+k)/gcd(a+k,b+k);
+                    if(t<now)
+                    {
+                        now=t;
+                        ans=k;
+                    }
+                }
+            }
         }
-        k++;
     }
     cout<<ans<<endl;
     return 0;
