@@ -1,18 +1,15 @@
 #include <iostream>
+#include <string> 
 #include <cstdio>
 using namespace std;
 typedef long long ll;
 #define wfor(i,j,k) for(i=j;i<k;++i)
 #define mfor(i,j,k) for(i=j;i>=k;--i)
-// void read(ll &x) {
+// void read(int &x) {
 // 	char ch = getchar(); x = 0;
 // 	for (; ch < '0' || ch > '9'; ch = getchar());
 // 	for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
 // }
-ll gcd(ll a,ll b)
-{
-    return b==0?a:gcd(b,a%b);
-}
 int main()
 {
     std::ios::sync_with_stdio(false);
@@ -23,54 +20,29 @@ int main()
     freopen("/home/time/debug/debug/in","r",stdin);
     freopen("/home/time/debug/debug/out","w",stdout);
     #endif
-    ll a,b;
-    cin>>a>>b;
-    ll now=a*b/gcd(a,b);
-    ll k=0;
-    ll ans=0;
-    if(a>b)
-        swap(a,b);
-    ll i;
-    for(i=2;i*i<=b-a;i++)
+    int t;
+    cin>>t;
+    while(t--)
     {
-        if((b-a)%i==0)
+        int n;
+        cin>>n;
+        string s;
+        cin>>s;
+        int cnt=n-11;
+        int flag=0;
+        int i;
+        wfor(i,0,cnt+1)
         {
-            if(a%i==b%i)
+            if(s[i]=='8')
             {
-                if(a%i==0)
-                    k=0;
-                else
-                {
-                    k=i-a%i;
-                }
-                ll t=(a+k)*(b+k)/gcd(a+k,b+k);
-                if(t<now)
-                {
-                    now=t;
-                    ans=k;
-                }
-            }
-            if(i*i!=b-a)
-            {
-                ll x=(b-a)/i;
-                if(a%x==b%x)
-                {
-                    if(a%x==0)
-                        k=0;
-                    else
-                    {
-                        k=x-a%x;
-                    }
-                    ll t=(a+k)*(b+k)/gcd(a+k,b+k);
-                    if(t<now)
-                    {
-                        now=t;
-                        ans=k;
-                    }
-                }
+                flag=1;
+                break;
             }
         }
+        if(flag==1)
+            cout<<"YES"<<endl;
+        else
+            cout<<"NO"<<endl;
     }
-    cout<<ans<<endl;
     return 0;
 }
