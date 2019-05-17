@@ -1,5 +1,5 @@
 #include <iostream>
-#include <string> 
+#include <algorithm> 
 #include <cstdio>
 using namespace std;
 typedef long long ll;
@@ -17,32 +17,36 @@ int main()
     freopen("F:\\Desktop\\question\\in.txt","r",stdin);
     #endif
     #ifdef ubuntu
-    freopen("/home/time/debug/debug/in","r",stdin);
-    freopen("/home/time/debug/debug/out","w",stdout);
+freopen("/home/time/debug/debug/in","r",stdin);
+freopen("/home/time/debug/debug/out","w",stdout);
     #endif
-    int t;
-    cin>>t;
-    while(t--)
+    int num[6]={4,8,15,16,23,42};
+    int t[4]={0};
+    int i;
+    wfor(i,1,5)
     {
-        int n;
-        cin>>n;
-        string s;
-        cin>>s;
-        int cnt=n-11;
-        int flag=0;
-        int i;
-        wfor(i,0,cnt+1)
+        cout<<"? "<<1<<" "<<i+1<<endl;
+        cin>>t[i-1];
+    }
+    do
+    {
+        int flag=1;
+        wfor(i,0,4)
         {
-            if(s[i]=='8')
+            if(num[0]*num[i+1]!=t[i])
             {
-                flag=1;
+                flag=0;
                 break;
             }
         }
         if(flag==1)
-            cout<<"YES"<<endl;
-        else
-            cout<<"NO"<<endl;
-    }
+        {
+            cout<<"! ";
+            wfor(i,0,6)
+                cout<<num[i]<<" ";
+            cout<<endl;
+            break;
+        }
+    }while(next_permutation(num,num+6));
     return 0;
 }
