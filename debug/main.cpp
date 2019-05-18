@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string> 
 #include <cstdio>
 using namespace std;
 typedef long long ll;
@@ -9,30 +10,7 @@ typedef long long ll;
 // 	for (; ch < '0' || ch > '9'; ch = getchar());
 // 	for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
 // }
-const int maxn=1e6+5;
-int pre[maxn];
-int findx(int x)
-{
-    int t=x;
-    while(pre[t]!=t)
-    {
-        t=pre[t];
-    }
-    int temp;
-    while(pre[x]!=t)
-    {
-        temp=pre[x];
-        pre[x]=t;
-        x=temp;
-    }
-    return t;
-}
-void add(int a,int b)
-{
-    int a1=findx(a);
-    int b1=findx(b);
-    pre[b1]=a1;
-}
+const int maxn=2e5+5;
 int ans[maxn];
 int main()
 {
@@ -44,39 +22,28 @@ int main()
     freopen("/home/time/debug/debug/in","r",stdin);
     freopen("/home/time/debug/debug/out","w",stdout);
     #endif
-    int n,m;
-    cin>>n>>m;
+    int n;
+    cin>>n;
+    string s;
+    cin>>s;
+    int left=0;
+    int right=0;
     int i;
-    wfor(i,0,maxn)
+    wfor(i,0,n)
     {
-        pre[i]=i;
-    }
-    wfor(i,1,m+1)
-    {
-        int cnt;
-        cin>>cnt;
-        int j;
-        wfor(j,0,cnt)
+        if(s[i]=='(')
         {
-            int temp;
-            cin>>temp;
-            if(findx(i)!=findx(temp+m+1))
-            {
-                if(pre[temp+m+1]==temp+m+1)
-                    ans[i]++;
-                else
-                    ans[i]+=ans[findx(temp+m+1)];
-                add(i,temp+m+1);
-            }
+            ans[i]=left;
+            left=left==0?1:0;
+        }else
+        {
+            ans[i]=right;
+            right=right==0?1:0;
         }
     }
-    wfor(i,1,n+1)
+    wfor(i,0,n)
     {
-        int root=findx(i+m+1);
-        if(ans[root]!=0)
-            cout<<ans[root]<<" ";
-        else
-            cout<<1<<" ";
+        cout<<ans[i];
     }
     return 0;
 }
