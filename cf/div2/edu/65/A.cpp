@@ -10,8 +10,6 @@ typedef long long ll;
 //  for (; ch < '0' || ch > '9'; ch = getchar());
 //  for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
 // }
-const int maxn = 2e5 + 5;
-int ans[maxn];
 int main()
 {
     std::ios::sync_with_stdio(false);
@@ -22,28 +20,29 @@ int main()
     freopen("/home/time/debug/debug/in", "r", stdin);
     freopen("/home/time/debug/debug/out", "w", stdout);
 #endif
-    int n;
-    cin >> n;
-    string s;
-    cin >> s;
-    int left = 0;
-    int right = 0;
-    int i;
-    wfor(i, 0, n)
+    int t;
+    cin >> t;
+    while (t--)
     {
-        if (s[i] == '(')
+        int n;
+        cin >> n;
+        string s;
+        cin >> s;
+        int cnt = n - 11;
+        int flag = 0;
+        int i;
+        wfor(i, 0, cnt + 1)
         {
-            ans[i] = left;
-            left = left == 0 ? 1 : 0;
-        } else
-        {
-            ans[i] = right;
-            right = right == 0 ? 1 : 0;
+            if (s[i] == '8')
+            {
+                flag = 1;
+                break;
+            }
         }
-    }
-    wfor(i, 0, n)
-    {
-        cout << ans[i];
+        if (flag == 1)
+            cout << "YES" << endl;
+        else
+            cout << "NO" << endl;
     }
     return 0;
 }

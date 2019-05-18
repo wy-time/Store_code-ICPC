@@ -1,5 +1,5 @@
 #include <iostream>
-#include <string>
+#include <algorithm>
 #include <cstdio>
 using namespace std;
 typedef long long ll;
@@ -10,8 +10,6 @@ typedef long long ll;
 //  for (; ch < '0' || ch > '9'; ch = getchar());
 //  for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
 // }
-const int maxn = 2e5 + 5;
-int ans[maxn];
 int main()
 {
     std::ios::sync_with_stdio(false);
@@ -22,28 +20,33 @@ int main()
     freopen("/home/time/debug/debug/in", "r", stdin);
     freopen("/home/time/debug/debug/out", "w", stdout);
 #endif
-    int n;
-    cin >> n;
-    string s;
-    cin >> s;
-    int left = 0;
-    int right = 0;
+    int num[6] = {4, 8, 15, 16, 23, 42};
+    int t[4] = {0};
     int i;
-    wfor(i, 0, n)
+    wfor(i, 1, 5)
     {
-        if (s[i] == '(')
+        cout << "? " << 1 << " " << i + 1 << endl;
+        cin >> t[i - 1];
+    }
+    do
+    {
+        int flag = 1;
+        wfor(i, 0, 4)
         {
-            ans[i] = left;
-            left = left == 0 ? 1 : 0;
-        } else
-        {
-            ans[i] = right;
-            right = right == 0 ? 1 : 0;
+            if (num[0]*num[i + 1] != t[i])
+            {
+                flag = 0;
+                break;
+            }
         }
-    }
-    wfor(i, 0, n)
-    {
-        cout << ans[i];
-    }
+        if (flag == 1)
+        {
+            cout << "! ";
+            wfor(i, 0, 6)
+            cout << num[i] << " ";
+            cout << endl;
+            break;
+        }
+    } while (next_permutation(num, num + 6));
     return 0;
 }
