@@ -1,4 +1,6 @@
 #include <iostream>
+#include <cstring> 
+#include <algorithm> 
 #include <cstdio>
 using namespace std;
 typedef long long ll;
@@ -9,12 +11,9 @@ typedef long long ll;
 // 	for (; ch < '0' || ch > '9'; ch = getchar());
 // 	for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
 // }
-const int maxn=1e6+5;
-int num[maxn];
-int _beg[maxn];
-int _end[maxn];
-int L[maxn];
-int R[maxn];
+const int maxn=5e5+5;
+pair<int,int>num[maxn];
+int len[maxn];
 int main()
 {
     std::ios::sync_with_stdio(false);
@@ -25,36 +24,40 @@ int main()
     freopen("/home/time/debug/debug/in","r",stdin);
     freopen("/home/time/debug/debug/out","w",stdout);
     #endif
-    int n,x;
-    cin>>n>>x;
-    int i;
-    fill(_beg,_beg+n+2,10000000);
-    fill(R,R+n+2,10000000);
-    wfor(i,0,n)
+    int n;
+    int casecnt=0;
+    while(cin>>n)
     {
-        cin>>num[i];
-        _beg[num[i]]=min(_beg[num[i]],i);
-        _end[num[i]]=i;
+        casecnt++;
+        int i;
+        wfor(i,0,n)
+        {
+            cin>>num[i].first>>num[i].second;
+        }
+        sort(num,num+n);
+        int ans=1;
+        len[1]=num[0].second;
+        wfor(i,1,n)
+        {
+            if(num[i].second>len[ans])
+            {
+                ans++;
+                len[ans]=num[i].second;
+            }else
+            {
+                int pos=lower_bound(len,len+ans,num[i].second)-len;
+                len[pos]=num[i].second;
+            }
+        }
+        cout<<"Case "<<casecnt<<":"<<endl<<"My king, at most ";
+        if(ans>1)
+        {
+            cout<<ans<<" roads can be built."<<endl;
+        }else
+        {
+            cout<<ans<<" road can be built."<<endl;
+        }
+        cout<<endl;
     }
-    wfor(i,1,x+1)
-    {
-        L[i]=max(L[i-1],_end[i]);
-    }
-    mfor(i,x,1)
-    {
-        R[i]=min(R[i+1],_beg[i]);
-    }
-    int l=0,r=0;
-    r=x;
-    ll ans=0;
-    while(R[r+1]>=_end[r]&&r>1)r--;
-    wfor(l,1,x+1)
-    {
-        if(l!=1&&_beg[l-1]<L[l-2])break;
-        while(r<l||L[l-1]>R[r+1])
-            r++;
-        ans+=x-r+1;
-    }
-    cout<<ans<<endl;
     return 0;
 }
