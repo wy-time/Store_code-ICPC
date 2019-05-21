@@ -1,6 +1,6 @@
 #include <iostream>
-#include <map> 
-#include <string> 
+#include <iomanip> 
+#include <cmath> 
 #include <cstdio>
 using namespace std;
 typedef long long ll;
@@ -21,49 +21,23 @@ int main()
     freopen("/home/time/debug/debug/in","r",stdin);
     freopen("/home/time/debug/debug/out","w",stdout);
     #endif
-    string s;
-    map<char,char>ma;
-    ma.insert(make_pair('A','V'));
-    ma.insert(make_pair('B','W'));
-    ma.insert(make_pair('C','X'));
-    ma.insert(make_pair('D','Y'));
-    ma.insert(make_pair('E','Z'));
-    ma.insert(make_pair('F','A'));
-    ma.insert(make_pair('G','B'));
-    ma.insert(make_pair('H','C'));
-    ma.insert(make_pair('I','D'));
-    ma.insert(make_pair('J','E'));
-    ma.insert(make_pair('K','F'));
-    ma.insert(make_pair('L','G'));
-    ma.insert(make_pair('M','H'));
-    ma.insert(make_pair('N','I'));
-    ma.insert(make_pair('O','J'));
-    ma.insert(make_pair('P','K'));
-    ma.insert(make_pair('Q','L'));
-    ma.insert(make_pair('R','M'));
-    ma.insert(make_pair('S','N'));
-    ma.insert(make_pair('T','O'));
-    ma.insert(make_pair('U','P'));
-    ma.insert(make_pair('V','Q'));
-    ma.insert(make_pair('W','R'));
-    ma.insert(make_pair('X','S'));
-    ma.insert(make_pair('Y','T'));
-    ma.insert(make_pair('Z','U'));
-    while(cin>>s)
+    int t;
+    cin>>t;
+    int casecnt=0;
+    while(t--)
     {
-        if(s=="ENDOFINPUT")
-            break;
-        getline(cin,s);
-        getline(cin,s);
-        int len=s.size();
-        int i;
-        wfor(i,0,len)
+        casecnt++;
+        int n,m;
+        cin>>n>>m;
+        double ans=0;
+        if(n%2!=0&&m%2!=0)
         {
-            if(ma.count(s[i])!=0)
-                s[i]=ma[s[i]];
-        }
-        cout<<s<<endl;
-        cin>>s;
+            ans+=n*m-1;
+            ans+=sqrt(2.0);
+        }else
+            ans=n*m;
+        cout<<"Scenario #"<<casecnt<<":"<<endl;
+        cout<<fixed<<setprecision(2)<<ans<<endl;
     }
     return 0;
 }
