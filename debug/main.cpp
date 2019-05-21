@@ -1,6 +1,4 @@
 #include <iostream>
-#include <iomanip> 
-#include <cmath> 
 #include <cstdio>
 using namespace std;
 typedef long long ll;
@@ -21,23 +19,23 @@ int main()
     freopen("/home/time/debug/debug/in","r",stdin);
     freopen("/home/time/debug/debug/out","w",stdout);
     #endif
-    int t;
-    cin>>t;
-    int casecnt=0;
-    while(t--)
+    int n,u,d;
+    while(cin>>n>>u>>d)
     {
-        casecnt++;
-        int n,m;
-        cin>>n>>m;
-        double ans=0;
-        if(n%2!=0&&m%2!=0)
+        if(n==0&&u==0&&d==0)
+            break;
+        int now=0;
+        int ans=0;
+        while(now<n)
         {
-            ans+=n*m-1;
-            ans+=sqrt(2.0);
-        }else
-            ans=n*m;
-        cout<<"Scenario #"<<casecnt<<":"<<endl;
-        cout<<fixed<<setprecision(2)<<ans<<endl;
+            now+=u;
+            ans++;
+            if(now>=n)
+                break;
+            now-=d;
+            ans++;
+        }
+        cout<<ans<<endl;
     }
     return 0;
 }
