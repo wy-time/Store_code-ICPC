@@ -15,7 +15,7 @@ typedef long long ll;
 const int maxn=2005;
 struct node
 {
-    ll len;
+    double len;
     int s;
     int l;
     int r;
@@ -130,7 +130,7 @@ int main()
         double ans=0;
         wfor(i,1,cnt)
         {
-            ans+=1.0*tree[1].len*(num[line[i].high-1]-num[last-1]);
+            ans+=tree[1].len*(num[line[i].high-1]-num[last-1]);
             update(1,line[i].l,line[i].r,line[i].flag);
             last=line[i].high;
         }
