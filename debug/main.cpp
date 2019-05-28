@@ -12,10 +12,10 @@ typedef long long ll;
 // 	for (; ch < '0' || ch > '9'; ch = getchar());
 // 	for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
 // }
-const int maxn=1005;
+const int maxn=2005;
 struct node
 {
-    int len;
+    ll len;
     int s;
     int l;
     int r;
@@ -92,6 +92,7 @@ int main()
     int casecnt=0;
     while(cin>>n&&n)
     {
+        num.clear();
         casecnt++;
         int i;
         wfor(i,0,n)
@@ -136,6 +137,7 @@ int main()
         cout<<"Test case #"<<casecnt<<endl;
         cout<<"Total explored area: ";
         cout<<fixed<<setprecision(2)<<ans<<endl;
+        cout<<endl;
     }
     return 0;
 }
