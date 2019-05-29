@@ -1,7 +1,8 @@
 #include <iostream>
-#include <cmath> 
-#include <vector> 
+#include <cstring> 
+#include <iomanip> 
 #include <algorithm> 
+#include <vector> 
 #include <cstdio>
 using namespace std;
 typedef long long ll;
@@ -12,53 +13,58 @@ typedef long long ll;
 // 	for (; ch < '0' || ch > '9'; ch = getchar());
 // 	for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
 // }
-const int maxn=20005;
-struct node
+const int maxn=1005;
+struct Point 
 {
-    int l,r;
-    int s;
-    int len;
+    double x1;
+    double x2;
+    double y1;
+    double y2;
 };
+Point point[maxn];
 struct Line
 {
-    int l,r;
-    int high;
+    int l;
+    int r;
+    double high;
     int flag;
-    bool operator <(const Line & other)const
+    bool operator <(const Line &other)const
     {
         return high<other.high;
     }
 };
-vector <int>num;
-struct Rect
+struct node
 {
-    int x1;
-    int y1;
-    int x2;
-    int y2;
+    int s;
+    double len[3];
+    int l,r;
 };
-Rect rec[maxn];
-Line line1[maxn];
-Line line2[maxn];
-node tree[maxn<<2];
-void build (int l,int r,int id)
+node tree[maxn*8];
+Line line[maxn<<1];
+vector<double>num;
+void build(int l,int r,int id)
 {
     tree[id].l=l;
     tree[id].r=r;
-    tree[id].len=0;
     tree[id].s=0;
+    tree[id].len[1]=tree[id].len[2]=0;
+    tree[id].len[0]=num[r-1]-num[l-1];
     if(l+1==r)
-        return ;
+        return;
     int mid=(l+r)>>1;
     build(l,mid,id<<1);
     build(mid,r,id<<1|1);
 }
 void push_up(int id)
 {
-    if(tree[id].s)
-        tree[id].len=num[tree[id].r-1]-num[tree[id].l-1];
-    else
-        tree[id].len=tree[id<<1].len+tree[id<<1|1].len;
+    int i;
+    wfor(i,1,3)
+    {
+        if(tree[id].s<i)
+            tree[id].len[i]=tree[id<<1].len[i-tree[id].s]+tree[id<<1|1].len[i-tree[id].s];
+        else
+            tree[id].len[i]=tree[id].len[0];
+    }
 }
 void update(int id,int L,int R,int number)
 {
@@ -85,70 +91,49 @@ int main()
     freopen("/home/time/debug/debug/in","r",stdin);
     freopen("/home/time/debug/debug/out","w",stdout);
     #endif
-    int n;
-    cin>>n;
-    int i;
-    wfor(i,0,n)
+    int t;
+    cin>>t;
+    while(t--)
     {
-        cin>>rec[i].x1>>rec[i].y1>>rec[i].x2>>rec[i].y2;
-        num.push_back(rec[i].x1);
-        num.push_back(rec[i].x2);
-        num.push_back(rec[i].y1);
-        num.push_back(rec[i].y2);
+        num.clear();
+        int n;
+        cin>>n;
+        int i;
+        wfor(i,0,n)
+        {
+            cin>>point[i].x1>>point[i].y1>>point[i].x2>>point[i].y2;
+            num.push_back(point[i].x1);
+            num.push_back(point[i].x2);
+        }
+        sort(num.begin(),num.end());
+        auto it=unique(num.begin(),num.end());
+        int len=it-num.begin();
+        int cnt=0;
+        wfor(i,0,n)
+        {
+            int x1=lower_bound(num.begin(),it,point[i].x1)-num.begin()+1;
+            int x2=lower_bound(num.begin(),it,point[i].x2)-num.begin()+1;
+            line[cnt].l=x1;
+            line[cnt].r=x2;
+            line[cnt].high=point[i].y1;
+            line[cnt++].flag=1;
+            line[cnt].l=x1;
+            line[cnt].r=x2;
+            line[cnt].high=point[i].y2;
+            line[cnt++].flag=-1;
+        }
+        sort(line,line+cnt);
+        build(1,len,1);
+        double ans=0;
+        double last=line[0].high;
+        update(1,line[0].l,line[0].r,line[0].flag);
+        wfor(i,1,cnt)
+        {
+            ans+=tree[1].len[2]*(line[i].high-last);
+            update(1,line[i].l,line[i].r,line[i].flag);
+            last=line[i].high;
+        }
+        cout<<fixed<<setprecision(2)<<ans<<endl;
     }
-    sort(num.begin(),num.end());
-    auto it=unique(num.begin(),num.end());
-    int len=it-num.begin();
-    int cnt=0;
-    wfor(i,0,n)
-    {
-        rec[i].x1=lower_bound(num.begin(),it,rec[i].x1)-num.begin()+1;
-        rec[i].x2=lower_bound(num.begin(),it,rec[i].x2)-num.begin()+1;
-        rec[i].y1=lower_bound(num.begin(),it,rec[i].y1)-num.begin()+1;
-        rec[i].y2=lower_bound(num.begin(),it,rec[i].y2)-num.begin()+1;
-    }
-    wfor(i,0,n)
-    {
-        line1[cnt].l=rec[i].x1;
-        line1[cnt].r=rec[i].x2;
-        line1[cnt].high=rec[i].y1;
-        line1[cnt].flag=1;
-        line2[cnt].l=rec[i].y1;
-        line2[cnt].r=rec[i].y2;
-        line2[cnt].high=rec[i].x1;
-        line2[cnt++].flag=1;
-        line1[cnt].l=rec[i].x1;
-        line1[cnt].r=rec[i].x2;
-        line1[cnt].high=rec[i].y2;
-        line1[cnt].flag=-1;
-        line2[cnt].l=rec[i].y1;
-        line2[cnt].r=rec[i].y2;
-        line2[cnt].high=rec[i].x2;
-        line2[cnt++].flag=-1;
-    }
-    sort(line1,line1+cnt);
-    sort(line2,line2+cnt);
-    ll ans=0;
-    build(1,len,1);
-    update(1,line1[0].l,line1[0].r,line1[0].flag);
-    ans+=num[line1[0].r-1]-num[line1[0].l-1];
-    int last=ans;
-    wfor(i,1,cnt)
-    {
-        update(1,line1[i].l,line1[i].r,line1[i].flag);
-        ans+=abs(tree[1].len-last);
-        last=tree[1].len;
-    }
-    build(1,len,1);
-    update(1,line2[0].l,line2[0].r,line2[0].flag);
-    ans+=num[line2[0].r-1]-num[line2[0].l-1];
-    last=num[line2[0].r-1]-num[line2[0].l-1];
-    wfor(i,1,cnt)
-    {
-        update(1,line2[i].l,line2[i].r,line2[i].flag);
-        ans+=abs(tree[1].len-last);
-        last=tree[1].len;
-    }
-    cout<<ans<<endl;
     return 0;
 }
