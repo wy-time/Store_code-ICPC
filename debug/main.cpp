@@ -1,7 +1,5 @@
 #include <iostream>
-#include <cmath> 
 #include <algorithm> 
-#include <string> 
 #include <cstdio>
 using namespace std;
 typedef long long ll;
@@ -12,6 +10,23 @@ typedef long long ll;
 // 	for (; ch < '0' || ch > '9'; ch = getchar());
 // 	for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
 // }
+const int maxn=2e5+5;
+int num[maxn];
+int vis[maxn];
+void add(int x)
+{
+    int i;
+    for(i=x;i<maxn;i+=(i&-i))
+        vis[i]++;
+}
+int get_sum(int x)
+{
+    int i;
+    int sum=0;
+    for(i=x;i>0;i-=(i&-i))
+        sum+=vis[i];
+    return sum;
+}
 int main()
 {
     std::ios::sync_with_stdio(false);
@@ -22,43 +37,32 @@ int main()
     freopen("/home/time/debug/debug/in","r",stdin);
     freopen("/home/time/debug/debug/out","w",stdout);
     #endif
-    int t;
-    cin>>t;
-    while(t--)
+    int n,k;
+    cin>>n>>k;
+    int i;
+    wfor(i,1,n+1)
     {
-        string s;
-        cin>>s;
-        sort(s.begin(),s.end());
-        int len=s.size();
-        int i;
-        string rest="";
-        string ans="";
-        ans+=s[0];
-        wfor(i,1,len)
-        {
-            if(s[i]-*(ans.end()-1)!=1)
-                ans+=s[i];
-            else if(s[i]-*(ans.begin())!=1)
-                ans=s[i]+ans;
-            else
-                rest+=s[i];
-        }
-        len=rest.size();
-        wfor(i,0,len)
-        {
-            if(abs(rest[i]-*(ans.end()-1))!=1)
-                ans+=rest[i];
-            else if(abs(rest[i]-*(ans.begin()))!=1)
-                ans=rest[i]+ans;
-            else
-            {
-                break;
-            }
-        }
-        if(ans.size()!=s.size())
-            cout<<"No answer"<<endl;
-        else
-            cout<<ans<<endl;
+        cin>>num[i];
     }
+    sort(num+1,num+1+n);
+    int ans=0;
+    int use=0;
+    wfor(i,1,n)
+    {
+        if(get_sum(i)-get_sum(i-1)==1)
+            continue;
+        use++;
+        add(i);
+        int pos=lower_bound(num+1,num+n+1,num[i]+k)-num;
+        int last=n-pos+1-(use-get_sum(pos-1));
+        if(last>0)
+        {
+            ans++;
+            use++;
+            add(n-last+1);
+        }else
+            break;
+    }
+    cout<<ans<<endl;
     return 0;
 }
