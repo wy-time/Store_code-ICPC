@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstring> 
 #include <algorithm> 
 #include <cstdio>
 using namespace std;
@@ -12,6 +13,7 @@ typedef long long ll;
 // }
 const int maxn=2e5+5;
 int num[maxn];
+int num2[maxn];
 int vis[maxn];
 void add(int x)
 {
@@ -43,8 +45,10 @@ int main()
     wfor(i,1,n+1)
     {
         cin>>num[i];
+        num2[i]=num[i];
     }
     sort(num+1,num+1+n);
+    sort(num2+1,num2+1+n);
     int ans=0;
     int use=0;
     wfor(i,1,n)
@@ -63,6 +67,30 @@ int main()
         }else
             break;
     }
+    memset(vis,0,sizeof(vis));
+    sort(num+1,num+1+n,greater<int>());
+    use=0;
+    int temp=0;
+    wfor(i,1,n)
+    {
+        if(get_sum(i)-get_sum(i-1)==1)
+            continue;
+        use++;
+        add(i);
+        int pos=upper_bound(num2+1,num2+n+1,num[i]-k)-num2-1;
+        if(pos==0)
+            break;
+        pos=n-pos+1;
+        int last=n-pos+1-(use-get_sum(pos-1));
+        if(last>0)
+        {
+            temp++;
+            use++;
+            add(n-last+1);
+        }else
+            break;
+    }
+    ans=max(temp,ans);
     cout<<ans<<endl;
     return 0;
 }
