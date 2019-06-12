@@ -1,4 +1,7 @@
 #include <iostream>
+#include <cmath> 
+#include <algorithm> 
+#include <string> 
 #include <cstdio>
 using namespace std;
 typedef long long ll;
@@ -19,40 +22,43 @@ int main()
     freopen("/home/time/debug/debug/in","r",stdin);
     freopen("/home/time/debug/debug/out","w",stdout);
     #endif
-    int n;
-    cin>>n;
-    int i;
-    int num[205]={0};
-    wfor(i,0,n)
+    int t;
+    cin>>t;
+    while(t--)
     {
-        cin>>num[i];
-    }
-    int last=num[0];
-    int flag=0;
-    int ans=0;
-    wfor(i,1,n)
-    {
-        if((last==2&&num[i]==3)||(last==3&&num[i]==2))
+        string s;
+        cin>>s;
+        sort(s.begin(),s.end());
+        int len=s.size();
+        int i;
+        string rest="";
+        string ans="";
+        ans+=s[0];
+        wfor(i,1,len)
         {
-            flag=1;
-            break;
+            if(s[i]-*(ans.end()-1)!=1)
+                ans+=s[i];
+            else if(s[i]-*(ans.begin())!=1)
+                ans=s[i]+ans;
+            else
+                rest+=s[i];
         }
-        if((last==1&&num[i]==2)||(last==2&&num[i]==1))
+        len=rest.size();
+        wfor(i,0,len)
         {
-            ans+=3;
-            if(i-2>=0&&num[i-2]==3&&last==1)
-                ans--;
+            if(abs(rest[i]-*(ans.end()-1))!=1)
+                ans+=rest[i];
+            else if(abs(rest[i]-*(ans.begin()))!=1)
+                ans=rest[i]+ans;
+            else
+            {
+                break;
+            }
         }
-        if((last==1&&num[i]==3)||(last==3&&num[i]==1))
-            ans+=4;
-        last=num[i];
-    }
-    if(flag==1)
-        cout<<"Infinite"<<endl;
-    else
-    {
-        cout<<"Finite"<<endl;
-        cout<<ans<<endl;
+        if(ans.size()!=s.size())
+            cout<<"No answer"<<endl;
+        else
+            cout<<ans<<endl;
     }
     return 0;
 }
