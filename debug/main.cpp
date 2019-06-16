@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstring> 
 #include <cstdio>
 using namespace std;
 typedef long long ll;
@@ -9,8 +10,8 @@ typedef long long ll;
 // 	for (; ch < '0' || ch > '9'; ch = getchar());
 // 	for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
 // }
-int ma1[55][55];
-int ma2[55][55];
+const int maxn=1e5+5;
+int num[2][maxn];
 int main()
 {
     std::ios::sync_with_stdio(false);
@@ -21,135 +22,57 @@ int main()
     freopen("/home/time/debug/debug/in","r",stdin);
     freopen("/home/time/debug/debug/out","w",stdout);
     #endif
-    int n,m;
-    cin>>n>>m;
-    int i,j;
+    int n,k;
+    cin>>n>>k;
+    memset(num[0],-1,sizeof(num[0]));
+    int i;
+    wfor(i,0,k)
+    {
+        int t;
+        cin>>t;
+        t--;
+        if(num[0][t]==-1)
+            num[0][t]=i;
+        num[1][t]=i;
+    }
+    int ans=0;
     wfor(i,0,n)
     {
-        wfor(j,0,m)
+        if(i-1>=0)
         {
-            cin>>ma1[i][j];
-        }
-    }
-    wfor(i,0,n)
-    {
-        wfor(j,0,m)
-        {
-            cin>>ma2[i][j];
-        }
-    }
-    int flag=1;
-    wfor(i,0,n)
-    {
-        wfor(j,0,m)
-        {
-            if(i>0&&j>0)
+            if(num[0][i]==-1)
             {
-                if((ma1[i][j]>ma1[i-1][j]&&ma1[i][j]>ma1[i][j-1])||(ma2[i][j]>ma1[i-1][j]&&ma2[i][j]>ma1[i][j-1]))
+                ans++;
+            }
+            else
+            {
+                int now=num[0][i];
+                if(num[0][i-1]==-1||num[1][i-1]<now)
                 {
-                    if(ma1[i][j]>ma2[i][j]&&ma2[i][j]>ma1[i-1][j]&&ma2[i][j]>ma1[i][j-1])
-                        swap(ma1[i][j],ma2[i][j]);
-                }else
-                {
-                    flag=0;
-                    break;
+                    ans++;
                 }
-            }else if(i>0)
-            {
-                if(ma1[i][j]>ma1[i-1][j]||ma2[i][j]>ma1[i-1][j])
-                {
-                    if(ma1[i][j]>ma2[i][j]&&ma2[i][j]>ma1[i-1][j])
-                        swap(ma1[i][j],ma2[i][j]);
-                }else
-                {
-                    flag=0;
-                    break;
-                }
-            }else if(j>0)
-            {
-                if(ma1[i][j]>ma1[i][j-1]||ma2[i][j]>ma1[i][j-1])
-                {
-                    if(ma1[i][j]>ma2[i][j]&&ma2[i][j]>ma1[i][j-1])
-                        swap(ma1[i][j],ma2[i][j]);
-                }else
-                {
-                    flag=0;
-                    break;
-                }
-            }else
-            {
-                if(ma1[i][j]>ma2[i][j])
-                    swap(ma1[i][j],ma2[i][j]);
             }
         }
-        if(flag==0)
-            break;
-    }
-    if(flag==1)
-    {
-        wfor(i,0,n)
+        if(i+1<n)
         {
-            wfor(j,0,m)
+            if(num[0][i]==-1)
             {
-                if(i>0)
+                ans++;
+            }
+            else
+            {
+                int now=num[0][i];
+                if(num[0][i+1]==-1||num[1][i+1]<now)
                 {
-                    if(ma2[i][j]<ma2[i-1][j])
-                    {
-                        if(ma1[i][j]>ma2[i-1][j])
-                            swap(ma1[i][j],ma2[i][j]);
-                        else
-                        {
-                            flag=0;
-                            break;
-                        }
-                    }
-                }
-                if(j>0)
-                {
-                    if(ma2[i][j]<ma2[i][j-1])
-                    {
-                        if(ma1[i][j]>ma2[i][j-1])
-                            swap(ma1[i][j],ma2[i][j]);
-                        else
-                        {
-                            flag=0;
-                            break;
-                        }
-                    }
+                    ans++;
                 }
             }
-            if(flag==0)
-                break;
         }
-        if(flag==1)
+        if(num[0][i]==-1)
         {
-            wfor(i,0,n)
-            {
-                wfor(j,0,m)
-                {
-                    if(i>0)
-                    {
-                        if(ma1[i][j]<ma1[i-1][j])
-                        {
-                            flag=0;
-                            break;
-                        }
-                    }
-                    if(j>0)
-                        if(ma1[i][j]<ma1[i][j-1])
-                        {
-                            flag=0;
-                            break;
-                        }
-                }
-                if(flag==0)
-                    break;
-            }
+            ans++;
         }
     }
-    if(flag==0)
-        cout<<"Impossible"<<endl;
-    else
-        cout<<"Possible"<<endl;
+    cout<<ans<<endl;
     return 0;
 }
