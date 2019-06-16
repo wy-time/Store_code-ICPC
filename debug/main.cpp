@@ -10,8 +10,6 @@ typedef long long ll;
 // 	for (; ch < '0' || ch > '9'; ch = getchar());
 // 	for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
 // }
-const int maxn=2e5+5;
-int num[maxn];
 int main()
 {
     std::ios::sync_with_stdio(false);
@@ -22,33 +20,26 @@ int main()
     freopen("/home/time/debug/debug/in","r",stdin);
     freopen("/home/time/debug/debug/out","w",stdout);
     #endif
-    int n,k;
-    cin>>n>>k;
+    int n,h,m;
+    cin>>n>>h>>m;
+    int num[51]={0};
+    fill(num,num+n,h);
     int i;
-    wfor(i,1,n+1)
+    wfor(i,0,m)
     {
-        cin>>num[i];
-    }
-    sort(num+1,num+n+1);
-    int l=1;
-    int r=n/2+1;
-    while(l<=r)
-    {
-        int mid=(l+r)>>1;
-        int flag=1;
-        wfor(i,1,mid+1)
+        int l,r,ma;
+        cin>>l>>r>>ma;
+        int j;
+        wfor(j,l-1,r)
         {
-            if(num[n-mid+i]-num[i]<k)
-            {
-                flag=0;
-                break;
-            }
+            num[j]=min(num[j],ma);
         }
-        if(flag)
-            l=mid+1;
-        else
-            r=mid-1;
     }
-    cout<<r<<endl;
+    ll ans=0;
+    wfor(i,0,n)
+    {
+        ans+=num[i]*num[i];
+    }
+    cout<<ans<<endl;
     return 0;
 }
