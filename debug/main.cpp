@@ -1,4 +1,5 @@
 #include <iostream>
+#include <map> 
 #include <cstdio>
 using namespace std;
 typedef long long ll;
@@ -9,6 +10,27 @@ typedef long long ll;
 // 	for (; ch < '0' || ch > '9'; ch = getchar());
 // 	for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
 // }
+const int maxn=1e5+5;
+int num[maxn];
+struct st
+{
+    int num;
+    int cnt;
+    bool operator <(const st & other)const
+    {
+        if(cnt!=other.cnt)
+            return cnt<other.cnt;
+        else
+            return num<other.num;
+    }
+    st(){}
+    st(int a,int b)
+    {
+        num=a;
+        cnt=b;
+    }
+};
+int vis[maxn];
 int main()
 {
     std::ios::sync_with_stdio(false);
@@ -19,29 +41,45 @@ int main()
     freopen("/home/time/debug/debug/in","r",stdin);
     freopen("/home/time/debug/debug/out","w",stdout);
     #endif
-    int n,m;
-    cin>>n>>m;
+    int n;
+    cin>>n;
+    int i;
+    wfor(i,0,n)
+    {
+        cin>>num[i];
+    }
+    map<st,int>ma;
     int ans=0;
-    if(n==m)
+    wfor(i,0,n)
     {
-        cout<<0<<endl;
-        return 0;
-    }
-    n-=m;
-    if(m==0)
-        ans=1;
-    int bian=n;
-    if(m>2&&bian>2)
-    {
-        m-=2;
-        bian-=2;
-        ans+=2;
-    }
-    while(m&&bian)
-    {
-        m--;
-        ans++;
-        bian--;
+        if(ma.count(st(num[i],vis[num[i]]))==0)
+        {
+            ma.insert(make_pair(st(num[i],1),1));
+        }else
+        {
+            ma.erase(st(num[i],vis[num[i]]));
+            ma[st(num[i],vis[num[i]]+1)]++;
+        }
+        vis[num[i]]++;
+        if(ma.size()==1)
+            ans=i+1;
+        else
+        {
+            auto it =ma.begin();
+            it++;
+            if(ma.begin()->first.cnt==1&&it->first.cnt==(--ma.end())->first.cnt)
+                ans=i+1;
+            else
+            {
+                it=ma.end();
+                it--;
+                auto it2=ma.end();
+                it2--;
+                it2--;
+                if(it->first.cnt==it2->first.cnt+1&&it2->first.cnt==ma.begin()->first.cnt)
+                    ans=i+1;
+            }
+        }
     }
     cout<<ans<<endl;
     return 0;
