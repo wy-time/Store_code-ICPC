@@ -1,5 +1,7 @@
 #include <iostream>
 #include <map> 
+#include <cmath> 
+#include <set> 
 #include <cstdio>
 using namespace std;
 typedef long long ll;
@@ -10,27 +12,39 @@ typedef long long ll;
 // 	for (; ch < '0' || ch > '9'; ch = getchar());
 // 	for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
 // }
-const int maxn=1e5+5;
-int num[maxn];
+const int maxn=1005;
+const double eps=1e-8;
+bool equa(double a,double b)
+{
+    if(fabs(a-b)<eps)
+        return true;
+    else
+        return false;
+}
 struct st
 {
-    int num;
-    int cnt;
-    bool operator <(const st & other)const
+    int x;
+    int y;
+};
+struct Line
+{
+    double k;
+    double b;
+    Line (){}
+    Line (double a,double a2)
     {
-        if(cnt!=other.cnt)
-            return cnt<other.cnt;
-        else
-            return num<other.num;
+        k=a;
+        b=a2;
     }
-    st(){}
-    st(int a,int b)
+    bool operator <(const Line & other)const
     {
-        num=a;
-        cnt=b;
+        if(!equa(k,other.k))
+            return k<other.k;
+        else
+            return b<other.b;
     }
 };
-int vis[maxn];
+st point[maxn];
 int main()
 {
     std::ios::sync_with_stdio(false);
@@ -46,41 +60,43 @@ int main()
     int i;
     wfor(i,0,n)
     {
-        cin>>num[i];
+        cin>>point[i].x>>point[i].y;
     }
-    map<st,int>ma;
-    int ans=0;
+    set<Line>st;
+    map<double,ll>ma;
+    ll cnt=0;
     wfor(i,0,n)
     {
-        if(ma.count(st(num[i],vis[num[i]]))==0)
+        int j;
+        wfor(j,i+1,n)
         {
-            ma.insert(make_pair(st(num[i],1),1));
-        }else
-        {
-            ma.erase(st(num[i],vis[num[i]]));
-            ma[st(num[i],vis[num[i]]+1)]++;
-        }
-        vis[num[i]]++;
-        if(ma.size()==1)
-            ans=i+1;
-        else
-        {
-            auto it =ma.begin();
-            it++;
-            if(ma.begin()->first.cnt==1&&it->first.cnt==(--ma.end())->first.cnt)
-                ans=i+1;
-            else
+            double k;
+            double b;
+            if(point[i].x-point[j].x==0)
             {
-                it=ma.end();
-                it--;
-                auto it2=ma.end();
-                it2--;
-                it2--;
-                if(it->first.cnt==it2->first.cnt+1&&it2->first.cnt==ma.begin()->first.cnt)
-                    ans=i+1;
+                k=0.000001;
+                b=point[i].x;
+            }else
+            {
+                k=((point[i].y-point[j].y)/(point[i].x-point[j].x));
+                b=1.0*point[i].y-k*point[i].x;
+            }
+            auto it=st.insert(Line(k,b));
+            if(it.second)
+            {
+                cnt++;
+                if(ma.count(k)==0)
+                    ma.insert(make_pair(k,1));
+                else
+                    ma[k]++;
             }
         }
     }
-    cout<<ans<<endl;
+    ll ans=0;
+    for(auto it:st)
+    {
+        ans+=cnt-ma[it.k];
+    }
+    cout<<ans/2<<endl;
     return 0;
 }
