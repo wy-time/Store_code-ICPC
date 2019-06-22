@@ -1,5 +1,4 @@
 #include <iostream>
-#include <string> 
 #include <cstdio>
 using namespace std;
 typedef long long ll;
@@ -10,6 +9,8 @@ typedef long long ll;
 // 	for (; ch < '0' || ch > '9'; ch = getchar());
 // 	for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
 // }
+const int maxn=3e5+5;
+int num[maxn];
 int main()
 {
     std::ios::sync_with_stdio(false);
@@ -22,33 +23,17 @@ int main()
     #endif
     int n;
     cin>>n;
-    string s;
-    cin>>s;
     int i;
-    int ans=0;
-    if(s[0]=='-')
+    wfor(i,0,n)
     {
-        wfor(i,0,n)
-        {
-            if(s[i]=='+')
-                break;
-        }
-        wfor(i,i,n)
-        {
-            if(s[i]=='-')
-                ans--;
-            else
-                ans++;
-        }
-    }else
+        cin>>num[i];
+    }
+    int ans=min(num[0],num[n-1])/(n-1);
+    wfor(i,1,n-1)
     {
-        wfor(i,0,n)
-        {
-            if(s[i]=='-')
-                ans--;
-            else
-                ans++;
-        }
+        int temp=min(num[i],num[n-1])/(n-1-i);
+        temp=min(temp,min(num[i],num[0])/i);
+        ans=min(temp,ans);
     }
     cout<<ans<<endl;
     return 0;
