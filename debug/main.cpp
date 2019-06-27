@@ -1,5 +1,6 @@
 #include <iostream>
-#include <algorithm> 
+#include <set> 
+#include <map> 
 #include <cstdio>
 using namespace std;
 typedef long long ll;
@@ -10,9 +11,19 @@ typedef long long ll;
 // 	for (; ch < '0' || ch > '9'; ch = getchar());
 // 	for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
 // }
-const int maxn=1e5+5;
-ll boy[maxn];
-ll girl[maxn];
+const int maxn=400;
+ll ksm(ll a,ll b)
+{
+    ll ans=1;
+    while(b)
+    {
+        if(b&1)
+            ans=ans*a;
+        a*=a;
+        b>>=1;
+    }
+    return ans;
+}
 int main()
 {
     std::ios::sync_with_stdio(false);
@@ -23,58 +34,69 @@ int main()
     freopen("/home/time/debug/debug/in","r",stdin);
     freopen("/home/time/debug/debug/out","w",stdout);
     #endif
-    int n,m;
-    cin>>n>>m;
-    int i;
-    wfor(i,0,n)
+    int t;
+    cin>>t;
+    while(t--)
     {
-        cin>>boy[i];
-    }
-    wfor(i,0,m)
-    {
-        cin>>girl[i];
-    }
-    sort(boy,boy+n,greater<int>());
-    sort(girl,girl+m,greater<int>());
-    int flag=1;
-    ll ans=0;
-    int now=0;
-    wfor(i,0,n)
-    {
-        int j;
-        ans+=now*boy[i];
-        int isok=0;
-        if(now!=0)
-            isok=1;
-        wfor(j,now,m)
+        int n;
+        cin>>n;
+        ll i;
+        map <ll ,ll >ma;
+        ll j;
+        set <ll>vis;
+        wfor(j,0,n)
         {
-            if(girl[j]<boy[i])
+            int num;
+            cin>>num;
+            vis.insert(num);
+            for(i=2;i*i<=num;i++)
             {
-                flag=0;
-                break;
-            }else if(j!=m-1)
-            {
-                ans+=girl[j];
-            }else
-            {
-                if(girl[j]==boy[i]||isok)
+                if(num%i==0)
                 {
-                    ans+=girl[j];
-                    now=m;
-                }
-                else
-                {
-                    ans+=boy[i];
-                    now=m-1;
+                    ll cnt=0;
+                    while(num%i==0)
+                    {
+                        num/=i;
+                        cnt++;
+                    }
+                    if(ma.count(i)==0)
+                        ma.insert(make_pair(i,cnt));
+                    else
+                        ma[i]=max(ma[i],cnt);
                 }
             }
+            if(num>1)
+            {
+                if(ma.count(num)==0)
+                    ma.insert(make_pair(num,1));
+                else
+                    ma[num]=max(ma[num],1ll);
+            }
         }
-        if(!flag)
-            break;
+        ll ans=1;
+        ll have=1;
+        for(auto k:ma)
+        {
+            have*=(k.second+1);
+            if(have>n+2)
+                break;
+            ans*=ksm(k.first,k.second);
+        }
+        if(have==n+2)
+        {
+            if(vis.count(ans)==0)
+                cout<<ans<<endl;
+            else
+                cout<<-1<<endl;
+        }else if (have>n+2)
+            cout<<-1<<endl;
+        else
+        {
+            if(ma.size()==1)
+                cout<<ans*(ma.begin()->first)<<endl;
+            else
+                cout<<-1<<endl;
+        }
     }
-    if(!flag)
-        cout<<-1<<endl;
-    else
-        cout<<ans<<endl;
     return 0;
 }
