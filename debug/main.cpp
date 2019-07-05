@@ -1,4 +1,5 @@
 #include <iostream>
+#include <algorithm> 
 #include <cstdio>
 using namespace std;
 typedef long long ll;
@@ -9,8 +10,9 @@ typedef long long ll;
 // 	for (; ch < '0' || ch > '9'; ch = getchar());
 // 	for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
 // }
-const int maxn=1<<18;
-int vis[maxn+5];
+const int maxn=2e5+5;
+const int INF=0x7f7f7f7f;
+int num[maxn];
 int main()
 {
     std::ios::sync_with_stdio(false);
@@ -21,27 +23,31 @@ int main()
     freopen("/home/time/debug/debug/in","r",stdin);
     freopen("/home/time/debug/debug/out","w",stdout);
     #endif
-    int n,k;
-    cin>>n>>k;
-    int i;
-    vis[k]=1;
-    int len=0;
-    wfor(i,1,1<<n)
+    int t;
+    cin>>t;
+    while(t--)
     {
-        if(vis[i])
-            continue;
-        vis[i^k]=1;
-        len++;
-    }
-    cout<<len<<endl;
-    int temp=0;
-    wfor(i,1,1<<n)
-    {
-        if(vis[i]==0)
+        int n,k;
+        cin>>n>>k;
+        int i;
+        wfor(i,0,n)
         {
-            cout<<(temp^i)<<" ";
-            temp=i;
+            cin>>num[i];
         }
+        sort(num,num+n);
+        int ans=INF;
+        int res=INF;
+        for(i=0;i+k<n;i++)
+        {
+            int temp=(num[i]+num[i+k])/2;
+            int dis=max(temp-num[i],num[i+k]-temp);
+            if(dis<res)
+            {
+                res=dis;
+                ans=temp;
+            }
+        }
+        cout<<ans<<endl;
     }
     return 0;
 }
