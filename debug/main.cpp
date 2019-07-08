@@ -1,4 +1,5 @@
-#include <iostream>
+#include <iostream> 
+#include <cstring> 
 #include <cstdio>
 using namespace std;
 typedef long long ll;
@@ -9,9 +10,12 @@ typedef long long ll;
 // 	for (; ch < '0' || ch > '9'; ch = getchar());
 // 	for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
 // }
-const int maxn=105;
-int num[maxn*2];
-int dp[maxn*2][maxn*2];
+const int maxn=205;
+const int INF=1e9;
+int num[maxn];
+int dp[maxn][maxn];
+int dp2[maxn][maxn];
+int sum[maxn];
 int main()
 {
     std::ios::sync_with_stdio(false);
@@ -25,24 +29,43 @@ int main()
     int n;
     cin>>n;
     int i;
-    wfor(i,0,n)
+    wfor(i,1,n+1)
     {
         cin>>num[i];
         num[i+n]=num[i];
     }
-    int j,k;
-    int ans=0;
-    wfor(j,1,2*n)
+    sum[1]=num[1];
+    wfor(i,2,2*n+1)
     {
-        for(i=j-1;i>=0&&j-i<n;i--)
+        sum[i]=sum[i-1]+num[i];
+    }
+    int j,k;
+    wfor(i,0,2*n+1)
+    {
+        wfor(j,0,2*n+1)
         {
-            for(k=i;k<j;k++)
+            dp2[i][j]=INF;
+        }
+    }
+    int ans1=INF;
+    int ans2=0;
+    wfor(i,0,2*n+1)
+        dp2[i][i]=0;
+    wfor(j,2,2*n+1)
+    {
+        for(i=j-1;i>=1&&j-i<n;i--)
+        {
+            wfor(k,i,j)
             {
-                dp[i][j]=max(dp[i][j],dp[i][k]+dp[k+1][j]+num[i]*num[k+1]*num[j+1]);
-                ans=max(ans,dp[i][j]);
+                dp[i][j]=max(dp[i][j],dp[i][k]+dp[k+1][j]+sum[j]-sum[i-1]);
+                dp2[i][j]=min(dp2[i][j],dp2[i][k]+dp2[k+1][j]+sum[j]-sum[i-1]);
+                ans2=max(ans2,dp[i][j]);
+                if(j-i+1==n)
+                    ans1=min(ans1,dp2[i][j]);
             }
         }
     }
-    cout<<ans<<endl;
+    cout<<ans1<<endl;
+    cout<<ans2<<endl;
     return 0;
 }
