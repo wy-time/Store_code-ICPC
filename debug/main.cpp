@@ -1,5 +1,5 @@
-#include <iostream> 
-#include <cstring> 
+#include <iostream>
+#include <string> 
 #include <cstdio>
 using namespace std;
 typedef long long ll;
@@ -10,12 +10,17 @@ typedef long long ll;
 // 	for (; ch < '0' || ch > '9'; ch = getchar());
 // 	for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
 // }
-const int maxn=205;
-const int INF=1e9;
-int num[maxn];
+const int maxn=105;
 int dp[maxn][maxn];
-int dp2[maxn][maxn];
-int sum[maxn];
+int val[5][5]=
+{
+    {5,-1,-2,-1,-3},
+    {-1,5,-3,-2,-4},
+    {-2,-3,5,-2,-2},
+    {-1,-2,-2,5,-1},
+    {-3,-4,-2,-1,0}
+};
+int ma[300];
 int main()
 {
     std::ios::sync_with_stdio(false);
@@ -26,46 +31,27 @@ int main()
     freopen("/home/time/debug/debug/in","r",stdin);
     freopen("/home/time/debug/debug/out","w",stdout);
     #endif
-    int n;
-    cin>>n;
-    int i;
-    wfor(i,1,n+1)
+    int len1,len2;
+    string s1,s2;
+    cin>>len1>>s1;
+    cin>>len2>>s2;
+    ma['A']=0;
+    ma['C']=1;
+    ma['G']=2;
+    ma['T']=3;
+    ma['-']=4;
+    int i,j;
+    wfor(i,1,len1+1)
+        dp[i][0]=dp[i-1][0]+val[ma[s1[i-1]]][4];
+    wfor(j,1,len2+1)
+        dp[0][j]=dp[0][j-1]+val[ma[s2[j-1]]][4];
+    wfor(i,1,len1+1)
     {
-        cin>>num[i];
-        num[i+n]=num[i];
-    }
-    sum[1]=num[1];
-    wfor(i,2,2*n+1)
-    {
-        sum[i]=sum[i-1]+num[i];
-    }
-    int j,k;
-    wfor(i,0,2*n+1)
-    {
-        wfor(j,0,2*n+1)
+        wfor(j,1,len2+1)
         {
-            dp2[i][j]=INF;
+            dp[i][j]=max(dp[i-1][j-1]+val[ma[s1[i-1]]][ma[s2[j-1]]],max(dp[i][j-1]+val[ma[s2[j-1]]][ma['-']],dp[i-1][j]+val[ma[s1[i-1]]][ma['-']]));
         }
     }
-    int ans1=INF;
-    int ans2=0;
-    wfor(i,0,2*n+1)
-        dp2[i][i]=0;
-    wfor(j,2,2*n+1)
-    {
-        for(i=j-1;i>=1&&j-i<n;i--)
-        {
-            wfor(k,i,j)
-            {
-                dp[i][j]=max(dp[i][j],dp[i][k]+dp[k+1][j]+sum[j]-sum[i-1]);
-                dp2[i][j]=min(dp2[i][j],dp2[i][k]+dp2[k+1][j]+sum[j]-sum[i-1]);
-                ans2=max(ans2,dp[i][j]);
-                if(j-i+1==n)
-                    ans1=min(ans1,dp2[i][j]);
-            }
-        }
-    }
-    cout<<ans1<<endl;
-    cout<<ans2<<endl;
+    cout<<dp[len1][len2]<<endl;
     return 0;
 }
