@@ -5,24 +5,24 @@ using namespace std;
 typedef long long ll;
 #define wfor(i,j,k) for(i=j;i<k;++i)
 #define mfor(i,j,k) for(i=j;i>=k;--i)
-// void read(int &x) {
+// void read(ll &x) {
 // 	char ch = getchar(); x = 0;
 // 	for (; ch < '0' || ch > '9'; ch = getchar());
 // 	for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
 // }
-const int maxn=2e5+5;
+const ll maxn=2e5+5;
 struct st
 {
-    int num[5];
-    int sum[7];
-    int number;
+    ll num[5];
+    ll sum[7];
+    ll number;
     st(){
         memset(num,0,sizeof(num));
         memset(sum,0,sizeof(sum));
     }
 };
 st info[maxn];
-int dp[maxn][10];
+ll dp[maxn][10];
 int main()
 {
     std::ios::sync_with_stdio(false);
@@ -33,18 +33,18 @@ int main()
     freopen("/home/time/debug/debug/in","r",stdin);
     freopen("/home/time/debug/debug/out","w",stdout);
     #endif
-    int n;
+    ll n;
     cin>>n;
-    int i;
-    int tot=0;
+    ll i;
+    ll tot=0;
     wfor(i,1,n+1)
     {
-        int k;
+        ll k;
         cin>>k;
-        int j;
+        ll j;
         wfor(j,0,k)
         {
-            int c,v;
+            ll c,v;
             cin>>c>>v;
             if(c==1)
             {
@@ -79,7 +79,7 @@ int main()
         info[i].sum[4]=info[i].sum[1]*2;
         if(info[i].sum[2]!=0)
         {
-            int temp=0;
+            ll temp=0;
             if(info[i].num[1]!=0)
                 temp=info[i].num[0]*2+info[i].num[1];
             if(info[i].num[3]!=0)
@@ -100,22 +100,34 @@ int main()
     }
     wfor(i,1,n+1)
     {
-        int j;
+        ll j;
         tot+=info[i].number;
-        int temp=info[i].number;
+        ll temp=info[i].number;
         wfor(j,0,10)
         {
-            if(tot<10&&j>tot)
+            if(j>tot)
                 break;
             if(j!=0)
-                dp[i][j]=max(dp[i-1][j],max(tot-temp>=(j+9)%10&&info[i].sum[1]!=0?dp[i-1][(j+9)%10]+info[i].sum[1]:0,max(tot-temp>=(j+8)%10&&info[i].sum[2]!=0?dp[i-1][(j+8)%10]+info[i].sum[2]:0,tot-temp>=(j+7)%10&&info[i].sum[3]!=0?dp[i-1][(j+7)%10]+info[i].sum[3]:0)));
+            {
+                if(tot<10)
+                    dp[i][j]=max(dp[i-1][j],max(tot-temp>=(j+9)%10&&info[i].sum[1]!=0?dp[i-1][(j+9)%10]+info[i].sum[1]:0,max(tot-temp>=(j+8)%10&&info[i].sum[2]!=0?dp[i-1][(j+8)%10]+info[i].sum[2]:0,tot-temp>=(j+7)%10&&info[i].sum[3]!=0?dp[i-1][(j+7)%10]+info[i].sum[3]:0)));
+                else
+                {
+                    if(j==1)
+                        dp[i][j]=max(dp[i-1][j],max(tot-temp>=(j+9)%10&&info[i].sum[1]!=0?dp[i-1][(j+9)%10]+info[i].sum[1]:0,max(tot-temp>=(j+8)%10&&info[i].sum[5]!=0?dp[i-1][(j+8)%10]+info[i].sum[5]:0,tot-temp>=(j+7)%10&&info[i].sum[6]!=0?dp[i-1][(j+7)%10]+info[i].sum[6]:0)));
+                    else if(j==2)
+                        dp[i][j]=max(dp[i-1][j],max(tot-temp>=(j+9)%10&&info[i].sum[1]!=0?dp[i-1][(j+9)%10]+info[i].sum[1]:0,max(tot-temp>=(j+8)%10&&info[i].sum[2]!=0?dp[i-1][(j+8)%10]+info[i].sum[2]:0,tot-temp>=(j+7)%10&&info[i].sum[6]!=0?dp[i-1][(j+7)%10]+info[i].sum[6]:0)));
+                    else
+                        dp[i][j]=max(dp[i-1][j],max(tot-temp>=(j+9)%10&&info[i].sum[1]!=0?dp[i-1][(j+9)%10]+info[i].sum[1]:0,max(tot-temp>=(j+8)%10&&info[i].sum[2]!=0?dp[i-1][(j+8)%10]+info[i].sum[2]:0,tot-temp>=(j+7)%10&&info[i].sum[3]!=0?dp[i-1][(j+7)%10]+info[i].sum[3]:0)));
+                }
+            }
             else if(tot>=10)
                 dp[i][j]=max(dp[i-1][j],max(tot-temp>=(j+9)%10&&info[i].sum[4]!=0?dp[i-1][(j+9)%10]+info[i].sum[4]:0,max(tot-temp>=(j+8)%10&&info[i].sum[5]!=0?dp[i-1][(j+8)%10]+info[i].sum[5]:0,tot-temp>=(j+7)%10&&info[i].sum[6]!=0?dp[i-1][(j+7)%10]+info[i].sum[6]:0)));
             else
                 dp[i][j]=0;
         }
     }
-    int ans=0;
+    ll ans=0;
     wfor(i,0,10)
         ans=max(ans,dp[n][i]);
     cout<<ans<<endl;
