@@ -1,5 +1,5 @@
 #include <iostream>
-#include <string> 
+#include <cstring> 
 #include <cstdio>
 using namespace std;
 typedef long long ll;
@@ -10,17 +10,19 @@ typedef long long ll;
 // 	for (; ch < '0' || ch > '9'; ch = getchar());
 // 	for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
 // }
-const int maxn=105;
-int dp[maxn][maxn];
-int val[5][5]=
+const int maxn=2e5+5;
+struct st
 {
-    {5,-1,-2,-1,-3},
-    {-1,5,-3,-2,-4},
-    {-2,-3,5,-2,-2},
-    {-1,-2,-2,5,-1},
-    {-3,-4,-2,-1,0}
+    int num[5];
+    int sum[7];
+    int number;
+    st(){
+        memset(num,0,sizeof(num));
+        memset(sum,0,sizeof(sum));
+    }
 };
-int ma[300];
+st info[maxn];
+int dp[maxn][10];
 int main()
 {
     std::ios::sync_with_stdio(false);
@@ -31,27 +33,91 @@ int main()
     freopen("/home/time/debug/debug/in","r",stdin);
     freopen("/home/time/debug/debug/out","w",stdout);
     #endif
-    int len1,len2;
-    string s1,s2;
-    cin>>len1>>s1;
-    cin>>len2>>s2;
-    ma['A']=0;
-    ma['C']=1;
-    ma['G']=2;
-    ma['T']=3;
-    ma['-']=4;
-    int i,j;
-    wfor(i,1,len1+1)
-        dp[i][0]=dp[i-1][0]+val[ma[s1[i-1]]][4];
-    wfor(j,1,len2+1)
-        dp[0][j]=dp[0][j-1]+val[ma[s2[j-1]]][4];
-    wfor(i,1,len1+1)
+    int n;
+    cin>>n;
+    int i;
+    int tot=0;
+    wfor(i,1,n+1)
     {
-        wfor(j,1,len2+1)
+        int k;
+        cin>>k;
+        int j;
+        wfor(j,0,k)
         {
-            dp[i][j]=max(dp[i-1][j-1]+val[ma[s1[i-1]]][ma[s2[j-1]]],max(dp[i][j-1]+val[ma[s2[j-1]]][ma['-']],dp[i-1][j]+val[ma[s1[i-1]]][ma['-']]));
+            int c,v;
+            cin>>c>>v;
+            if(c==1)
+            {
+                if(v>info[i].num[0])
+                {
+                    info[i].num[2]=info[i].num[1];
+                    info[i].num[1]=info[i].num[0];
+                    info[i].num[0]=v;
+                }
+                else if(v>info[i].num[1])
+                {
+                    
+                    info[i].num[2]=info[i].num[1];
+                    info[i].num[1]=v;
+                }
+                else if(v>info[i].num[2])
+                    info[i].num[2]=v;
+            }else if(c==2)
+            {
+                if(v>info[i].num[3])
+                    info[i].num[3]=v;
+            }else 
+                if(v>info[i].num[4])
+                    info[i].num[4]=v;
+        }
+        info[i].sum[1]=max(info[i].num[0],max(info[i].num[3],info[i].num[4]));
+        info[i].sum[2]=max(info[i].num[0]!=0&&info[i].num[3]!=0?info[i].num[0]+info[i].num[3]:0,info[i].num[0]!=0&&info[i].num[1]!=0?info[i].num[1]+info[i].num[0]:0);
+        if(info[i].num[2]!=0)
+            info[i].sum[3]=info[i].num[2]+info[i].num[1]+info[i].num[0];
+        else
+            info[i].sum[3]=0;
+        info[i].sum[4]=info[i].sum[1]*2;
+        if(info[i].sum[2]!=0)
+        {
+            int temp=0;
+            if(info[i].num[1]!=0)
+                temp=info[i].num[0]*2+info[i].num[1];
+            if(info[i].num[3]!=0)
+                temp=max(temp,info[i].num[0]+info[i].num[3]+max(info[i].num[0],info[i].num[3]));
+            info[i].sum[5]=temp;
+        }else
+            info[i].sum[5]=0;
+        if(info[i].sum[3]!=0)
+            info[i].sum[6]=info[i].num[2]+info[i].num[1]+info[i].num[0]*2;
+        else
+            info[i].sum[6]=0;
+        if(info[i].sum[3]!=0)
+            info[i].number=3;
+        else if(info[i].sum[2]!=0)
+            info[i].number=2;
+        else
+            info[i].number=1;
+    }
+    wfor(i,1,n+1)
+    {
+        int j;
+        tot+=info[i].number;
+        int temp=info[i].number;
+        wfor(j,0,10)
+        {
+            if(tot<10&&j>tot)
+                break;
+            if(j!=0)
+                dp[i][j]=max(dp[i-1][j],max(tot-temp>=(j+9)%10&&info[i].sum[1]!=0?dp[i-1][(j+9)%10]+info[i].sum[1]:0,max(tot-temp>=(j+8)%10&&info[i].sum[2]!=0?dp[i-1][(j+8)%10]+info[i].sum[2]:0,tot-temp>=(j+7)%10&&info[i].sum[3]!=0?dp[i-1][(j+7)%10]+info[i].sum[3]:0)));
+            else if(tot>=10)
+                dp[i][j]=max(dp[i-1][j],max(tot-temp>=(j+9)%10&&info[i].sum[4]!=0?dp[i-1][(j+9)%10]+info[i].sum[4]:0,max(tot-temp>=(j+8)%10&&info[i].sum[5]!=0?dp[i-1][(j+8)%10]+info[i].sum[5]:0,tot-temp>=(j+7)%10&&info[i].sum[6]!=0?dp[i-1][(j+7)%10]+info[i].sum[6]:0)));
+            else
+                dp[i][j]=0;
         }
     }
-    cout<<dp[len1][len2]<<endl;
+    int ans=0;
+    wfor(i,0,10)
+        ans=max(ans,dp[n][i]);
+    cout<<ans<<endl;
     return 0;
 }
