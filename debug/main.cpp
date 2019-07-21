@@ -1,5 +1,5 @@
 #include <iostream>
-#include <algorithm> 
+#include <queue> 
 #include <cstdio>
 using namespace std;
 typedef long long ll;
@@ -11,22 +11,24 @@ typedef long long ll;
 // 	for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
 // }
 const int maxn=1005;
-int numa[maxn];
-int numb[maxn];
-int check(int ans,int n,int m)
+int num[maxn];
+struct st
 {
-    int i;
-    wfor(i,0,m)
-    {
-        int pos=lower_bound(numa,numa+n,numb[i]+ans)-numa;
-        if(pos!=n)
-        {
-            if(numa[pos]==numb[i]+ans)
-                return 0;
-        }
+    int val;
+    int id;
+    int peop;
+    st(){}
+    st(int a,int b,int c){
+        val=a;
+        id=b;
+        peop=c;
     }
-    return 1;
-}
+    bool operator <(const st &b)const
+    {
+        return val>b.val;
+    }
+};
+int ans[maxn];
 int main()
 {
     std::ios::sync_with_stdio(false);
@@ -40,27 +42,48 @@ int main()
     int n,m;
     while(cin>>n>>m)
     {
+        priority_queue<st>qu;
         int i;
         wfor(i,0,n)
         {
-            cin>>numa[i];
+            cin>>num[i];
+            qu.push(st(0,i,0));
         }
-        wfor(i,0,m)
+        while(m)
         {
-            cin>>numb[i];
+            st temp=qu.top();
+            qu.pop();
+            temp.val+=num[temp.id];
+            temp.peop++;
+            qu.push(temp);
+            m--;
         }
-        sort(numa,numa+n);
-        sort(numb,numb+m);
-        int l=0;int r=1000;
-        while(l<=r)
+        int flag=1;
+        int last=qu.top().val;
+        ans[qu.top().id]=qu.top().peop;
+        qu.pop();
+        while(!qu.empty())
         {
-            int mid=(l+r)>>1;
-            if(check(mid,n,m))
-                r=mid-1;
-            else
-                l=mid+1;
+            ans[qu.top().id]=qu.top().peop;
+            int temp=qu.top().val;
+            qu.pop();
+            if(temp!=last)
+            {
+                flag=0;
+                break;
+            }
         }
-        cout<<l<<endl;
+        if(flag)
+        {
+            cout<<"Yes"<<endl;
+            wfor(i,0,n-1)
+            {
+                cout<<ans[i]<<" ";
+            }
+            cout<<ans[i]<<endl;
+        }else
+            cout<<"No"<<endl;
     }
+    
     return 0;
 }
