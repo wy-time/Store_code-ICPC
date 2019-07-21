@@ -5,20 +5,20 @@ using namespace std;
 typedef long long ll;
 #define wfor(i,j,k) for(i=j;i<k;++i)
 #define mfor(i,j,k) for(i=j;i>=k;--i)
-// void read(int &x) {
+// void read(ll &x) {
 // 	char ch = getchar(); x = 0;
 // 	for (; ch < '0' || ch > '9'; ch = getchar());
 // 	for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
 // }
-const int maxn=1005;
-int num[maxn];
+const ll maxn=1005;
+ll num[maxn];
 struct st
 {
-    int val;
-    int id;
-    int peop;
+    ll val;
+    ll id;
+    ll peop;
     st(){}
-    st(int a,int b,int c){
+    st(ll a,ll b,ll c){
         val=a;
         id=b;
         peop=c;
@@ -28,7 +28,7 @@ struct st
         return val>b.val;
     }
 };
-int ans[maxn];
+ll ans[maxn];
 int main()
 {
     std::ios::sync_with_stdio(false);
@@ -39,11 +39,11 @@ int main()
     freopen("/home/time/debug/debug/in","r",stdin);
     freopen("/home/time/debug/debug/out","w",stdout);
     #endif
-    int n,m;
+    ll n,m;
     while(cin>>n>>m)
     {
         priority_queue<st>qu;
-        int i;
+        ll i;
         wfor(i,0,n)
         {
             cin>>num[i];
@@ -58,14 +58,14 @@ int main()
             qu.push(temp);
             m--;
         }
-        int flag=1;
-        int last=qu.top().val;
+        ll flag=1;
+        ll last=qu.top().val;
         ans[qu.top().id]=qu.top().peop;
         qu.pop();
         while(!qu.empty())
         {
             ans[qu.top().id]=qu.top().peop;
-            int temp=qu.top().val;
+            ll temp=qu.top().val;
             qu.pop();
             if(temp!=last)
             {
