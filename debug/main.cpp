@@ -1,5 +1,4 @@
 #include <iostream>
-#include <queue> 
 #include <cstdio>
 using namespace std;
 typedef long long ll;
@@ -12,23 +11,11 @@ typedef long long ll;
 // }
 const int maxn=1005;
 int num[maxn];
-struct st
-{
-    int val;
-    int id;
-    int peop;
-    st(){}
-    st(int a,int b,int c){
-        val=a;
-        id=b;
-        peop=c;
-    }
-    bool operator <(const st &b)const
-    {
-        return val>b.val;
-    }
-};
 int ans[maxn];
+int gcd(int a,int b)
+{
+    return b==0?a:gcd(b,a%b);
+}
 int main()
 {
     std::ios::sync_with_stdio(false);
@@ -42,48 +29,47 @@ int main()
     int n,m;
     while(cin>>n>>m)
     {
-        priority_queue<st>qu;
         int i;
         wfor(i,0,n)
         {
             cin>>num[i];
-            qu.push(st(0,i,0));
         }
-        while(m)
-        {
-            st temp=qu.top();
-            qu.pop();
-            temp.val+=num[temp.id];
-            temp.peop++;
-            qu.push(temp);
-            m--;
-        }
-        int flag=1;
-        int last=qu.top().val;
-        ans[qu.top().id]=qu.top().peop;
-        qu.pop();
-        while(!qu.empty())
-        {
-            ans[qu.top().id]=qu.top().peop;
-            int temp=qu.top().val;
-            qu.pop();
-            if(temp!=last)
-            {
-                flag=0;
-                break;
-            }
-        }
-        if(flag)
+        if(n==1)
         {
             cout<<"Yes"<<endl;
-            wfor(i,0,n-1)
-            {
-                cout<<ans[i]<<" ";
-            }
-            cout<<ans[i]<<endl;
+            cout<<"m"<<endl;
         }else
+        {
+            int value=num[0]*num[1]/gcd(num[0],num[1]);
+            wfor(i,2,n)
+            {
+                value=value*num[i]/gcd(value,num[i]);
+            }
+            int sum=0;
+            int cnt=1;
+            int temp=value;
+            while(sum<m)
+            {
+                value=temp*cnt;
+                sum=0;
+                wfor(i,0,n)
+                {
+                    ans[i]=value/num[i];
+                    sum+=ans[i];
+                }
+                cnt++;
+            }
+            if(sum==m)
+            {
+                cout<<"Yes"<<endl;
+                wfor(i,0,n-1)
+                {
+                    cout<<ans[i]<<" ";
+                }
+                cout<<ans[i]<<endl;
+            }else
             cout<<"No"<<endl;
+        }
     }
-    
     return 0;
 }
