@@ -1,45 +1,155 @@
-#include<bits/stdc++.h>
-#define fi first
-#define se second
-#define bug cout<<"--------------"<<endl
+#include <iostream>
+
+#include <bitset> 
+
+#include <cstdio>
+
 using namespace std;
-typedef long long LL;
-const double PI=acos(-1.0);
-const double eps=1e-6;
-const int inf=1e9;
-const LL llf=1e18;
-const int mod=1e9+7;
-const int maxn=1e6+10;
-int n,x;
-int ll[maxn],rr[maxn];
-int l[maxn],r[maxn];
-int main(){
-    ios::sync_with_stdio(false);
-    //freopen("in","r",stdin);
-    cin>>n>>x;
-    memset(l,0x3f3f3f,sizeof(l));
-    memset(ll,0x3f3f3f,sizeof(ll));
-    for(int i=1,d;i<=n;i++){
-        cin>>d;
-        l[d]=min(i,l[d]);
-        r[d]=i;
-    }
-    for(int i=1;i<=x;i++){
-        rr[i]=max(rr[i-1],r[i]);
-    }
-    for(int i=x;i>=1;i--){
-        ll[i]=min(l[i],ll[i+1]);
-    }
-    int R=x;
-    LL ans=0;
-    while(ll[R]>=r[R-1]&&R>=1) R--;
-    for(int i=0;i<x;i++){
-        if(i!=0&&l[i]<rr[i-1]) break;
-        while(R<=i+1||rr[i]>ll[R]){
-            R++;
+
+typedef long long ll;
+
+#define wfor(i,j,k) for(i=j;i<k;++i)
+
+#define mfor(i,j,k) for(i=j;i>=k;--i)
+
+// void read(ll &x) {
+
+// 	char ch = getchar(); x = 0;
+
+// 	for (; ch < '0' || ch > '9'; ch = getchar());
+
+// 	for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
+
+// }
+
+ll val[28][28];
+
+ll ans[28];
+
+ll ch[14];
+
+int main()
+
+{
+
+    std::ios::sync_with_stdio(false);
+
+    #ifdef test
+
+    freopen("F:\\Desktop\\question\\in.txt","r",stdin);
+
+    #endif
+
+    #ifdef ubuntu
+
+    freopen("/home/time/debug/debug/in","r",stdin);
+
+    freopen("/home/time/debug/debug/out","w",stdout);
+
+    #endif
+
+    ll n;
+
+    cin>>n;
+
+    ll i;
+
+    wfor(i,0,2*n)
+
+    {
+
+        ll j;
+
+        wfor(j,0,2*n)
+
+        {
+
+            cin>>val[i][j];
+
+            ans[i]+=val[i][j];
+
         }
-        ans+=x-R+2;
+
     }
-    cout<<ans<<endl;
+
+    string temp="";
+
+    wfor(i,0,n)
+
+        temp+='1';
+
+    wfor(i,0,n)
+
+        temp+='0';
+
+    bitset<28> ends(temp);
+
+    ll end=ends.to_ullong();
+
+    end++;
+
+    ll res=0;
+    bitset<28>gao;
+    wfor(i,0,end)
+
+    {
+
+        bitset<28> now(i);
+
+        if(now.count()==n)
+
+        {
+
+            ll cnt=0;
+
+            ll j;
+
+            ll temp=0;
+
+            wfor(j,0,2*n)
+
+            {
+
+                if(now[j]==1)
+
+                {
+
+                    ch[cnt++]=j;
+
+                    temp+=ans[j];
+
+                }
+
+            }
+
+            wfor(j,0,cnt)
+
+            {
+
+                ll k;
+
+                wfor(k,j+1,cnt)
+
+                {
+
+                    temp-=val[ch[j]][ch[k]]*2;
+
+                }
+
+            }
+
+            if(res<temp)
+            {
+                res=temp;
+                gao=now;
+            }
+
+        }
+
+    }
+
+    cout<<res<<endl;
+    cout<<gao.to_string()<<endl;
     return 0;
+
 }
