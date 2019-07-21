@@ -1,4 +1,6 @@
 #include <iostream>
+#include <iomanip> 
+#include <cmath> 
 #include <cstdio>
 using namespace std;
 typedef long long ll;
@@ -9,6 +11,8 @@ typedef long long ll;
 // 	for (; ch < '0' || ch > '9'; ch = getchar());
 // 	for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
 // }
+const int maxn=1005;
+double num[maxn];
 int main()
 {
     std::ios::sync_with_stdio(false);
@@ -19,12 +23,26 @@ int main()
     freopen("/home/time/debug/debug/in","r",stdin);
     freopen("/home/time/debug/debug/out","w",stdout);
     #endif
-    int x,y;
-    cin>>x>>y;
-    int a=x+y;
-    a/=2;
-    int b=x-y;
-    b/=2;
-    cout<<a*b<<endl;
+    int n;
+    while(cin>>n)
+    {
+        int i;
+        ll last=0;
+        wfor(i,0,n)
+        {
+            cin>>num[i];
+            last+=round(num[i]*1000);
+        }
+        ll now=0;
+        wfor(i,0,n)
+        {
+            num[i]*=100;
+            ll temp=round(num[i]);
+            temp*=10;
+            now+=temp;
+        }
+        double cha=1.0*(now-last)/1000;
+        cout<<fixed<<setprecision(3)<<cha<<endl;
+    }
     return 0;
 }
