@@ -4,15 +4,15 @@ using namespace std;
 typedef long long ll;
 #define wfor(i,j,k) for(i=j;i<k;++i)
 #define mfor(i,j,k) for(i=j;i>=k;--i)
-// void read(int &x) {
+// void read(ll &x) {
 // 	char ch = getchar(); x = 0;
 // 	for (; ch < '0' || ch > '9'; ch = getchar());
 // 	for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
 // }
-const int maxn=1005;
-int num[maxn];
-int ans[maxn];
-int gcd(int a,int b)
+const ll maxn=1005;
+ll num[maxn];
+ll ans[maxn];
+ll gcd(ll a,ll b)
 {
     return b==0?a:gcd(b,a%b);
 }
@@ -26,10 +26,10 @@ int main()
     freopen("/home/time/debug/debug/in","r",stdin);
     freopen("/home/time/debug/debug/out","w",stdout);
     #endif
-    int n,m;
+    ll n,m;
     while(cin>>n>>m)
     {
-        int i;
+        ll i;
         wfor(i,0,n)
         {
             cin>>num[i];
@@ -37,36 +37,30 @@ int main()
         if(n==1)
         {
             cout<<"Yes"<<endl;
-            cout<<"m"<<endl;
+            cout<<m<<endl;
         }else
         {
-            int value=num[0]*num[1]/gcd(num[0],num[1]);
+            ll value=num[0]*num[1]/gcd(num[0],num[1]);
             wfor(i,2,n)
             {
                 value=value*num[i]/gcd(value,num[i]);
             }
-            int sum=0;
-            int cnt=1;
-            int temp=value;
-            while(sum<m)
+            ll sum=0;
+            wfor(i,0,n)
             {
-                value=temp*cnt;
-                sum=0;
-                wfor(i,0,n)
-                {
-                    ans[i]=value/num[i];
-                    sum+=ans[i];
-                }
-                cnt++;
+                ans[i]=value/num[i];
+                sum+=ans[i];
             }
-            if(sum==m)
+            ll mul=1;
+            if(m%sum==0)
             {
+                mul=m/sum;
                 cout<<"Yes"<<endl;
                 wfor(i,0,n-1)
                 {
-                    cout<<ans[i]<<" ";
+                    cout<<ans[i]*mul<<" ";
                 }
-                cout<<ans[i]<<endl;
+                cout<<ans[i]*mul<<endl;
             }else
             cout<<"No"<<endl;
         }
