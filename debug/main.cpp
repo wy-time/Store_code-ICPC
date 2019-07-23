@@ -5,62 +5,62 @@ using namespace std;
 typedef long long ll;
 #define wfor(i,j,k) for(i=j;i<k;++i)
 #define mfor(i,j,k) for(i=j;i>=k;--i)
-// void read(int &x) {
+// void read(ll &x) {
 // 	char ch = getchar(); x = 0;
 // 	for (; ch < '0' || ch > '9'; ch = getchar());
 // 	for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
 // }
-const int maxn=100005;
+const ll maxn=100005;
 struct EDGE
 {
-    int next;
-    int end;
+    ll next;
+    ll end;
 };
-int head[maxn];
+ll head[maxn];
 EDGE edge[maxn*2];
-int cnt;
-void add(int beg,int end)
+ll cnt;
+void add(ll beg,ll end)
 {
     edge[++cnt].next=head[beg];
     edge[cnt].end=end;
     head[beg]=cnt;
 }
-int vis[maxn];
-int sum[maxn];
-int sum_num[maxn];
-void dfs(int now)
+ll vis[maxn];
+ll sum[maxn];
+ll sum_num[maxn];
+void dfs(ll now)
 {
-    int i;
-    int temp_sum=0;
-    int temp_sum_num=0;
+    ll i;
+    ll temp_sum=0;
+    ll temp_sum_num=0;
     for(i=head[now];i;i=edge[i].next)
     {
-        int v=edge[i].end;
+        ll v=edge[i].end;
         if(!vis[v])
         {
             vis[v]=1;
             dfs(v);
-            temp_sum+=sum[v]+1;
-            temp_sum_num+=sum_num[v]+sum[v]+1;
+            temp_sum+=sum_num[v]+sum[v]+1;
+            temp_sum_num+=sum_num[v]+1;
         }
     }
     sum_num[now]=temp_sum_num;
     sum[now]=temp_sum;
 }
-int root_1;
-int sum_root1;
-int root_2;
-int sum_root2;
-int find_root(int now,int &root,int &sum_root)
+ll root_1;
+ll sum_root1;
+ll root_2;
+ll sum_root2;
+ll find_root(ll now,ll &root,ll &sum_root)
 {
-    int i;
-    int tot=0;
+    ll i;
+    ll tot=0;
     tot+=sum[now];
-    int temp1=sum[now];
-    int temp2=sum_num[now];
+    ll temp1=sum[now];
+    ll temp2=sum_num[now];
     for(i=head[now];i;i=edge[i].next)
     {
-        int v=edge[i].end;
+        ll v=edge[i].end;
         if(!vis[v])
         {
             vis[v]=1;
@@ -90,12 +90,12 @@ int main()
     freopen("/home/time/debug/debug/in","r",stdin);
     freopen("/home/time/debug/debug/out","w",stdout);
     #endif
-    int n;
+    ll n;
     cin>>n;
-    int i;
-    wfor(i,0,n)
+    ll i;
+    wfor(i,0,n-2)
     {
-        int u,v;
+        ll u,v;
         cin>>u>>v;
         add(u,v);
         add(v,u);
@@ -116,14 +116,14 @@ int main()
     }
     sum_root2=sum[root_2];
     memset(vis,0,sizeof(vis));
-    int ans=0;
+    ll ans=0;
     vis[root_1]=1;
-    int temp=find_root(root_1,root_1,sum_root1);
+    ll temp=find_root(root_1,root_1,sum_root1);
     ans+=temp/2;
     vis[root_2]=1;
     temp=find_root(root_2,root_2,sum_root2);
     ans+=temp/2;
-    ans+=sum_root2*sum_root1;
+    ans+=(sum_root2)*(sum_num[root_1]+1)+(sum_root1+sum_num[root_1]+1)*(sum_num[root_2]+1);
     cout<<ans<<endl;
     return 0;
 }
