@@ -79,17 +79,16 @@ int main()
                 wfor(k,0,26)
                 {
                     if(num[k][0]>use[k])need+=num[k][0]-use[k];
-                    if(k!=j)
-                        if(sum[temp+1][k]+use[k]<num[k][0])
-                        {
-                            ok=0;
-                            break;
-                        }
+                    if(sum[temp+1][k]+use[k]<num[k][0])
+                    {
+                        ok=0;
+                        break;
+                    }
                 }
                 if(!ok)continue;
                 else
                 {
-                    if(need>n-i-1)
+                    if(need>n-i-1||need>len-temp||n-i-1>len-temp-1)
                     {
                         use[j]--;
                         continue;
