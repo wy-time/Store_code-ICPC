@@ -1,85 +1,21 @@
 #include <iostream>
 #include <cstring> 
+#include <string>
 #include <cstdio>
 using namespace std;
 typedef long long ll;
 #define wfor(i,j,k) for(i=j;i<k;++i)
 #define mfor(i,j,k) for(i=j;i>=k;--i)
-// void read(ll &x) {
+// void read(int &x) {
 // 	char ch = getchar(); x = 0;
 // 	for (; ch < '0' || ch > '9'; ch = getchar());
 // 	for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
 // }
-const ll maxn=100005;
-struct EDGE
-{
-    ll next;
-    ll end;
-};
-ll head[maxn];
-EDGE edge[maxn*2];
-ll cnt;
-void add(ll beg,ll end)
-{
-    edge[++cnt].next=head[beg];
-    edge[cnt].end=end;
-    head[beg]=cnt;
-}
-ll vis[maxn];
-ll sum[maxn];
-ll sum_num[maxn];
-void dfs(ll now)
-{
-    ll i;
-    ll temp_sum=0;
-    ll temp_sum_num=0;
-    for(i=head[now];i;i=edge[i].next)
-    {
-        ll v=edge[i].end;
-        if(!vis[v])
-        {
-            vis[v]=1;
-            dfs(v);
-            temp_sum+=sum_num[v]+sum[v]+1;
-            temp_sum_num+=sum_num[v]+1;
-        }
-    }
-    sum_num[now]=temp_sum_num;
-    sum[now]=temp_sum;
-}
-ll root_1;
-ll sum_root1;
-ll root_2;
-ll sum_root2;
-ll find_root(ll now,ll &root,ll &sum_root)
-{
-    ll i;
-    ll tot=0;
-    tot+=sum[now];
-    ll temp1=sum[now];
-    ll temp2=sum_num[now];
-    for(i=head[now];i;i=edge[i].next)
-    {
-        ll v=edge[i].end;
-        if(!vis[v])
-        {
-            vis[v]=1;
-            sum[now]-=(sum[v]+sum_num[v]+1);
-            sum_num[now]-=(sum_num[v]+1);
-            sum[v]+=sum[now]+sum_num[now]+1;
-            sum_num[v]+=sum_num[now]+1;
-            if(sum[v]<sum_root)
-            {
-                sum_root=sum[v];
-                root=v;
-            }
-            tot+=find_root(v,root,sum_root);
-            sum[now]=temp1;
-            sum_num[now]=temp2;
-        }
-    }
-    return tot;
-}
+const int maxn=1e5+5;
+int num[26][2];
+int pos[maxn][26];
+char ans[maxn];
+int sum[maxn][26];
 int main()
 {
     std::ios::sync_with_stdio(false);
@@ -90,40 +26,93 @@ int main()
     freopen("/home/time/debug/debug/in","r",stdin);
     freopen("/home/time/debug/debug/out","w",stdout);
     #endif
-    ll n;
-    cin>>n;
-    ll i;
-    wfor(i,0,n-2)
+    int n;
+    string s;
+    while(cin>>s>>n)
     {
-        ll u,v;
-        cin>>u>>v;
-        add(u,v);
-        add(v,u);
-    }
-    vis[1]=1;
-    dfs(1);
-    root_1=1;
-    sum_root1=sum[root_1];
-    wfor(i,1,n+1)
-    {
-        if(!vis[i])
+        int i;
+        wfor(i,0,26)
         {
-            vis[i]=1;
-            root_2=i;
-            dfs(i);
-            break;
+            cin>>num[i][0]>>num[i][1];
+        }
+        int len=s.size();
+        int now[26];
+        memset(now,-1,sizeof(now));
+        memset(sum[len],0,sizeof(sum[len]));
+        mfor(i,len-1,0)
+        {
+            int j;
+            now[s[i]-'a']=i;
+            wfor(j,0,26)
+            {
+                pos[i][j]=now[j];
+                if(j==s[i]-'a')
+                    sum[i][j]=sum[i+1][j]+1;
+                else
+                    sum[i][j]=sum[i+1][j];
+            }
+        }
+        int use[26]={0};
+        int pnow=0;
+        int flag=1;
+        wfor(i,0,n)
+        {
+            int j;
+            int chose=0;
+            wfor(j,0,26)
+            {
+                if(pos[pnow][j]==-1)
+                {
+                    if(use[j]<num[j][0])
+                    {
+                        flag=0;
+                        break;
+                    }else
+                        continue;
+                }
+                if(use[j]==num[j][1])continue;
+                int temp=pos[pnow][j];
+                use[j]++;
+                int k;
+                int ok=1;
+                int need=0;
+                wfor(k,0,26)
+                {
+                    if(num[k][0]>use[k])need+=num[k][0]-use[k];
+                    if(k!=j)
+                        if(sum[temp+1][k]+use[k]<num[k][0])
+                        {
+                            ok=0;
+                            break;
+                        }
+                }
+                if(!ok)continue;
+                else
+                {
+                    if(need>n-i-1)
+                    {
+                        use[j]--;
+                        continue;
+                    }
+                    ans[i]=j+'a';
+                    chose=1;
+                    pnow=pos[pnow][j]+1;
+                    break;
+                }
+            }
+            if(!chose)
+                flag=0;
+            if(!flag)
+                break;
+        }
+        if(!flag)
+            cout<<-1<<endl;
+        else
+        {
+            wfor(i,0,n)
+                cout<<ans[i];
+            cout<<endl;
         }
     }
-    sum_root2=sum[root_2];
-    memset(vis,0,sizeof(vis));
-    ll ans=0;
-    vis[root_1]=1;
-    ll temp=find_root(root_1,root_1,sum_root1);
-    ans+=temp/2;
-    vis[root_2]=1;
-    temp=find_root(root_2,root_2,sum_root2);
-    ans+=temp/2;
-    ans+=(sum_root2)*(sum_num[root_1]+1)+(sum_root1+sum_num[root_1]+1)*(sum_num[root_2]+1);
-    cout<<ans<<endl;
     return 0;
 }
