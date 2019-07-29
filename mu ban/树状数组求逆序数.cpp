@@ -43,8 +43,10 @@ int main()
 {
 	std::ios::sync_with_stdio(false);
 	ll x, y;
-	while (cin >> n >> x >> y)
+	// while (cin >> n >> x >> y)
+	while (1)
 	{
+		n = 4, x = 1, y = 1;
 		memset(c, 0, sizeof(c));
 		memset(b, 0, sizeof(b));
 		ll i;
