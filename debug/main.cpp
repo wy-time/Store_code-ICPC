@@ -1,7 +1,8 @@
 #include <iostream>
-#include <cstring> 
-#include <string>
+#include <cstring>
+#include <queue>
 #include <cstdio>
+#include <vector>
 using namespace std;
 typedef long long ll;
 #define wfor(i,j,k) for(i=j;i<k;++i)
@@ -11,110 +12,138 @@ typedef long long ll;
 // 	for (; ch < '0' || ch > '9'; ch = getchar());
 // 	for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
 // }
-const int maxn=1e5+5;
-int num[26][2];
-int pos[maxn][26];
-char ans[maxn];
-int sum[maxn][26];
+const int maxn = 2005;
+const int INF = 1e9;
+struct EDGE
+{
+	int first;
+	int flow;
+	int cost;
+	int _end;
+	int next;
+};
+int num[maxn];
+int head[3 * maxn];
+EDGE edge[maxn* maxn];
+int cnt = -1;
+void add(int beg, int _end, int flow, int cost)
+{
+	edge[++cnt].next = head[beg];
+	edge[cnt]._end = _end;
+	edge[cnt].flow = flow;
+	edge[cnt].cost = cost;
+	edge[cnt].first = beg;
+	head[beg] = cnt;
+}
+int vis[3 * maxn];
+int dis[3 * maxn];
+int pre[3 * maxn];
+int sum = 0;
+int spfa(int beg, int _end)
+{
+	queue<int>qu;
+	memset(vis, 0, sizeof(vis));
+	fill(dis, dis + 3*maxn, INF);
+	qu.push(beg);
+	vis[beg] = 1;
+	dis[beg] = 0;
+	while (!qu.empty())
+	{
+		int temp = qu.front();
+		qu.pop();
+		vis[temp] = 0;
+		for (int i = head[temp]; i != -1; i = edge[i].next)
+		{
+			int v = edge[i]._end;
+			if (edge[i].flow <= 0) continue;
+			if (edge[i].cost + dis[temp] < dis[v])
+			{
+				dis[v] = edge[i].cost + dis[temp];
+				pre[v] = i;
+				if (!vis[v])
+				{
+					qu.push(v);
+					vis[v] = 1;
+				}
+			}
+		}
+	}
+	if (dis[_end] == INF)
+		return 0;
+	return 1;
+}
+int mfmc(int beg, int _end)
+{
+	int ans = 0;
+	memset(pre, -1, sizeof(pre));
+	while (spfa(beg, _end) == 1)
+	{
+		int t = pre[_end];
+		int flow = INF;
+		while (t != -1)
+		{
+			flow = min(edge[t].flow, flow);
+			t = pre[edge[t].first];
+		}
+		t = pre[_end];
+		while (t != -1)
+		{
+			edge[t].flow -= flow;
+			edge[t ^ 1].flow += flow;
+			ans += flow * edge[t].cost;
+			t = pre[edge[t].first];
+		}
+		sum += flow;
+	}
+	return ans;
+}
 int main()
 {
-    std::ios::sync_with_stdio(false);
-    #ifdef test
-    freopen("F:\\Desktop\\question\\in.txt","r",stdin);
-    #endif
-    #ifdef ubuntu
-    freopen("/home/time/debug/debug/in","r",stdin);
-    freopen("/home/time/debug/debug/out","w",stdout);
-    #endif
-    int n;
-    string s;
-    while(cin>>s>>n)
+	std::ios::sync_with_stdio(false);
+#ifdef test
+	freopen("F:\\Desktop\\question\\in.txt", "r", stdin);
+#endif
+#ifdef ubuntu
+	freopen("/home/time/debug/debug/in", "r", stdin);
+	freopen("/home/time/debug/debug/out", "w", stdout);
+#endif
+    int t;
+    cin>>t;
+    while(t--)
     {
+        int k;
+        int n;
+        cin >> n>>k;
         int i;
-        wfor(i,0,26)
-        {
-            cin>>num[i][0]>>num[i][1];
-        }
-        int len=s.size();
-        int now[26];
-        memset(now,-1,sizeof(now));
-        memset(sum[len],0,sizeof(sum[len]));
-        mfor(i,len-1,0)
-        {
-            int j;
-            now[s[i]-'a']=i;
-            wfor(j,0,26)
-            {
-                pos[i][j]=now[j];
-                if(j==s[i]-'a')
-                    sum[i][j]=sum[i+1][j]+1;
-                else
-                    sum[i][j]=sum[i+1][j];
-            }
-        }
-        int use[26]={0};
-        int pnow=0;
-        int flag=1;
+        cnt=-1;
+        memset(head, -1, sizeof(head));
         wfor(i,0,n)
         {
-            int j;
-            int chose=0;
-            wfor(j,0,26)
+            cin>>num[i];
+            add(0,i+1,1,0);
+            add(i+1,0,0,0);
+            add(i+1,2000+i+1,1,0);
+            add(2000,i+1,0,0);
+            add(2000+i+1,4001,1,-num[i]);
+            add(4001,2000+i+1,0,num[i]);
+        }
+        int j;
+        wfor(i,0,n)
+        {
+            wfor(j,i+1,n)
             {
-                if(pos[pnow][j]==-1)
+                if(num[i]<=num[j])
                 {
-                    if(use[j]<num[j][0])
-                    {
-                        flag=0;
-                        break;
-                    }else
-                        continue;
-                }
-                if(use[j]==num[j][1])continue;
-                int temp=pos[pnow][j];
-                use[j]++;
-                int k;
-                int ok=1;
-                int need=0;
-                int have=0;
-                wfor(k,0,26)
-                {
-                    have+=min(sum[temp+1][k],num[k][1]);
-                    if(num[k][0]>use[k])need+=num[k][0]-use[k];
-                    if(sum[temp+1][k]+use[k]<num[k][0])
-                    {
-                        ok=0;
-                        use[j]--;
-                        break;
-                    }
-                }
-                if(!ok)continue;
-                else
-                {
-                    if(need>n-i-1||need>len-temp||n-i-1>len-temp-1||have<n-i-1)
-                    {
-                        use[j]--;
-                        continue;
-                    }
-                    ans[i]=j+'a';
-                    chose=1;
-                    pnow=pos[pnow][j]+1;
-                    break;
+                    add(i+2001,j+1,1,-num[i]);
+                    add(j+1,i+2001,0,num[i]);
                 }
             }
-            if(!chose)
-                flag=0;
-            if(!flag)
-                break;
         }
-        if(!flag)
-            cout<<-1<<endl;
-        else
-        {
-            wfor(i,0,n)
-                cout<<ans[i];
-            cout<<endl;
-        }
+        add(4002,0,k,0);
+        add(0,4002,0,0);
+        ll ans=mfmc(4002,4001);
+        cout<<-ans<<endl;
     }
     return 0;
 }
+

@@ -110,6 +110,7 @@ ll work()
 int main()
 {
     ios::sync_with_stdio(false);
+    m=1;
     cin>>ss;
     ll len=ss.size();
     s=ss;
@@ -125,7 +126,6 @@ int main()
     s=ss;
     s+='$';
     s+=ss;
-    cout<<s<<endl;
     makesa();
     lcp();
     ll ans_same=work();

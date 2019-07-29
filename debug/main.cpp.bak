@@ -1,6 +1,6 @@
+#include <cstring>
+#include <unordered_map> 
 #include <iostream>
-#include <cstring> 
-#include <string>
 #include <cstdio>
 using namespace std;
 typedef long long ll;
@@ -11,108 +11,96 @@ typedef long long ll;
 // 	for (; ch < '0' || ch > '9'; ch = getchar());
 // 	for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
 // }
-const int maxn=1e5+5;
-int num[26][2];
-int pos[maxn][26];
-char ans[maxn];
-int sum[maxn][26];
+const int maxn = 3e5+5;
+char ss[maxn];
+char s[2 * maxn];
+int plen[2 * maxn];
+void cal_plen();
+ll ans[maxn];
+unordered_map<string ,unordered_map<int,int> >ma;
+void dfs(int lengt,int beg)
+{
+    if(lengt%2==0)
+    {
+        if(plen[beg+(lengt)/2+1]-1>=(lengt)/2&&(plen[beg+(lengt)/2+1]-1-((lengt)/2))%2==0)
+            ans[lengt]++;
+    }else
+    {
+        if(plen[beg+(lengt+1)/2+1]-1>=(lengt+1)/2&&(plen[beg+(lengt+1)/2+1]-1-((lengt+1)/2))%2==0)
+            ans[lengt]++;
+    }
+}
 int main()
 {
-    std::ios::sync_with_stdio(false);
-    #ifdef test
-    freopen("F:\\Desktop\\question\\in.txt","r",stdin);
-    #endif
-    #ifdef ubuntu
-    freopen("/home/time/debug/debug/in","r",stdin);
-    freopen("/home/time/debug/debug/out","w",stdout);
-    #endif
-    int n;
-    string s;
-    while(cin>>s>>n)
-    {
-        int i;
-        wfor(i,0,26)
+	//std::ios::sync_with_stdio(false);
+#ifdef test
+	freopen("F:\\Desktop\\question\\in.txt", "r", stdin);
+#endif
+	while (scanf("%s",ss)!=EOF)
+	{
+		int len = strlen(ss);
+        memset(ans,0,sizeof(ll)*(len+5));
+		int i;
+		s[0] = '@';
+		wfor(i, 1, len + 1)
+		{
+			s[(i << 1) - 1] = '#';
+			s[i << 1] = ss[i - 1];
+		}
+		s[(i << 1) - 1] = '#';
+		s[i << 1] = '$';
+		s[i << 1 | 1] = '\0';
+		cal_plen();
+        len=strlen(s)-2;
+        wfor(i,1,len)
         {
-            cin>>num[i][0]>>num[i][1];
-        }
-        int len=s.size();
-        int now[26];
-        memset(now,-1,sizeof(now));
-        memset(sum[len],0,sizeof(sum[len]));
-        mfor(i,len-1,0)
-        {
-            int j;
-            now[s[i]-'a']=i;
-            wfor(j,0,26)
+            if(plen[i]-1>=1)
             {
-                pos[i][j]=now[j];
-                if(j==s[i]-'a')
-                    sum[i][j]=sum[i+1][j]+1;
-                else
-                    sum[i][j]=sum[i+1][j];
-            }
-        }
-        int use[26]={0};
-        int pnow=0;
-        int flag=1;
-        wfor(i,0,n)
-        {
-            int j;
-            int chose=0;
-            wfor(j,0,26)
-            {
-                if(pos[pnow][j]==-1)
+                int lengt=plen[i]-1;
+                int beg=(i-plen[i]);
+                while(lengt>0)
                 {
-                    if(use[j]<num[j][0])
+                    if(lengt%2==0)
                     {
-                        flag=0;
-                        break;
+                        if(plen[beg+(lengt)/2+1]-1>=(lengt)/2&&(plen[beg+(lengt)/2+1]-1-((lengt)/2))%2==0)
+                            ans[lengt]++;
                     }else
-                        continue;
-                }
-                if(use[j]==num[j][1])continue;
-                int temp=pos[pnow][j];
-                use[j]++;
-                int k;
-                int ok=1;
-                int need=0;
-                wfor(k,0,26)
-                {
-                    if(num[k][0]>use[k])need+=num[k][0]-use[k];
-                    if(k!=j)
-                        if(sum[temp+1][k]+use[k]<num[k][0])
-                        {
-                            ok=0;
-                            break;
-                        }
-                }
-                if(!ok)continue;
-                else
-                {
-                    if(need>n-i-1)
                     {
-                        use[j]--;
-                        continue;
+                        if(plen[beg+(lengt+1)/2+1]-1>=(lengt+1)/2&&(plen[beg+(lengt+1)/2+1]-1-((lengt+1)/2))%2==0)
+                            ans[lengt]++;
                     }
-                    ans[i]=j+'a';
-                    chose=1;
-                    pnow=pos[pnow][j]+1;
-                    break;
+                    lengt-=2;
+                    beg+=2;
                 }
             }
-            if(!chose)
-                flag=0;
-            if(!flag)
-                break;
         }
-        if(!flag)
-            cout<<-1<<endl;
-        else
+        len=strlen(ss);
+        wfor(i,1,len)
         {
-            wfor(i,0,n)
-                cout<<ans[i];
-            cout<<endl;
+            //cout<<ans[i]<<" ";
+            printf("%lld ",ans[i]);
         }
-    }
-    return 0;
+        printf("%lld\n",ans[i]);
+	}
+	return 0;
+}
+void cal_plen()
+{
+	int len = strlen(s);
+	int i;
+	int pos = 0; int mx = 0;
+	wfor(i, 1, len)
+	{
+		if (mx > i)
+			plen[i] = min(plen[2 * pos - i], mx - i);
+		else
+			plen[i] = 1;
+		while (s[i - plen[i]] == s[i + plen[i]])
+			plen[i]++;
+		if (i + plen[i] > mx)
+		{
+			mx = i + plen[i];
+			pos = i;
+		}
+	}
 }
