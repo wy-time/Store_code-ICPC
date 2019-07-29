@@ -1,149 +1,173 @@
-#include <iostream>
-#include <cstring>
-#include <queue>
-#include <cstdio>
-#include <vector>
+#include<cstdio>
+#include <iostream> 
+#include<cstring>
+#include<algorithm>
 using namespace std;
-typedef long long ll;
-#define wfor(i,j,k) for(i=j;i<k;++i)
-#define mfor(i,j,k) for(i=j;i>=k;--i)
-// void read(int &x) {
-// 	char ch = getchar(); x = 0;
-// 	for (; ch < '0' || ch > '9'; ch = getchar());
-// 	for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
-// }
-const int maxn = 2005;
-const int INF = 1e9;
-struct EDGE
+ 
+const int maxn = 400000+10;
+
+const int MAX = 2e5+100;
+const int ALP = 26;
+struct Palindromic_Tree {
+    int son[MAX][ALP]; //???
+    int fail[MAX]; //fail ??
+    int cnt[MAX]; //????????????????????
+    int num[MAX]; //???? fail ????????
+    int len[MAX]; //?????????????
+    int S[MAX]; //??????
+    int last; //????????????? SAM
+    int n; //????????
+    int p; //????????
+    int newnode(int l) {
+        memset(son[p], 0, sizeof(son[p]));
+        cnt[p] = 0;
+        num[p] = 0;
+        len[p] = l;
+        return p++;
+    }
+ 
+    void init() {
+        p = 0;
+        newnode(0);
+        newnode(-1);
+        last = 0;
+        n = 0;
+        S[n] = -1;
+        fail[0] = 1;
+    }
+ 
+    int get_fail(int x) {
+        while (S[n - len[x] - 1] != S[n]) x = fail[x];
+        return x;
+    }
+ 
+    void add(int c) {
+        c -= 'a';
+        S[++n] = c;
+        int cur = get_fail(last); //?????????????
+        if (!son[cur][c]) { //????????????????
+            int now = newnode(len[cur] + 2);
+            fail[now] = son[get_fail(fail[cur])][c]; //??????? fail ?????? fail
+            son[cur][c] = now;
+            num[now] = num[fail[now]] + 1; //?? fail ????
+        }
+        last = son[cur][c];
+        cnt[last]++; //???????????
+    }
+    void count() {
+        //??????????????? fail ?????????????????????
+        for (int i = p - 1; i >= 0; i--) cnt[fail[i]] += cnt[i];
+    }
+} AUT;
+char str[maxn];
+int wa[maxn],wb[maxn],wv[maxn];
+int c[maxn];
+int cmp(int *r,int a,int b,int l)
 {
-	int first;
-	int flow;
-	int cost;
-	int _end;
-	int next;
-};
-int num[maxn];
-int head[3 * maxn];
-EDGE edge[maxn* maxn];
-int cnt = -1;
-void add(int beg, int _end, int flow, int cost)
-{
-	edge[++cnt].next = head[beg];
-	edge[cnt]._end = _end;
-	edge[cnt].flow = flow;
-	edge[cnt].cost = cost;
-	edge[cnt].first = beg;
-	head[beg] = cnt;
+    return r[a]==r[b] && r[a+l]==r[b+l];
 }
-int vis[3 * maxn];
-int dis[3 * maxn];
-int pre[3 * maxn];
-int sum = 0;
-int spfa(int beg, int _end)
+ 
+void cal_the_houzhui(char *r,int *sa,int n,int m)
 {
-	queue<int>qu;
-	memset(vis, 0, sizeof(vis));
-	fill(dis, dis + 3*maxn, INF);
-	qu.push(beg);
-	vis[beg] = 1;
-	dis[beg] = 0;
-	while (!qu.empty())
-	{
-		int temp = qu.front();
-		qu.pop();
-		vis[temp] = 0;
-		for (int i = head[temp]; i != -1; i = edge[i].next)
-		{
-			int v = edge[i]._end;
-			if (edge[i].flow <= 0) continue;
-			if (edge[i].cost + dis[temp] < dis[v])
-			{
-				dis[v] = edge[i].cost + dis[temp];
-				pre[v] = i;
-				if (!vis[v])
-				{
-					qu.push(v);
-					vis[v] = 1;
-				}
-			}
-		}
-	}
-	if (dis[_end] == INF)
-		return 0;
-	return 1;
+    int i,j,p;
+    int *x=wa,*y=wb;
+ 
+    for(i=0;i<m;i++)
+        c[i]=0;
+ 
+    for(i=0;i<n;i++)
+        c[x[i]=r[i]]++;
+    for(i=1;i<m;i++)
+        c[i]+=c[i-1];
+    for(i=n-1;i>=0;i--)
+        sa[--c[x[i]]]=i;
+ 
+    p=1;
+    for(j=1;p<n;j*=2,m=p)
+    {
+        for(p=0,i=n-j;i<n;i++)
+            y[p++]=i;
+        for(i=0;i<n;i++)
+            if(sa[i]>=j)
+                y[p++]=sa[i]-j;
+        for(i=0;i<n;i++)
+            wv[i]=x[y[i]];
+ 
+        for(i=0;i<m;i++)
+            c[i]=0;
+        for(i=0;i<n;i++)
+            c[wv[i]]++;
+        for(i=1;i<m;i++)
+            c[i]+=c[i-1];
+        for(i=n-1;i>=0;i--)
+            sa[--c[wv[i]]] = y[i];
+        swap(x,y);
+        p=1;
+        x[sa[0]] = 0;
+        for(i=1;i<n;i++)
+            x[sa[i]] = cmp(y,sa[i-1],sa[i],j)?p-1:p++;
+    }
+ 
 }
-int mfmc(int beg, int _end)
+ 
+int _rank[maxn],height[maxn];
+void cal_the_height(char *r,int *sa,int n)
 {
-	int ans = 0;
-	memset(pre, -1, sizeof(pre));
-	while (spfa(beg, _end) == 1)
-	{
-		int t = pre[_end];
-		int flow = INF;
-		while (t != -1)
-		{
-			flow = min(edge[t].flow, flow);
-			t = pre[edge[t].first];
-		}
-		t = pre[_end];
-		while (t != -1)
-		{
-			edge[t].flow -= flow;
-			edge[t ^ 1].flow += flow;
-			ans += flow * edge[t].cost;
-			t = pre[edge[t].first];
-		}
-		sum += flow;
-	}
-	return ans;
+    int i,j,k=0;
+    for(i=0;i<n;i++)
+        _rank[sa[i]]=i;
+    for(i=0;i<n;height[_rank[i++]]=k)
+    {
+        for(k?k--:0,j=sa[_rank[i]-1];r[i+k]==r[j+k];)
+            k++;
+    }
+}
+ 
+int n;
+int _sa[maxn];
+ 
+long long solve()
+{
+    cal_the_houzhui(str,_sa,n+1,256);
+    cal_the_height(str,_sa,n+1);
+    long long ans=0;
+    for(int i=1;i<=n;i++)
+    {
+        ans+=n-_sa[i]-height[i];
+    }
+    return ans;
 }
 int main()
 {
-	std::ios::sync_with_stdio(false);
 #ifdef test
-	freopen("F:\\Desktop\\question\\in.txt", "r", stdin);
+    freopen("F:\\Desktop\\question\\in.txt", "r", stdin);
 #endif
 #ifdef ubuntu
 	freopen("/home/time/debug/debug/in", "r", stdin);
 	freopen("/home/time/debug/debug/out", "w", stdout);
 #endif
-    int t;
-    cin>>t;
-    while(t--)
+    scanf("%s",str);
+    n=strlen(str);
+    AUT.init();
+    for(int i=0;i<n;i++)
     {
-        int k;
-        int n;
-        cin >> n>>k;
-        int i;
-        cnt=-1;
-        memset(head, -1, sizeof(head));
-        wfor(i,0,n)
-        {
-            cin>>num[i];
-            add(0,i+1,1,0);
-            add(i+1,0,0,0);
-            add(i+1,2000+i+1,1,0);
-            add(2000,i+1,0,0);
-            add(2000+i+1,4001,1,-num[i]);
-            add(4001,2000+i+1,0,num[i]);
-        }
-        int j;
-        wfor(i,0,n)
-        {
-            wfor(j,i+1,n)
-            {
-                if(num[i]<=num[j])
-                {
-                    add(i+2001,j+1,1,-num[i]);
-                    add(j+1,i+2001,0,num[i]);
-                }
-            }
-        }
-        add(4002,0,k,0);
-        add(0,4002,0,0);
-        ll ans=mfmc(4002,4001);
-        cout<<-ans<<endl;
+        AUT.add(str[i]);
     }
+    long long ans2=AUT.p-2;
+    int len=strlen(str);
+    n=len;
+    str[n]='$';
+    int pos=n+1;
+    int i;
+    for(i=n-1;i>=0;i--)
+    {
+        str[pos]=str[i];
+        pos++;
+    }
+    str[pos]='\0';
+    n=strlen(str);
+    long long ans=solve();
+    ans-=1ll*(len+1)*(len+1);
+    printf("%lld\n",(ans+ans2)/2);
     return 0;
 }
-
