@@ -49,7 +49,7 @@ int main()
     int cnt=0;
     for(auto k:ma)
     {
-        num[cnt++].val=k.first;
+        num[cnt].val=k.first;
         num[cnt++].cnt=k.second;
     }
     int need=(8*I)/n;
