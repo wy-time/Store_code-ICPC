@@ -9,32 +9,8 @@ typedef long long ll;
 // 	for (; ch < '0' || ch > '9'; ch = getchar());
 // 	for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
 // }
-int is_prime(ll k)
-{
-    ll i;
-    for(i=2;i*i<=k;i++)
-    {
-        if(k%i==0)
-            return 0;
-    }
-    return 1;
-}
-inline ll mul(ll x,ll y,ll mod)
-{
-    return (x*y-(ll)((long double)x/mod*y)*mod+mod)%mod;
-}
-ll ksm(ll a,ll b,ll mod)
-{
-    ll ans=1;
-    while(b)
-    {
-        if(b&1)
-            ans=mul(ans,a,mod);
-        a=mul(a,a,mod);
-        b>>=1;
-    }
-    return ans;
-}
+const int maxn=1e5+5;
+int num[maxn];
 int main()
 {
     std::ios::sync_with_stdio(false);
@@ -45,22 +21,46 @@ int main()
     freopen("/home/time/debug/debug/in","r",stdin);
     freopen("/home/time/debug/debug/out","w",stdout);
     #endif
-    int t;
-    cin>>t;
-    while(t--)
+    int n,x,y;
+    cin>>n>>x>>y;
+    int i;
+    wfor(i,0,n)
     {
-        ll p;
-        cin>>p;
-        ll n=p-1;
-        while(!is_prime(n))
-            n--;
-        ll i;
-        ll ans=p-1;
-        mfor(i,p-1,n+1)
-        {
-            ans=mul(ans,ksm(i,p-2,p),p);
-        }
-        cout<<ans<<endl;
+        cin>>num[i];
     }
+    int ans=0;
+    wfor(i,0,n)
+    {
+        ans=i+1;
+        int j=i;
+        int flag=1;
+        mfor(j,i-1,i-x)
+        {
+            if(j>=0)
+            {
+                if(num[j]<=num[i])
+                {
+                    flag=0;
+                    break;
+                }
+            }else
+                break;
+        }
+        wfor(j,i+1,i+y+1)
+        {
+            if(j<n)
+            {
+                if(num[j]<=num[i])
+                {
+                    flag=0;
+                    break;
+                }
+            }else
+                break;
+        }
+        if(flag)
+            break;
+    }
+    cout<<ans<<endl;
     return 0;
 }
