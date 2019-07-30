@@ -1,5 +1,4 @@
 #include <iostream>
-#include <deque> 
 #include <algorithm> 
 #include <unordered_map> 
 #include <cstdio>
@@ -69,23 +68,11 @@ int main()
             {
                 sum[i]=sum[i-1]+num[i-1].cnt;
             }
-            deque<int>Q;
-            int head,end;
-            ll ans=-1e18;
-            int k=need;
-            for(i = 1; i<=cnt; i++)
+            ll ans=-1e10;
+            wfor(i,1,cnt-need+2)
             {
-                while(!Q.empty() && sum[i-1]<sum[Q.back()])
-                    Q.pop_back();
-                while(!Q.empty() && Q.front()<i-k)
-                    Q.pop_front();
-                Q.push_back(i-1);
-                if(sum[i]-sum[Q.front()]>ans)
-                {
-                    ans = sum[i]-sum[Q.front()];
-                    head = Q.front()+1;
-                    end = i;
-                }
+                if(sum[i+need-1]-sum[i-1]>ans)
+                    ans=sum[i+need-1]-sum[i-1];
             }
             cout<<n-ans<<endl;
         }
