@@ -65,7 +65,7 @@ int main()
         {
             sort(num,num+cnt);
             sum[1]=num[0].cnt;
-            wfor(i,2,n+1)
+            wfor(i,2,cnt+1)
             {
                 sum[i]=sum[i-1]+num[i-1].cnt;
             }
@@ -73,7 +73,7 @@ int main()
             int head,end;
             ll ans=-1e18;
             int k=need;
-            for(i = 1; i<=n; i++)
+            for(i = 1; i<=cnt; i++)
             {
                 while(!Q.empty() && sum[i-1]<sum[Q.back()])
                     Q.pop_back();
