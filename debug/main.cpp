@@ -73,26 +73,23 @@ ll ans=0;
 int vis2[maxn];
 void slove(ll su,ll now)
 {
-    vis[now]=1;
     vector<int>pre;
     ll t=pam.fail[now];
-    while(t>1&&!vis2[t])
+    while(t>1&&!vis[t])
     {
-        if(t==su)
-            break;
         sun[now]++;
-        vis2[t]=1;
+        vis[t]=1;
         pre.push_back(t);
         t=pam.fail[t];
     }
     sun[now]+=sun[su];
-    if(su>1)
+    ans+=sun[now];
+    if(now>1)
     {
         sun[now]++;
         vis[now]=1;
         pre.push_back(now);
     }
-    ans+=sun[now];
     ll j;
     wfor(j,0,ALP)
     {
@@ -100,7 +97,7 @@ void slove(ll su,ll now)
             slove(now,pam.next[now][j]);
     }
     for(auto k:pre)
-        vis2[k]=0;
+        vis[k]=0;
     pre.clear();
 }
 int main()
@@ -132,11 +129,13 @@ int main()
         {
             pam.add(s[i]);
         }
-        wfor(i,2,pam.p)
+        /*wfor(i,2,pam.p)
         {
             if(!vis[i])
                 slove(0,i);
-        }
+        }*/
+        slove(0,0);
+        slove(1,1);
         cout<<"Case #"<<casecnt<<": ";
         cout<<ans<<endl;
     }
