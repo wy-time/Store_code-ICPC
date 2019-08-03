@@ -76,7 +76,7 @@ void slove(ll su,ll now)
     vis[now]=1;
     vector<int>pre;
     ll t=pam.fail[now];
-    while(t!=1&&t!=0&&!vis2[t])
+    while(t>1&&!vis2[t])
     {
         if(t==su)
             break;
@@ -86,8 +86,12 @@ void slove(ll su,ll now)
         t=pam.fail[t];
     }
     sun[now]+=sun[su];
-    if(su!=0&&su!=1)
+    if(su>1)
+    {
         sun[now]++;
+        vis[now]=1;
+        pre.push_back(now);
+    }
     ans+=sun[now];
     ll j;
     wfor(j,0,ALP)
