@@ -8,17 +8,9 @@ for (; ch < '0' || ch > '9'; ch = getchar());
 for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
 }
 using namespace std;
-const double eps=1e-9;
 const int maxn = 100001;
 const int MAX=1e4+5;
 int prime[MAX];
-int equa(double a,double b)
-{
-    if(fabs(a-b)<eps)
-        return 1;
-    else
-        return 0;
-}
 void get_prime()
 {
     int i;
@@ -80,17 +72,18 @@ int main() {
             printf("%d\n",res);
             continue;
         }
-        double temp=pow(x,-4.0);
-        if(equa(temp*temp*temp*temp,x))
+        LL temp=sqrt(x);
+        if(temp*temp==x)
         {
-            res=min(res,4);
-            temp=pow(x,-2.0);
-            if(equa(temp*temp,x))
+            LL temp2=sqrt(temp);
+            if(temp2*temp2==temp)
+                res=min(res,4);
+            else
                 res=min(2,res);
         }else
         {
-            temp=pow(x,-3.0);
-            if(equa(temp*temp*temp,x))
+            temp=pow(x,1.0/3.0);
+            if(temp*temp*temp==x||(temp+1)*(temp+1)*(temp+1)==x||(temp-1)*(temp-1)*(temp-1)==x)
             {
                 res=min(res,3);
             }else
