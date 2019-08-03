@@ -11,7 +11,7 @@ using namespace std;
 const double eps=1e-9;
 const int maxn = 100001;
 const int MAX=1e4+5;
-LL prime[MAX];
+int prime[MAX];
 int equa(double a,double b)
 {
     if(fabs(a-b)<eps)
@@ -21,7 +21,7 @@ int equa(double a,double b)
 }
 void get_prime()
 {
-    LL i;
+    int i;
     wfor(i,2,MAX)
     {
         if(prime[i]==0)
@@ -34,37 +34,6 @@ void get_prime()
                 break;
         }
     }
-}
-LL mul(LL a,LL b,LL mod) {
-    if(!a) return 0;
-    return ((a&1)*b%mod + (mul(a>>1,b,mod)<<1)%mod)%mod;
-}
-LL quickPow(LL a,LL d,LL n) {
-    LL ret = 1;
-    while(d) {
-        if(d&1) ret = mul(ret,a,n);
-        d >>= 1;
-        a = mul(a,a,n);
-    }
-    return ret;
-}
-bool check(LL a,LL d,LL n) {
-    if(n == a) return true;
-    while(~d&1) d >>= 1;
-    LL t = quickPow(a,d,n);
-    while(d < n-1 && t != 1 && t != n-1) {
-        t = mul(t,t,n);
-        d <<= 1;
-    }
-    return (d&1) || t == n-1;
-}
-bool isP(LL n) {
-    if(n == 2) return true;
-    if(n < 2 || 0 == (n&1)) return false;
-    static int p[5] = {2,3,7,61,24251};
-    for(int i = 0; i < 5; ++i)
-        if(!check(p[i],n-1,n)) return false;
-    return true;
 }
 int main() {
     #ifdef test
@@ -82,10 +51,6 @@ int main() {
     while(t--){
         read(x);
         if(x == 1) {
-            puts("1");
-            continue;
-        }
-        if(isP(x)){
             puts("1");
             continue;
         }
@@ -113,10 +78,6 @@ int main() {
         }
         if(x == 1) {
             printf("%d\n",res);
-            continue;
-        }
-        if(isP(x)){
-            puts("1");
             continue;
         }
         double temp=pow(x,-4.0);
