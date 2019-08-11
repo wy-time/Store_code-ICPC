@@ -76,8 +76,8 @@ int main()
                         else
                         {
                             L[j]=st.top().first;
-                            st.push(make_pair(j,h[i][j]));
                         }
+                        st.push(make_pair(j,h[i][j]));
                     }else
                     {
                         int temp=0;
@@ -91,7 +91,6 @@ int main()
                         if(!st.empty()&&h[i][j]!=st.top().second)
                         {
                             L[j]=st.top().first;
-                            st.push(make_pair(j,h[i][j]));
                         }
                         else if(!st.empty())
                         {
@@ -99,8 +98,8 @@ int main()
                         }else
                         {
                             L[j]=temp;
-                            st.push(make_pair(j,h[i][j]));
                         }
+                        st.push(make_pair(j,h[i][j]));
                     }
                 }else
                 {
