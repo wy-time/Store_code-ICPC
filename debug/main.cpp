@@ -89,13 +89,18 @@ int main()
                             st.pop();
                         }
                         if(!st.empty()&&h[i][j]!=st.top().second)
+                        {
                             L[j]=st.top().first;
+                            st.push(make_pair(j,h[i][j]));
+                        }
                         else if(!st.empty())
                         {
                             L[j]=-1;
                         }else
+                        {
                             L[j]=temp;
-                        st.push(make_pair(j,h[i][j]));
+                            st.push(make_pair(j,h[i][j]));
+                        }
                     }
                 }else
                 {
