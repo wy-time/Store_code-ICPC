@@ -1,0 +1,153 @@
+#include <iostream>
+#include <vector> 
+#include <string> 
+#include <cstdio>
+using namespace std;
+typedef long long ll;
+#define wfor(i,j,k) for(i=j;i<k;++i)
+#define mfor(i,j,k) for(i=j;i>=k;--i)
+// void read(int &x) {
+// 	char ch = getchar(); x = 0;
+// 	for (; ch < '0' || ch > '9'; ch = getchar());
+// 	for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
+// }
+struct node
+{
+    int one;
+    int two;
+    node;
+};
+int main()
+{
+    std::ios::sync_with_stdio(false);
+    #ifdef test
+    freopen("F:\\Desktop\\question\\in.txt","r",stdin);
+    #endif
+    #ifdef ubuntu
+    freopen("/home/time/debug/debug/in","r",stdin);
+    freopen("/home/time/debug/debug/out","w",stdout);
+    #endif
+    int t;
+    cin>>t;
+    while(t--)
+    {
+        vector<pair<string,node>>v;
+        string s;
+        cin>>s;
+        int len=s.size();
+        int i;
+        char last='0';
+        string temp="";
+        int cnt=0;
+        int cnt2=0;
+        wfor(i,0,len)
+        {
+            if(s[i]=='0')
+            {
+                cnt2=0;
+                if(last!='1')
+                {
+                    temp+=s[i];
+                    cnt++;
+                }
+                else
+                {
+                    v.push_back(make_pair(temp,cnt));
+                    temp=s[i];
+                    cnt=1;
+                }
+                last='0';
+            }else
+            {
+                temp+=s[i];
+                last='1';
+                cnt2++;
+            }
+        }
+        v.push_back(make_pair(temp,cnt));
+        len=v.size();
+        vector<pair<string,int> >out;
+        vector<pair<string,int> >wait;
+        out.push_back(v[0]);
+        int Last=v[0].second;
+        int flag=0;
+        wfor(i,1,len)
+        {
+            if(flag>=out.size()&&flag!=0)
+            {
+                flag=-1;
+                for(auto k:wait)
+                    cout<<k.first;
+                wait.clear();
+            }
+            if(flag==0&&v[i].second<=Last&&v[i].second!=v[i].first.size())
+            {
+                out.push_back(v[i]);
+                Last=v[i].second;
+            }
+            else
+            {
+                if(v[i].second==v[i].first.size())
+                {
+                    for(auto k:out)
+                        cout<<k.first;
+                    cout<<" ";
+                    for(auto k:wait)
+                        cout<<k.first;
+                    if(wait.size()!=0)
+                        cout<<" ";
+                    out.clear(),wait.clear();
+                    flag=0;
+                    out.push_back(v[i]);
+                }else
+                {
+                    if(flag==-1)
+                        flag=0;
+                    if(v[i].second==out[flag].second)
+                    {
+                        wait.push_back(v[i]);
+                        flag++;
+                    }else
+                    {
+                        for(auto k:out)
+                            cout<<k.first;
+                        out.clear();
+                        cout<<" ";
+                        for(auto k:wait)
+                            cout<<k.first;
+                        if(wait.size()!=0)
+                            cout<<" ";
+                        wait.clear();
+                        out.push_back(v[i]);
+                        flag=0;
+                        Last=v[i].second;
+                    }
+                }
+            }
+            
+        }
+        if(flag>=out.size()&&flag!=0)
+        {
+            flag=-1;
+            for(auto k:wait)
+                cout<<k.first;
+            if(!out.empty())
+                cout<<" ";
+            wait.clear();
+        }
+        if(!out.empty())
+        {
+            for(auto k:out)
+                cout<<k.first;
+            if(!wait.empty())
+                cout<<" ";
+        }
+        if(!wait.empty())
+        {
+            for(auto k:wait)
+                cout<<k.first;
+        }
+        cout<<endl;
+    }
+    return 0;
+}
