@@ -57,6 +57,8 @@ int main()
         {
             if(ma[i][j]!=1)
             {
+                L[j]=-1;
+                R[j]=-1;
                 while(!st.empty())
                 {
                     int pos=st.top().first;
@@ -82,6 +84,11 @@ int main()
                             R[pos]=j;
                             st.pop();
                         }
+                        if(!st.empty())
+                            L[j]=st.top().first;
+                        else
+                            L[j]=0;
+                        st.push(make_pair(j,h[i][j]));
                     }
                 }else
                 {
