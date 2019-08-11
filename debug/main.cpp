@@ -74,20 +74,27 @@ int main()
                         if(h[i][j]==st.top().second)
                             L[j]=-1;
                         else
+                        {
                             L[j]=st.top().first;
-                        st.push(make_pair(j,h[i][j]));
+                            st.push(make_pair(j,h[i][j]));
+                        }
                     }else
                     {
+                        int temp=0;
                         while(!st.empty()&&h[i][j]<st.top().second)
                         {
                             int pos=st.top().first;
                             R[pos]=j;
+                            temp=L[pos];
                             st.pop();
                         }
-                        if(!st.empty())
+                        if(!st.empty()&&h[i][j]!=st.top().second)
                             L[j]=st.top().first;
-                        else
-                            L[j]=0;
+                        else if(!st.empty())
+                        {
+                            L[j]=-1;
+                        }else
+                            L[j]=temp;
                         st.push(make_pair(j,h[i][j]));
                     }
                 }else
