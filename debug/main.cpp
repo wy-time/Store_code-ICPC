@@ -9,17 +9,6 @@ typedef long long ll;
 // 	for (; ch < '0' || ch > '9'; ch = getchar());
 // 	for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
 // }
-ll check(ll now,ll n,ll k,ll m)
-{
-    ll no=(n-k+1);
-    ll sorce=m/no;
-    ll temp=m-sorce*no;
-    temp=n-temp;
-    if(temp*(sorce+1)<=now)
-        return 1;
-    else
-        return 0;
-}
 int main()
 {
     std::ios::sync_with_stdio(false);
@@ -41,17 +30,8 @@ int main()
             cout<<k<<endl;
             continue;
         }
-        ll l=0,r=(m+1)*n;
-        while(l<=r)
-        {
-            ll mid=(l+r)>>1;
-            if(check(mid,n,k,m))
-            {
-                r=mid-1;
-            }else
-                l=mid+1;
-        }
-        cout<<l<<endl;
+        ll ans=(m/(n-k+1)+1)*n;
+        cout<<ans<<endl;
     }
     return 0;
 }
