@@ -13,7 +13,9 @@ ll check(ll now,ll n,ll k,ll m)
 {
     ll no=(n-k+1);
     ll sorce=m/no;
-    if(now>sorce)
+    ll temp=m-sorce*no;
+    temp=n-temp;
+    if(temp*(sorce+1)<=now)
         return 1;
     else
         return 0;
@@ -34,7 +36,12 @@ int main()
     {
         ll n,m,k;
         cin>>n>>m>>k;
-        ll l=0,r=m+1;
+        if(m==0)
+        {
+            cout<<k<<endl;
+            continue;
+        }
+        ll l=0,r=(m+1)*n;
         while(l<=r)
         {
             ll mid=(l+r)>>1;
@@ -44,7 +51,7 @@ int main()
             }else
                 l=mid+1;
         }
-        cout<<l*k<<endl;
+        cout<<l<<endl;
     }
     return 0;
 }
