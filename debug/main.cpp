@@ -54,10 +54,11 @@ int main()
             read(s);
             read(x);
             read(a);
+            a%=mod;
             //cin>>r>>s>>x>>a;
             ll temp=s*ksm(r,mod-2);
-            sum[i+2]=((temp-1)*((ans[i+1]-ans[x]+mod)%mod)%mod+temp*a%mod)%mod;
-            ans[i+2]=sum[i+2]+ans[i+1];
+            sum[i+2]=(((temp-1+mod)%mod)*((ans[i+1]-ans[x]+mod)%mod)%mod+temp*a%mod)%mod;
+            ans[i+2]=(sum[i+2]+ans[i+1])%mod;
         }
         wfor(i,0,m)
         {
