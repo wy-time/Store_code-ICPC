@@ -56,7 +56,7 @@ int main()
             read(a);
             a%=mod;
             //cin>>r>>s>>x>>a;
-            ll temp=s*ksm(r,mod-2);
+            ll temp=(s%mod*ksm(r,mod-2))%mod;
             sum[i+2]=(((temp-1+mod)%mod)*((ans[i+1]-ans[x]+mod)%mod)%mod+temp*a%mod)%mod;
             ans[i+2]=(sum[i+2]+ans[i+1])%mod;
         }
@@ -65,7 +65,7 @@ int main()
             ll l,r;
             //cin>>l>>r;
             read(l);read(r);
-            printf("%lld\n",ans[r]-ans[l]);
+            printf("%lld\n",(ans[r]-ans[l]+mod+mod)%mod);
             //cout<<(ans[r]-ans[l]+mod)%mod<<endl;
         }
     }
