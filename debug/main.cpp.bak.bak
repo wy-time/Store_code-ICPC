@@ -1,22 +1,35 @@
 #include <iostream>
-#include <vector> 
-#include <string> 
+#include <set> 
+#include <cstring> 
+#include <algorithm> 
 #include <cstdio>
 using namespace std;
 typedef long long ll;
 #define wfor(i,j,k) for(i=j;i<k;++i)
 #define mfor(i,j,k) for(i=j;i>=k;--i)
-// void read(int &x) {
+// void read(ll &x) {
 // 	char ch = getchar(); x = 0;
 // 	for (; ch < '0' || ch > '9'; ch = getchar());
 // 	for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
 // }
-struct node
+ll coin[3];
+ll kind[3]={10,20,50};
+set <ll>st;
+void slove(ll now)
 {
-    int one;
-    int two;
-    node;
-};
+    ll i;
+    st.insert(now);
+    wfor(i,0,3)
+    {
+        if(coin[i]!=0)
+        {
+            coin[i]-=1;
+            slove(now+kind[i]);
+            coin[i]+=1;
+        }
+    }
+    return ;
+}
 int main()
 {
     std::ios::sync_with_stdio(false);
@@ -27,127 +40,153 @@ int main()
     freopen("/home/time/debug/debug/in","r",stdin);
     freopen("/home/time/debug/debug/out","w",stdout);
     #endif
-    int t;
+    ll t;
     cin>>t;
     while(t--)
     {
-        vector<pair<string,node>>v;
-        string s;
-        cin>>s;
-        int len=s.size();
-        int i;
-        char last='0';
-        string temp="";
-        int cnt=0;
-        int cnt2=0;
-        wfor(i,0,len)
+        memset(coin,0,sizeof(coin));
+        ll num[105];
+        ll num2[105];
+        ll n;
+        cin>>n;
+        ll i;
+        ll ans=0;
+        wfor(i,0,n)
         {
-            if(s[i]=='0')
+            cin>>num[i];
+        }
+        sort(num,num+n);
+        if(num[0]>=100)
+        {
+            ans=max(ans,num[0]/100);
+            num[0]%=100;
+        }
+        n=unique(num,num+n)-num;
+        wfor(i,1,n)
+        {
+            if(num[i]-num[i-1]>=100)
             {
-                cnt2=0;
-                if(last!='1')
-                {
-                    temp+=s[i];
-                    cnt++;
-                }
-                else
-                {
-                    v.push_back(make_pair(temp,cnt));
-                    temp=s[i];
-                    cnt=1;
-                }
-                last='0';
-            }else
-            {
-                temp+=s[i];
-                last='1';
-                cnt2++;
+                ll cha=num[i]-num[i-1];
+                ans=max(ans,cha/100);
+                num[i]-=cha/100*100;
             }
         }
-        v.push_back(make_pair(temp,cnt));
-        len=v.size();
-        vector<pair<string,int> >out;
-        vector<pair<string,int> >wait;
-        out.push_back(v[0]);
-        int Last=v[0].second;
-        int flag=0;
-        wfor(i,1,len)
+        memcpy(num2,num,sizeof(num));
+        ll flag=0;
+        ll maxisok=0;
+        wfor(i,0,n)
         {
-            if(flag>=out.size()&&flag!=0)
+            ll j;
+            if(st.count(num[i])!=1)
             {
-                flag=-1;
-                for(auto k:wait)
-                    cout<<k.first;
-                wait.clear();
-            }
-            if(flag==0&&v[i].second<=Last&&v[i].second!=v[i].first.size())
-            {
-                out.push_back(v[i]);
-                Last=v[i].second;
-            }
-            else
-            {
-                if(v[i].second==v[i].first.size())
+                if(!st.empty())
                 {
-                    for(auto k:out)
-                        cout<<k.first;
-                    cout<<" ";
-                    for(auto k:wait)
-                        cout<<k.first;
-                    if(wait.size()!=0)
-                        cout<<" ";
-                    out.clear(),wait.clear();
-                    flag=0;
-                    out.push_back(v[i]);
-                }else
+                    maxisok=*st.rbegin();
+                    auto it=st.upper_bound(num[i]);
+                    it--;
+                    num[i]-=*it;
+                    maxisok-=*it;
+                }
+                mfor(j,2,0)
                 {
-                    if(flag==-1)
-                        flag=0;
-                    if(v[i].second==out[flag].second)
+                    if(num[i]>=kind[j])
                     {
-                        wait.push_back(v[i]);
-                        flag++;
-                    }else
-                    {
-                        for(auto k:out)
-                            cout<<k.first;
-                        out.clear();
-                        cout<<" ";
-                        for(auto k:wait)
-                            cout<<k.first;
-                        if(wait.size()!=0)
-                            cout<<" ";
-                        wait.clear();
-                        out.push_back(v[i]);
-                        flag=0;
-                        Last=v[i].second;
+                        ll cnt=num[i]/kind[j];
+                        num[i]-=cnt*kind[j];
+                        if(kind[j]<=maxisok&&st.count(kind[j])!=0)
+                        {
+                            int temp=min(cnt,maxisok/kind[j]);
+                            maxisok-=temp*kind[j];
+                            cnt-=temp;
+                        }
+                        coin[j]+=cnt;
                     }
                 }
+                if(num[i]!=0)
+                {
+                    flag=1;
+                    break;
+                }
             }
-            
+            slove(0);
         }
-        if(flag>=out.size()&&flag!=0)
+        if(!flag)
         {
-            flag=-1;
-            for(auto k:wait)
-                cout<<k.first;
-            if(!out.empty())
-                cout<<" ";
-            wait.clear();
-        }
-        if(!out.empty())
-        {
-            for(auto k:out)
-                cout<<k.first;
-            if(!wait.empty())
-                cout<<" ";
-        }
-        if(!wait.empty())
-        {
-            for(auto k:wait)
-                cout<<k.first;
-        }
-        cout<<endl;
+            flag=0;
+            while(coin[0]>=1&&coin[1]>=2)
+            {
+                coin[0]-=1;
+                coin[1]-=2;
+                coin[2]+=1;
+                st.clear();
+                slove(0);
+                wfor(i,0,n)
+                {
+                    if(st.count(num2[i])!=1)
+                    {
+                        flag=1;
+                        break;
+                    }
+                }
+                if(flag)
+                {
+                    coin[0]+=1;
+                    coin[1]+=2;
+                    coin[2]-=1;
+                    break;
+                }
+            }
+            flag=0;
+            while(coin[0]>=2)
+            {
+                coin[0]-=2;
+                coin[1]+=1;
+                st.clear();
+                slove(0);
+                wfor(i,0,n)
+                {
+                    if(st.count(num2[i])!=1)
+                    {
+                        flag=1;
+                        break;
+                    }
+                }
+                if(flag)
+                {
+                    coin[0]+=2;
+                    coin[1]-=1;
+                    break;
+                }
+            }
+            flag=0;
+            while(coin[0]>=1&&coin[1]>=2)
+            {
+                coin[0]-=1;
+                coin[1]-=2;
+                coin[2]+=1;
+                st.clear();
+                slove(0);
+                wfor(i,0,n)
+                {
+                    if(st.count(num2[i])!=1)
+                    {
+                        flag=1;
+                        break;
+                    }
+                }
+                if(flag)
+                {
+                    coin[0]+=1;
+                    coin[1]+=2;
+                    coin[2]-=1;
+                    break;
+                }
+            }
+            wfor(i,0,3)
+                ans+=coin[i];
+            cout<<ans<<endl;
+        }else
+            cout<<-1<<endl;
     }
     return 0;
 }
