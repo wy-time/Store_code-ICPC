@@ -58,38 +58,60 @@ int main()
             {
                 int temp=j;
                 j=0;
-                ll tans=-1;
-                ll tans2=-1;
-                ll minans1=1e18+5;
+                ll tans=1e18+5;
+                ll tans2=1e18+5;
+                ll maxnum=0;
                 while(j<n)
                 {
                     if(vis[num2[j].id]==2)
                     {
-                        tans=abs(num1[i].num-num2[j].num);
-                        break;
+                        if(num2[j].num>=maxnum)
+                        {
+                            tans=abs(num1[i].num-num2[j].num);
+                            maxnum=num2[j].num;
+                            break;
+                        }
                     }
-                    if(num1[i].id!=num2[j].id)
-                        minans1=min(minans1,abs(num1[i].num-num2[j].num));
                     j++;
                 }
-                if(tans==-1)
-                    tans=minans1;
+                j=0;
+                while(j<n)
+                {
+                    if(num2[j].id!=num1[i].id&&vis[num2[j].id]!=1)
+                    {
+                        if(abs(num1[i].num-num2[j].num)<tans&&maxnum<=num2[j].num)
+                            tans=abs(num1[i].num-num2[j].num);
+                    }
+                    j++;
+                }
                 j=temp;
                 i=0;
-                minans1=1e18+5;
+                maxnum=0;
                 while(i<n)
                 {
                     if(vis[num1[i].id]==1)
                     {
-                        tans2=abs(num1[i].num-num2[j].num);
-                        break;
+                        if(num1[i].num>=maxnum)
+                        {
+                            tans2=abs(num1[i].num-num2[j].num);
+                            maxnum=num1[i].num;
+                            break;
+                        }
                     }
-                    if(num1[i].id!=num2[j].id)
-                        minans1=min(minans1,abs(num1[i].num-num2[j].num));
                     i++;
                 }
-                if(tans2==-1)
-                    tans2=minans1;
+                i=0;
+                while(i<n)
+                {
+                    if(num2[j].id!=num1[i].id&&vis[num1[i].id]!=2)
+                    {
+                        if(abs(num1[i].num-num2[j].num)<tans2&&maxnum<=num1[i].num)
+                        {
+                            tans2=abs(num1[i].num-num2[j].num);
+                        }
+                    }
+                    i++;
+                }
                 ans=min(ans,min(tans,tans2));
                 break;
             }else
@@ -103,7 +125,8 @@ int main()
                     {
                         vis[num2[j].id]=1;
                         j++;
-                    }
+                    }else
+                        break;
                 }
                 else
                 {
@@ -111,7 +134,8 @@ int main()
                     {
                         vis[num1[i].id]=2;
                         i++;
-                    }
+                    }else
+                        break;
                 }
             }
         }
