@@ -52,24 +52,20 @@ int main()
         ll j;
         i=j=0;
         ll ans=1e18+5;
-        int flag=0;
         while(i<n&&j<n)
         {
             if(vis[num1[i].id]==0&&vis[num2[j].id]==0)
             {
-                if(num1[i].id==num2[j].id||flag!=0)
+                if(num1[i].id==num2[j].id)
                 {
-                    if(num1[i].num<=num2[j].num||flag==1)
+                    if(j+1==n&&i+1!=n)
                     {
-                        vis[num1[i].id]=1;
-                        j++;
-                        flag=1;
-                    }else if(num1[i].num>num2[j].num||flag==2)
-                    {
-                        vis[num2[j].id]=2;
-                        i++;
-                        flag=2;
-                    }
+                        ans=min(ans,abs(num1[i+1].num-num2[j].num));
+                    }else if(i+1==n&&j+1!=n)
+                        ans=min(abs(num1[i].num-num2[j+1].num),ans);
+                    else if(i+1!=n&&j+1!=n)
+                        ans=min(ans,min(abs(num1[i].num-num2[j+1].num),abs(num1[i+1].num-num2[j].num)));
+                    break;
                 }else
                 {
                     ans=min(ans,abs(num1[i].num-num2[j].num));
