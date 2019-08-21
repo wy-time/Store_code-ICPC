@@ -49,22 +49,38 @@ int main()
         ll j;
         i=j=0;
         ll ans=1e18+5;
-        while(i<n&&j<n)
+        int flag=0;
+        while(i<n&&j<n&&flag!=1)
         {
             if(num1[i].id!=num2[j].id)
             {
                 ans=min(ans,abs(num1[i].num-num2[j].num));
-            }
-            if(num1[i].num>num2[j].num)
-                i++;
-            else if(num1[i].num<num2[j].num)
-                j++;
-            else
-            {
-                if(num1[i+1].num>=num2[j+1].num)
+                if(num1[i].num>num2[j].num)
                     i++;
-                else
+                else if(num1[i].num<num2[j].num)
                     j++;
+                else
+                {
+                    break;
+                }
+            }else
+            {
+                if(num1[i].num<=num2[j].num)
+                {
+                    while(j<n)
+                    {
+                        j++;
+                        ans=min(ans,abs(num1[i].num-num2[j].num));
+                    }
+                }else
+                {
+                    while(i<n)
+                    {
+                        i++;
+                        ans=min(ans,abs(num1[i].num-num2[j].num));
+                    }
+                }
+                flag=1;
             }
         }
         cout<<ans<<endl;
