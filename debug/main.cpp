@@ -1,35 +1,27 @@
 #include <iostream>
-#include <cstring> 
+#include <algorithm> 
 #include <cstdio>
 using namespace std;
 typedef long long ll;
 #define wfor(i,j,k) for(i=j;i<k;++i)
 #define mfor(i,j,k) for(i=j;i>=k;--i)
-// void read(int &x) {
+// void read(ll &x) {
 // 	char ch = getchar(); x = 0;
 // 	for (; ch < '0' || ch > '9'; ch = getchar());
 // 	for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
 // }
-int sum[2][4][2][120];
-void slove()
+const ll maxn=1e5+5;
+struct st
 {
-    memset(sum,0,sizeof(sum));
-    int i,j,k;
-    wfor(i,0,2)
+    ll num;
+    ll id;
+    bool operator <(const st&other)const
     {
-        wfor(j,0,4)
-        {
-            wfor(k,0,2)
-            {
-                int a,b,c;
-                wfor(a,0,i+1)
-                    wfor(b,0,j+1)
-                        wfor(c,0,k+1)
-                            sum[i][j][k][a*10+b*20+c*50]=1;
-            }
-        }
+        return num>other.num;
     }
-}
+};
+st num1[maxn];
+st num2[maxn];
 int main()
 {
     std::ios::sync_with_stdio(false);
@@ -40,58 +32,39 @@ int main()
     freopen("/home/time/debug/debug/in","r",stdin);
     freopen("/home/time/debug/debug/out","w",stdout);
     #endif
-    int t;
+    ll t;
     cin>>t;
     while(t--)
     {
-        slove();
-        int num[105];
-        int n;
+        ll n;
         cin>>n;
-        int i,j,k;
-        int no=0;
+        ll i;
         wfor(i,0,n)
         {
-            cin>>num[i];
-            if(num[i]%10!=0)
-                no=1;
+            cin>>num1[i].num>>num2[i].num;
+            num1[i].id=num2[i].id=i;
         }
-        if(no==1)
+        sort(num1,num1+n);
+        sort(num2,num2+n);
+        ll j;
+        i=j=0;
+        ll ans=1e18+5;
+        while(i<n&&j<n)
         {
-            cout<<-1<<endl;
-            continue;
-        }
-        ll ans=1e9;
-        wfor(i,0,2)
-        {
-            wfor(j,0,4)
+            if(num1[i].id!=num2[j].id)
             {
-                wfor(k,0,2)
-                {
-                    int p;
-                    int cnt=0;
-                    int flag=1;
-                    wfor(p,0,n)
-                    {
-                        if(sum[i][j][k][num[p]%100]!=1&&(num[p]<=110&&sum[i][j][k][num[p]]!=1))
-                        {
-                            flag=0;
-                            break;
-                        }else
-                        {
-                            int fix=0;
-                            if(num[p]%100==0&&sum[i][j][k][100]==1)
-                                fix++;
-                            if(num[p]%110==0&&sum[i][j][k][110]==1)
-                                fix++;
-                            cnt=max(cnt,num[p]/100-fix);
-                        }
-                    }
-                    if(flag)
-                    {
-                        ans=min(ans,(ll)i+j+k+cnt);
-                    }
-                }
+                ans=min(ans,abs(num1[i].num-num2[j].num));
+            }
+            if(num1[i].num>num2[j].num)
+                i++;
+            else if(num1[i].num<num2[j].num)
+                j++;
+            else
+            {
+                if(num1[i+1].num>=num2[j+1].num)
+                    i++;
+                else
+                    j++;
             }
         }
         cout<<ans<<endl;
