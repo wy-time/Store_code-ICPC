@@ -52,24 +52,41 @@ int main()
         ll j;
         i=j=0;
         ll ans=1e18+5;
+        int flag=0;
         while(i<n&&j<n)
         {
-            if(num1[i].id!=num2[j].id&&vis[num1[i].id]!=0&&vis[num2[j].id]!=0)
+            if(vis[num1[i].id]==0&&vis[num2[j].id]==0)
             {
-                ans=min(ans,abs(num1[i].num-num2[j].num));
-                if(num1[i].num>num2[j].num)
+                if(num1[i].id==num2[j].id||flag!=0)
                 {
-                    vis[num1[i].id]=2;
-                    i++;
-                }
-                else if(num1[i].num<num2[j].num)
+                    if(num1[i].num<=num2[j].num||flag==1)
+                    {
+                        vis[num1[i].id]=1;
+                        j++;
+                        flag=1;
+                    }else if(num1[i].num>num2[j].num||flag==2)
+                    {
+                        vis[num2[j].id]=2;
+                        i++;
+                        flag=2;
+                    }
+                }else
                 {
-                    vis[num2[j].id]=1;
-                    j++;
-                }
-                else
-                {
-                    break;
+                    ans=min(ans,abs(num1[i].num-num2[j].num));
+                    if(num1[i].num>num2[j].num)
+                    {
+                        vis[num1[i].id]=2;
+                        i++;
+                    }
+                    else if(num1[i].num<num2[j].num)
+                    {
+                        vis[num2[j].id]=1;
+                        j++;
+                    }
+                    else
+                    {
+                        break;
+                    }
                 }
             }else
             {
@@ -89,7 +106,7 @@ int main()
                         vis[num1[i].id]=2;
                         i++;
                     }
-                }else
+                }else if(vis[num1[i].id]!=0&&vis[num2[j].id]!=0)
                 {
                     ans=min(ans,abs(num1[i].num-num2[j].num));
                 }
