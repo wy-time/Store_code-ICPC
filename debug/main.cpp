@@ -54,59 +54,65 @@ int main()
         ll ans=1e18+5;
         while(i<n&&j<n)
         {
-            if(vis[num1[i].id]==0&&vis[num2[j].id]==0)
+            if(num1[i].id==num2[j].id)
             {
-                if(num1[i].id==num2[j].id)
+                int temp=j;
+                j=0;
+                ll tans=-1;
+                ll tans2=-1;
+                ll minans1=1e18+5;
+                while(j<n)
                 {
-                    if(j+1==n&&i+1!=n)
+                    if(vis[num2[j].id]==2)
                     {
-                        ans=min(ans,abs(num1[i+1].num-num2[j].num));
-                    }else if(i+1==n&&j+1!=n)
-                        ans=min(abs(num1[i].num-num2[j+1].num),ans);
-                    else if(i+1!=n&&j+1!=n)
-                        ans=min(ans,min(abs(num1[i].num-num2[j+1].num),abs(num1[i+1].num-num2[j].num)));
-                    break;
-                }else
-                {
-                    ans=min(ans,abs(num1[i].num-num2[j].num));
-                    if(num1[i].num>num2[j].num)
-                    {
-                        vis[num1[i].id]=2;
-                        i++;
-                    }
-                    else if(num1[i].num<num2[j].num)
-                    {
-                        vis[num2[j].id]=1;
-                        j++;
-                    }
-                    else
-                    {
+                        tans=abs(num1[i].num-num2[j].num);
                         break;
                     }
+                    if(num1[i].id!=num2[j].id)
+                        minans1=min(minans1,abs(num1[i].num-num2[j].num));
+                    j++;
                 }
+                if(tans==-1)
+                    tans=minans1;
+                j=temp;
+                i=0;
+                minans1=1e18+5;
+                while(i<n)
+                {
+                    if(vis[num1[i].id]==1)
+                    {
+                        tans2=abs(num1[i].num-num2[j].num);
+                        break;
+                    }
+                    if(num1[i].id!=num2[j].id)
+                        minans1=min(minans1,abs(num1[i].num-num2[j].num));
+                    i++;
+                }
+                if(tans2==-1)
+                    tans2=minans1;
+                ans=min(ans,min(tans,tans2));
+                break;
             }else
             {
-                if(vis[num1[i].id]!=0&&vis[num2[j].id]==0)
+                ans=min(ans,abs(num1[i].num-num2[j].num));
+                if(vis[num1[i].id]==1&&vis[num2[j].id]==2)
+                    break;
+                if(num1[i].num<num2[j].num)
                 {
-                    while(vis[num2[j].id]==0)
+                    if(vis[num2[j].id]!=2)
                     {
-                        ans=min(ans,abs(num1[i].num-num2[j].num));
                         vis[num2[j].id]=1;
                         j++;
                     }
-                }else if(vis[num1[i].id]==0&&vis[num2[j].id]!=0)
+                }
+                else
                 {
-                    while(vis[num1[i].id]==0)
+                    if(vis[num1[i].id]!=1)
                     {
-                        ans=min(ans,abs(num1[i].num-num2[j].num));
                         vis[num1[i].id]=2;
                         i++;
                     }
-                }else if(vis[num1[i].id]!=0&&vis[num2[j].id]!=0)
-                {
-                    ans=min(ans,abs(num1[i].num-num2[j].num));
                 }
-                break;
             }
         }
         cout<<ans<<endl;
