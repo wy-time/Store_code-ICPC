@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstring> 
 #include <algorithm> 
 #include <cstdio>
 using namespace std;
@@ -22,6 +23,7 @@ struct st
 };
 st num1[maxn];
 st num2[maxn];
+int vis[maxn];
 int main()
 {
     std::ios::sync_with_stdio(false);
@@ -36,6 +38,7 @@ int main()
     cin>>t;
     while(t--)
     {
+        memset(vis,0,sizeof(vis));
         ll n;
         cin>>n;
         ll i;
@@ -49,38 +52,48 @@ int main()
         ll j;
         i=j=0;
         ll ans=1e18+5;
-        int flag=0;
-        while(i<n&&j<n&&flag!=1)
+        while(i<n&&j<n)
         {
-            if(num1[i].id!=num2[j].id)
+            if(num1[i].id!=num2[j].id&&vis[num1[i].id]!=0&&vis[num2[j].id]!=0)
             {
                 ans=min(ans,abs(num1[i].num-num2[j].num));
                 if(num1[i].num>num2[j].num)
+                {
+                    vis[num1[i].id]=2;
                     i++;
+                }
                 else if(num1[i].num<num2[j].num)
+                {
+                    vis[num2[j].id]=1;
                     j++;
+                }
                 else
                 {
                     break;
                 }
             }else
             {
-                if(num1[i].num<=num2[j].num)
+                if(vis[num1[i].id]!=0&&vis[num2[j].id]==0)
                 {
-                    while(j<n)
+                    while(vis[num2[j].id]==0)
                     {
-                        j++;
                         ans=min(ans,abs(num1[i].num-num2[j].num));
+                        vis[num2[j].id]=1;
+                        j++;
+                    }
+                }else if(vis[num1[i].id]==0&&vis[num2[j].id]!=0)
+                {
+                    while(vis[num1[i].id]==0)
+                    {
+                        ans=min(ans,abs(num1[i].num-num2[j].num));
+                        vis[num1[i].id]=2;
+                        i++;
                     }
                 }else
                 {
-                    while(i<n)
-                    {
-                        i++;
-                        ans=min(ans,abs(num1[i].num-num2[j].num));
-                    }
+                    ans=min(ans,abs(num1[i].num-num2[j].num));
                 }
-                flag=1;
+                break;
             }
         }
         cout<<ans<<endl;
