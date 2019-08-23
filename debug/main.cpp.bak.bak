@@ -69,6 +69,7 @@ void build(int id,int l,int r)
         tree[id].a=num[l].a;
         tree[id].b=num[l].b;
         tree[id].sum=num[l].a+num[l].b;
+        tree[id].l=tree[id].r=-1;
         return ;
     }
     int mid=(l+r)>>1;
@@ -76,7 +77,7 @@ void build(int id,int l,int r)
     build(id<<1|1,mid+1,r);
     push_up(id);
 }
-void update(int id,int l,int r,int pos,int flag,int whi)
+void update(int id,int l,int r,int pos,int flag)
 {
     if(l==r)
     {
@@ -96,9 +97,9 @@ void update(int id,int l,int r,int pos,int flag,int whi)
     }
     int mid=(l+r)>>1;
     if(pos<=mid)
-        update(id<<1,l,mid,pos,flag,whi);
+        update(id<<1,l,mid,pos,flag);
     else
-        update(id<<1|1,mid+1,r,pos,flag,whi);
+        update(id<<1|1,mid+1,r,pos,flag);
     push_up(id);
 }
 struct st2
@@ -132,9 +133,8 @@ int main()
             ans[2*n].ans+=num[i].a+num[i].b;
             ans[2*n].treeid=0;
         }
-        build(1,1,n,0);
-        build(1,1,n,1);
-        build(1,1,n,2);
+        build(1,1,n);
+        T[0]=tree[1];
         ans[2*n-1].ans=ans[2*n].ans-tree[ans[2*n].treeid][1].b;
         ans[2*n-1].treeid=ans[2*n].treeid;
         ans[2*n-1].op=1;
