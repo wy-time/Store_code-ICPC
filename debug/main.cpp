@@ -1,7 +1,7 @@
 #include <iostream>
-#include <algorithm> 
-#include <queue> 
 #include <vector> 
+#include <algorithm> 
+#include <map> 
 #include <cstdio>
 using namespace std;
 typedef long long ll;
@@ -12,20 +12,28 @@ typedef long long ll;
 // 	for (; ch < '0' || ch > '9'; ch = getchar());
 // 	for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
 // }
-const int maxn=5e4+5;
-vector<pair<ll,int>>G[maxn];
-struct st
+const int maxn=3e5+5;
+pair<int,int>num[maxn];
+map<pair<int,int>,int >ma;
+vector<pair<int,int>>v;
+const ll mod=998244353;
+ll fac[maxn];
+struct rule
 {
-    int u;
-    ll w;
-    int id;
-    bool operator <(const st&other)const
+    bool operator ()(const pair<int,int> &a,const pair<int,int>&b)
     {
-        return w>other.w;
+        return a.second<b.second;
     }
 };
-ll ans[maxn];
-int question[maxn];
+void init()
+{
+    ll i;
+    fac[0]=1;
+    wfor(i,1,maxn)
+    {
+        fac[i]=fac[i-1]*i%mod;
+    }
+}
 int main()
 {
     std::ios::sync_with_stdio(false);
@@ -36,57 +44,66 @@ int main()
     freopen("/home/time/debug/debug/in","r",stdin);
     freopen("/home/time/debug/debug/out","w",stdout);
     #endif
-    int t;
-    cin>>t;
-    while(t--)
+    int n;
+    cin>>n;
+    int i;
+    init();
+    wfor(i,0,n)
     {
-        int n,m,q;
-        cin>>n>>m>>q;
-        int i;
-        wfor(i,0,n+2)
+        cin>>num[i].first>>num[i].second;
+        ma[num[i]]++;
+        v.push_back(num[i]);
+    }
+    sort(v.begin(),v.end());
+    v.erase(unique(v.begin(),v.end()),v.end());
+    sort(num,num+n);
+    int cnt=1;
+    ll ans1=1;
+    ll ans2=1;
+    int flag=0;
+    wfor(i,1,n)
+    {
+        if(num[i].second<num[i-1].second)
         {
-            G[i].clear();
+            flag=1;
+            break;
         }
-        priority_queue<st>qu;
-        wfor(i,0,m)
+    }
+    wfor(i,1,n)
+    {
+        if(num[i].first==num[i-1].first)
+            cnt++;
+        else
         {
-            int u,v;
-            ll w;
-            cin>>u>>v>>w;
-            G[u].push_back(make_pair(w,v));
+            ans1=ans1*fac[cnt]%mod;
+            cnt=1;
         }
-        wfor(i,1,n+1)
+    }
+    ans1=ans1*fac[cnt]%mod;
+    sort(num,num+n,rule());
+    cnt=1;
+    wfor(i,1,n)
+    {
+        if(num[i].second==num[i-1].second)
+            cnt++;
+        else
         {
-            sort(G[i].begin(),G[i].end());
-            if(G[i].size()>0)
-                qu.push({i,G[i][0].first,0});
+            ans2=ans2*fac[cnt]%mod;
+            cnt=1;
         }
-        int maxnum=0;
-        wfor(i,0,q)
-        {
-            cin>>question[i];
-            maxnum=max(maxnum,question[i]);
-        }
-        int cnt=0;
-        while(!qu.empty())
-        {
-            st temp=qu.top();
-            qu.pop();
-            ans[++cnt]=temp.w;
-            if(cnt>maxnum)
-                break;
-            if(temp.id+1<G[temp.u].size())
-            {
-                qu.push({temp.u,temp.w-G[temp.u][temp.id].first+G[temp.u][temp.id+1].first,temp.id+1});
-            }
-            int v=G[temp.u][temp.id].second;
-            if(G[v].size()>0)
-                qu.push({v,temp.w+G[v][0].first,0});
-        }
-        wfor(i,0,q)
-        {
-            cout<<ans[question[i]]<<endl;
-        }
+    }
+    ans2=ans2*fac[cnt]%mod;
+    if(flag==0)
+    {
+        ll temp=1;
+        for(auto k:v)
+            temp=temp*fac[ma[k]]%mod;
+        ll ans=(ans1+ans2-temp+mod)%mod;
+        cout<<(fac[n]-ans+mod)%mod<<endl;;
+    }else
+    {
+        ll ans=(ans1+ans2)%mod;
+        cout<<(fac[n]-ans+mod)%mod<<endl;
     }
     return 0;
 }
