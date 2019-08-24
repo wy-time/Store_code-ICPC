@@ -22,7 +22,7 @@ int main()
     #endif
     int i;
     cout<<"? ";
-    wfor(i,0,99)
+    wfor(i,1,100)
     {
         cout<<(i<<7)<<" ";
     }
