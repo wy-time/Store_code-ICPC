@@ -1,5 +1,4 @@
 #include <iostream>
-#include <bitset> 
 #include <cstdio>
 using namespace std;
 typedef long long ll;
@@ -20,28 +19,19 @@ int main()
     freopen("/home/time/debug/debug/in","r",stdin);
     freopen("/home/time/debug/debug/out","w",stdout);
     #endif
-    int i;
-    cout<<"? ";
-    wfor(i,1,100)
+    int t;
+    cin>>t;
+    while(t--)
     {
-        cout<<(i<<7)<<" ";
+        int a,b,n;
+        cin>>a>>b>>n;
+        n++;
+        if(n%3==0)
+            cout<<(a^b)<<endl;
+        else if(n%3==1)
+            cout<<a<<endl;
+        else if(n%3==2)
+            cout<<b<<endl;
     }
-    cout<<(i<<7)<<endl;
-    int fir;
-    cin>>fir;
-    cout<<"? ";
-    wfor(i,0,99)
-        cout<<i<<" ";
-    cout<<i<<endl;
-    int sec;
-    cin>>sec;
-    bitset<14>firnum(fir);
-    bitset<14>senum(sec);
-    mfor(i,13,7)
-    {
-        firnum[i]=senum[i];
-    }
-    ll ans=firnum.to_ullong();
-    cout<<"! "<<ans<<endl;
     return 0;
 }
