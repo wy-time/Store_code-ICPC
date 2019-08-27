@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector> 
 #include <cstring> 
 #include <algorithm> 
 #include <cstdio>
@@ -53,6 +54,7 @@ int main()
     int ans=1e9;
     int last=0;
     int minl=1e9;
+    vector<int>v;
     wfor(i,0,n)
     {
         if(_next[i][num[i]]!=-1)
@@ -69,9 +71,11 @@ int main()
                 break;
             int temp=_next[i][num[i]];
             last=max(last,_next[i][num[i]]);
+            v.push_back(_next[i][num[i]]);
             minl=min(minl,_next[i][num[i]]);
             while(_next[temp][num[i]]!=-1)
             {
+                v.push_back(_next[temp][num[i]]);
                 minl=min(minl,_next[temp][num[i]]);
                 last=max(last,_next[temp][num[i]]);
                 temp=_next[temp][num[i]];
@@ -79,6 +83,8 @@ int main()
             }
         }
     }
+    if(!v.empty()&&v.size()>=2)
+        ans=min(*max_element(v.begin(),v.end())-*min_element(v.begin(),v.end())+1,ans);
     if(ans==1e9)
         ans=0;
     cout<<ans<<endl;
