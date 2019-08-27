@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstring> 
 #include <algorithm> 
 #include <cstdio>
 using namespace std;
@@ -27,6 +28,7 @@ int main()
     int n;
     cin>>n;
     int i;
+    memset(_next,-1,sizeof(_next));
     wfor(i,0,n)
     {
         cin>>num2[i];
@@ -79,9 +81,13 @@ int main()
         if(_next[i][num[i]]!=-1)
         {
             l=min(l,_next[i][num[i]]);
+            r=max(r,_next[i][num[i]]);
             int temp=_next[i][num[i]];
             while(_next[temp][num[i]]!=-1)
-                r=max(r,_next[i][num[i]]);
+            {
+                r=max(r,_next[temp][num[i]]);
+                temp=_next[temp][num[i]];
+            }
             flag=1;
         }
     }
