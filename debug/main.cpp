@@ -41,7 +41,7 @@ int main()
     int j;
     wfor(i,0,p)
         _next[n-1][i]=-1;
-    mfor(i,n-1,0)
+    mfor(i,n-1,1)
     {
         wfor(j,0,p)
         {
@@ -79,7 +79,9 @@ int main()
         if(_next[i][num[i]]!=-1)
         {
             l=min(l,_next[i][num[i]]);
-            r=max(r,_next[i][num[i]]);
+            int temp=_next[i][num[i]];
+            while(_next[temp][num[i]]!=-1)
+                r=max(r,_next[i][num[i]]);
             flag=1;
         }
     }
