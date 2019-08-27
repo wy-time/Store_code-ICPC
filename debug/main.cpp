@@ -16,6 +16,7 @@ const int maxn=2005;
 int num2[maxn];
 int num[maxn];
 int _next[maxn][maxn];
+int vis[maxn];
 int main()
 {
     std::ios::sync_with_stdio(false);
@@ -58,8 +59,11 @@ int main()
     int cnt=0;
     wfor(i,0,n)
     {
-        if(_next[i][num[i]!=-1])
+        if(_next[i][num[i]]!=-1&&!vis[num[i]])
+        {
             cnt++;
+            vis[num[i]]=1;
+        }
     }
     int cnt2=0;
     wfor(i,0,n)
