@@ -41,8 +41,6 @@ int main()
         num[i]=lower_bound(num2,num2+p,num[i])-num2;
     }
     int j;
-    wfor(i,0,p)
-        _next[n-1][i]=-1;
     mfor(i,n-1,1)
     {
         wfor(j,0,p)
@@ -51,53 +49,37 @@ int main()
             _next[i-1][num[i]]=i;
         }
     }
-    int l=0,r=0;
-    int flag=0;
-    ll ans=0;
+    int l,r=0;
+    int ans=1e9;
+    int last=0;
+    int minl=1e9;
     wfor(i,0,n)
     {
         if(_next[i][num[i]]!=-1)
         {
-            if(flag)
+            l=min(i,minl);
+            r=0;
+            wfor(j,i,n)
             {
-                r=i;
-            }else
-            {
-                l=i;
-                r=i;
-                flag=1;
+                if(_next[j][num[j]]!=-1)
+                    r=max(last,j);
             }
-        }
-    }
-    ans=r-l+1;
-    if(flag==0)
-        ans=0;
-    l=1e9;r=0;
-    flag=0;
-    wfor(i,0,n)
-    {
-        if(i>=l)
-            break;
-        if(_next[i][num[i]]!=-1)
-        {
-            l=min(l,_next[i][num[i]]);
-            r=max(r,_next[i][num[i]]);
+            ans=min(ans,r-l+1);
+            if(i>=minl)
+                break;
             int temp=_next[i][num[i]];
+            last=max(last,_next[i][num[i]]);
+            minl=min(minl,_next[i][num[i]]);
             while(_next[temp][num[i]]!=-1)
             {
-                r=max(r,_next[temp][num[i]]);
+                minl=min(minl,_next[temp][num[i]]);
+                last=max(last,_next[temp][num[i]]);
                 temp=_next[temp][num[i]];
+
             }
-            flag=1;
         }
     }
-    wfor(i,l,n)
-    {
-        if(_next[i][num[i]]!=-1)
-            r=max(r,i);
-    }
-    ans=min(ans,(ll)r-l+1);
-    if(!flag)
+    if(ans==1e9)
         ans=0;
     cout<<ans<<endl;
     return 0;
