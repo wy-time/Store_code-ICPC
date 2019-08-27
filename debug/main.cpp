@@ -55,6 +55,13 @@ int main()
     int last=0;
     int minl=1e9;
     vector<int>v;
+    int cnt=0;
+    wfor(i,0,n)
+    {
+        if(_next[i][num[i]!=-1])
+            cnt++;
+    }
+    int cnt2=0;
     wfor(i,0,n)
     {
         if(_next[i][num[i]]!=-1)
@@ -69,6 +76,7 @@ int main()
             ans=min(ans,r-l+1);
             if(i>=minl)
                 break;
+            cnt2++;
             int temp=_next[i][num[i]];
             last=max(last,_next[i][num[i]]);
             v.push_back(_next[i][num[i]]);
@@ -83,7 +91,7 @@ int main()
             }
         }
     }
-    if(!v.empty()&&v.size()>=2)
+    if(!v.empty()&&cnt==cnt2)
         ans=min(*max_element(v.begin(),v.end())-*min_element(v.begin(),v.end())+1,ans);
     if(ans==1e9)
         ans=0;
