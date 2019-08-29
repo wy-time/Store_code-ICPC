@@ -1,7 +1,6 @@
 #include <iostream>
-#include <vector> 
 #include <cstring> 
-#include <algorithm> 
+#include <string> 
 #include <cstdio>
 using namespace std;
 typedef long long ll;
@@ -12,11 +11,50 @@ typedef long long ll;
 // 	for (; ch < '0' || ch > '9'; ch = getchar());
 // 	for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
 // }
-const int maxn=2005;
-int num2[maxn];
-int num[maxn];
-int _next[maxn][maxn];
-int vis[maxn];
+const int maxn=250005;
+struct st
+{
+    int len;
+    int link;
+    int _next[26];
+};
+int sz,last;
+st sam[maxn*2];
+void init()
+{
+    sam[sz].len=0;
+    sam[sz].link=-1;
+    memset(sam[sz]._next,0,sizeof(sam[sz]._next));
+    sz++;
+    last=0;
+}
+void add(char c)
+{
+    int cur=sz++;
+    sam[cur].len=sam[last].len+1;
+    int p=last;
+    for(;p!=-1&&!sam[p]._next[c-'a'];p=sam[p].link)
+        sam[p]._next[c-'a']=cur;
+    if(p==-1)
+        sam[cur].link=0;
+    else
+    {
+        int q=sam[p]._next[c-'a'];
+        if(sam[p].len+1==sam[q].len)
+            sam[cur].link=q;
+        else
+        {
+            int cop=sz++;
+            sam[cop]=sam[q];
+            sam[cop].len=sam[p].len+1;
+            for(;p!=-1&&sam[p]._next[c-'a']==q;p=sam[p].link)
+                sam[p]._next[c-'a']=cop;
+            sam[q].link=cop;
+            sam[cur].link=cop;
+        }
+    }
+    last=cur;
+}
 int main()
 {
     std::ios::sync_with_stdio(false);
@@ -27,78 +65,31 @@ int main()
     freopen("/home/time/debug/debug/in","r",stdin);
     freopen("/home/time/debug/debug/out","w",stdout);
     #endif
-    int n;
-    cin>>n;
+    string s,t;
+    cin>>s>>t;
+    init();
+    int len=s.size();
     int i;
-    memset(_next,-1,sizeof(_next));
-    wfor(i,0,n)
+    wfor(i,0,len)
     {
-        cin>>num2[i];
-        num[i]=num2[i];
+        add(s[i]);
     }
-    sort(num2,num2+n);
-    int p=unique(num2,num2+n)-num2;
-    wfor(i,0,n)
+    int v=0,l=0;
+    int ans=0;
+    wfor(i,0,t.length())
     {
-        num[i]=lower_bound(num2,num2+p,num[i])-num2;
-    }
-    int j;
-    mfor(i,n-1,1)
-    {
-        wfor(j,0,p)
+        while(v&&!sam[v]._next[t[i]-'a'])
         {
-            _next[i-1][j]=_next[i][j];
-            _next[i-1][num[i]]=i;
+            v=sam[v].link;
+            l=sam[v].len;
         }
-    }
-    int l,r=0;
-    int ans=1e9;
-    int last=0;
-    int minl=1e9;
-    vector<int>v;
-    int cnt=0;
-    wfor(i,0,n)
-    {
-        if(_next[i][num[i]]!=-1&&!vis[num[i]])
+        if(sam[v]._next[t[i]-'a']!=0)
         {
-            cnt++;
-            vis[num[i]]=1;
+            v=sam[v]._next[t[i]-'a'];
+            l++;
         }
+        ans=max(ans,l);
     }
-    int cnt2=0;
-    wfor(i,0,n)
-    {
-        if(_next[i][num[i]]!=-1)
-        {
-            l=min(i,minl);
-            r=0;
-            wfor(j,i,n)
-            {
-                if(_next[j][num[j]]!=-1)
-                    r=max(last,j);
-            }
-            ans=min(ans,r-l+1);
-            if(i>=minl)
-                break;
-            cnt2++;
-            int temp=_next[i][num[i]];
-            last=max(last,_next[i][num[i]]);
-            v.push_back(_next[i][num[i]]);
-            minl=min(minl,_next[i][num[i]]);
-            while(_next[temp][num[i]]!=-1)
-            {
-                v.push_back(_next[temp][num[i]]);
-                minl=min(minl,_next[temp][num[i]]);
-                last=max(last,_next[temp][num[i]]);
-                temp=_next[temp][num[i]];
-
-            }
-        }
-    }
-    if(!v.empty()&&cnt==cnt2)
-        ans=min(*max_element(v.begin(),v.end())-*min_element(v.begin(),v.end())+1,ans);
-    if(ans==1e9)
-        ans=0;
     cout<<ans<<endl;
     return 0;
 }
