@@ -6,11 +6,11 @@ using namespace std;
 typedef long long ll;
 #define wfor(i,j,k) for(i=j;i<k;++i)
 #define mfor(i,j,k) for(i=j;i>=k;--i)
-// void read(int &x) {
-// 	char ch = getchar(); x = 0;
-// 	for (; ch < '0' || ch > '9'; ch = getchar());
-// 	for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
-// }
+void read(int &x) {
+char ch = getchar(); x = 0;
+for (; ch < '0' || ch > '9'; ch = getchar());
+for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
+}
 const int maxn=250005;
 struct st
 {
@@ -64,7 +64,7 @@ int sum[maxn];
 int ans[maxn];
 int main()
 {
-    std::ios::sync_with_stdio(false);
+    //std::ios::sync_with_stdio(false);
     #ifdef test
     freopen("F:\\Desktop\\question\\in.txt","r",stdin);
     #endif
@@ -73,13 +73,14 @@ int main()
     freopen("/home/time/debug/debug/out","w",stdout);
     #endif
     init();
-    string s;
-    cin>>s;
+    char s[maxn];
+    scanf("%s",s);
+    int len=strlen(s);
     int i;
-    wfor(i,0,s.length())
+    wfor(i,0,len)
         add(s[i]);
     wfor(i,0,tot)sum[sam[i].len]++;
-    wfor(i,1,s.length()+1)sum[i]+=sum[i-1];
+    wfor(i,1,len+1)sum[i]+=sum[i-1];
     wfor(i,0,tot)toop[--sum[sam[i].len]]=i;
     mfor(i,tot-1,0)
     {
@@ -102,7 +103,8 @@ int main()
                 ans[j]=max(ans[j],sam[i].cnt);
         }
     }
-    wfor(i,0,s.length())
-        cout<<ans[i+1]<<endl;
+    wfor(i,0,len)
+        printf("%d\n",ans[i+1]);
+        //cout<<ans[i+1]<<endl;
     return 0;
 }
