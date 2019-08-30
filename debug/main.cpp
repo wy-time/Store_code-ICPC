@@ -18,17 +18,17 @@ struct st
     int link;
     int num;
     map<char,int>_next;
-    void init()
-    {
-        len=0;
-        link=-1;
-        _next.clear();
-        tot=1;
-        last=0;
-        num=0;
-    }
 };
-st sam[maxn];
+st sam[2*maxn];
+void init()
+{
+    sam[tot].len=0;
+    sam[tot].link=-1;
+    sam[tot]._next.clear();
+    tot=1;
+    last=0;
+    sam[tot].num=0;
+}
 void add(char c)
 {
     int cur=tot++;
@@ -65,6 +65,8 @@ void slove(int now,int aim)
         return;
     for(auto k:sam[now]._next)
     {
+        if(aim<=0)
+            return ;
         if(sam[k.second].num<aim)
         {
             aim-=sam[k.second].num;
@@ -74,7 +76,7 @@ void slove(int now,int aim)
             ans+=k.first;
             aim--;
             slove(k.second,aim);
-            break;
+            return ;
         }
     }
 }
@@ -90,7 +92,7 @@ int main()
     #endif
     string s;
     cin>>s;
-    sam[0].init();
+    init();
     int i;
     wfor(i,0,s.length())
         add(s[i]);
@@ -104,7 +106,6 @@ int main()
             sam[v].num+=sam[k.second].num;
         sam[v].num++;
     }
-    sam[0].num--;
     int q;
     cin>>q;
     while(q--)
