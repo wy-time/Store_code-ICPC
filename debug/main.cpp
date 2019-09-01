@@ -24,17 +24,34 @@ ll eular(ll n)
     if(n > 1)ans -= ans/n;
     return ans;
 }
-ll ksm(ll a,ll b,ll mo)
+ll ksm(ll a,ll b,ll mod)
 {
     ll ans=1;
+    int flag=0;
+    int flag2=0;
     while(b)
     {
         if(b&1)
-            ans=ans*a%mo;
-        a=a*a%mo;
+        {
+            ans=ans*a;
+            if(ans>mod||flag==2)
+            {
+                flag2=1;
+                ans%=mod;
+            }
+        }
+        a=a*a;
+        if(a>mod)
+        {
+            flag=2;
+            a%=mod;
+        }
         b>>=1;
     }
-    return ans;
+    if(flag2==1)
+        return ans%mod+mod;
+    else
+        return ans;
 }
 const ll maxn=1000005;
 ll a;
@@ -43,10 +60,13 @@ ll solve(ll now,ll mod,ll aim)
 {
     if(now==aim)
     {
-        return a%mod;
+        if(a>mod)
+            return a%mod+mod;
+        else
+            return a;
     }
     ll t=solve(now+1,eular(mod),aim);
-    ll tans=ksm(a,t+eular(mod),mod);
+    ll tans=ksm(a,t,mod);
     return tans;
 }
 int main()
@@ -65,11 +85,6 @@ int main()
     {
         ll b,m;
         cin>>a>>b>>m;
-        if(a==1||b==0)
-        {
-            cout<<1<<endl;
-            continue;
-        }
         int i;
         wfor(i,1,11)
         {
@@ -80,6 +95,10 @@ int main()
             res=ans[10];
         else
             res=ans[b];
+        if(a==1||b==0)
+        {
+            res=1;
+        }
         cout<<res%m<<endl;
     }
     return 0;
