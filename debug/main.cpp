@@ -4,74 +4,159 @@ using namespace std;
 typedef long long ll;
 #define wfor(i,j,k) for(i=j;i<k;++i)
 #define mfor(i,j,k) for(i=j;i>=k;--i)
-// void read(ll &x) {
-// 	char ch = getchar(); x = 0;
-// 	for (; ch < '0' || ch > '9'; ch = getchar());
-// 	for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
-// }
-ll eular(ll n)
+void read(int &x) {
+char ch = getchar(); x = 0;
+for (; ch < '0' || ch > '9'; ch = getchar());
+for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
+}
+const int maxn=1e5+5;
+struct node
 {
-    ll ans = n;
-    for(ll i = 2; i*i <= n; i++)
+    int bit[25];
+    int tag_xor;
+    int tag_or;
+    int tag_and;
+};
+node tree[maxn<<2];
+int num[maxn];
+void push_up(int id)
+{
+    int i;
+    wfor(i,0,25)
+        tree[id].bit[i]=tree[id<<1].bit[i]+tree[id<<1|1].bit[i];
+}
+void build(int l,int r,int id)
+{
+    if(l==r)
     {
-        if(n % i == 0)
+        int i;
+        wfor(i,0,25)
         {
-            ans -= ans/i;
-            while(n % i == 0)
-                n /= i;
+            if((num[l]>>i)&1)
+                tree[id].bit[i]=1;
+            else
+                tree[id].bit[i]=0;
+            tree[id].tag_xor=0;
+            tree[id].tag_or=0;
+            tree[id].tag_and=1;
+        }
+        return ;
+    }
+    int mid=(l+r)>>1;
+    build(l,mid,id<<1);
+    build(mid+1,r,id<<1|1);
+    push_up(id);
+}
+void push_down(int id,int l,int r)
+{
+    tree[id<<1].tag_and&=tree[id].tag_and;
+    tree[id<<1|1].tag_and&=tree[id].tag_and;
+    tree[id<<1].tag_or|=tree[id].tag_or;
+    tree[id<<1|1].tag_or|=tree[id].tag_or;
+    tree[id<<1].tag_xor^=tree[id].tag_xor;
+    tree[id<<1|1].tag_xor^=tree[id].tag_xor;
+    int i;
+    int number=tree[id].tag_xor;
+    int mid=(l+r)>>1;
+    wfor(i,0,25)
+    {
+        if((number>>i)&1)
+        {
+            tree[id<<1].bit[i]=mid-l+1-tree[id<<1].bit[i];
+            tree[id<<1|1].bit[i]=r-mid-tree[id<<1|1].bit[i];
         }
     }
-    if(n > 1)ans -= ans/n;
-    return ans;
-}
-ll ksm(ll a,ll b,ll mod)
-{
-    ll ans=1;
-    int flag=0;
-    int flag2=0;
-    while(b)
+    number=tree[id].tag_or;
+    wfor(i,0,25)
     {
-        if(b&1)
+        if((number>>i)&1)
         {
-            ans=ans*a;
-            if(ans>mod||flag==2)
+            tree[id<<1].bit[i]=mid-l+1;
+            tree[id<<1|1].bit[i]=r-mid;
+        }
+    }
+    number=tree[id].tag_and;
+    wfor(i,0,25)
+    {
+        if(((number>>i)&i))
+        {
+            tree[id<<1].bit[i]=0;
+            tree[id<<1|1].bit[i]=0;
+        }
+    }
+    tree[id].tag_or=tree[id].tag_xor=0;
+    tree[id].tag_and=1;
+}
+void update(int l,int r,int L,int R,int id,int number,int op)
+{
+    if(l>=L&&r<=R)
+    {
+        int i;
+        if(op==1)
+        {
+            tree[id].tag_xor^=number;
+            wfor(i,0,25)
             {
-                flag2=1;
-                ans%=mod;
+                if((number>>i)&1)
+                {
+                    tree[id].bit[i]=r-l+1-tree[id].bit[i];
+                }
+            }
+        }else if(op==2)
+        {
+            tree[id].tag_or|=number;
+            wfor(i,0,25)
+            {
+                if((number>>i)&1)
+                {
+                    tree[id].bit[i]=r-l+1;
+                }
+            }
+        }else
+        {
+            tree[id].tag_and&=number;
+            wfor(i,0,25)
+            {
+                if(!((number>>i)&1))
+                {
+                    tree[id].bit[i]=0;
+                }
             }
         }
-        a=a*a;
-        if(a>mod)
-        {
-            flag=2;
-            a%=mod;
-        }
-        b>>=1;
+        return ;
     }
-    if(flag2==1)
-        return ans%mod+mod;
-    else
-        return ans;
+    push_down(id,l,r);
+    int mid=(l+r)>>1;
+    if(L<=mid)
+        update(l,mid,L,R,id<<1,number,op);
+    if(R>mid)
+        update(r,mid+1,L,R,id<<1|1,number,op);
+    push_up(id);
 }
-const ll maxn=1000005;
-ll a;
-ll ans[20];
-ll solve(ll now,ll mod,ll aim)
+ll query(int l,int r,int L,int R,int id)
 {
-    if(now==aim)
+    if(l>=L&&r<=R)
     {
-        if(a>mod)
-            return a%mod+mod;
-        else
-            return a;
+        ll temp=0;
+        int i;
+        wfor(i,0,25)
+        {
+            temp+=((ll)tree[id].bit[i]<<i);
+        }
+        return temp;
     }
-    ll t=solve(now+1,eular(mod),aim);
-    ll tans=ksm(a,t,mod);
-    return tans;
+    ll ans=0;
+    push_down(id,l,r);
+    int mid=(l+r)>>1;
+    if(L<=mid)
+        ans+=query(l,mid,L,R,id<<1);
+    if(R>mid)
+        ans+=query(mid+1,r,L,R,id<<1|1);
+    return ans;
 }
 int main()
 {
-    std::ios::sync_with_stdio(false);
+    //std::ios::sync_with_stdio(false);
     #ifdef test
     freopen("F:\\Desktop\\question\\in.txt","r",stdin);
     #endif
@@ -79,27 +164,37 @@ int main()
     freopen("/home/time/debug/debug/in","r",stdin);
     freopen("/home/time/debug/debug/out","w",stdout);
     #endif
-    ll t;
-    cin>>t;
-    while(t--)
+    int n;
+    read(n);
+    int i;
+    wfor(i,1,n+1)
     {
-        ll b,m;
-        cin>>a>>b>>m;
-        int i;
-        wfor(i,1,11)
+        //cin>>num[i];
+        read(num[i]);
+    }
+    build(1,n,1);
+    int m;
+    read(m);
+    wfor(i,0,m)
+    {
+        int op,l,r;
+        read(op);
+        read(l),read(r);
+        if(op==1)
         {
-            ans[i]=solve(1,m,i);
-        }
-        ll res;
-        if(b>=10)
-            res=ans[10];
-        else
-            res=ans[b];
-        if(a==1||b==0)
+            ll ans=query(1,n,l,r,1);
+            printf("%lld\n",ans);
+        }else 
         {
-            res=1;
+            int x;
+            cin>>x;
+            if(op==2)
+                update(1,n,l,r,1,x,1);
+            else if(op==3)
+                update(1,n,l,r,1,x,2);
+            else
+                update(1,n,l,r,1,x,3);
         }
-        cout<<res%m<<endl;
     }
     return 0;
 }
