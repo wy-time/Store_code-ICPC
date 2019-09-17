@@ -1,6 +1,4 @@
 #include <iostream>
-#include <set> 
-#include <map> 
 #include <cstdio>
 using namespace std;
 typedef long long ll;
@@ -21,62 +19,17 @@ int main()
     freopen("/home/time/debug/debug/in","r",stdin);
     freopen("/home/time/debug/debug/out","w",stdout);
     #endif
-    int t;
-    cin>>t;
-    int casecnt=0;
-    while(t--)
+    ll x,y,p;
+    cin>>x>>y>>p;
+    ll ans1=(x+y)/p;
+    ll temp1=x%p;
+    ll temp2=y%p;
+    ll temp=p-max(temp1,temp2);
+    ll ans2=0;
+    if(min(temp1,temp2)>=temp)
     {
-        casecnt++;
-        cout<<"Case #"<<casecnt<<": ";
-        map<int,int>vis;
-        int n,m;
-        cin>>n>>m;
-        int i;
-        wfor(i,0,m)
-        {
-            int l,r;
-            cin>>l>>r;
-            if(vis.count(l)==0)
-                vis.insert(make_pair(l,1));
-            else
-                vis[l]++;
-            if(vis.count(r+1)==0)
-                vis.insert(make_pair(r+1,-1));
-            else
-                vis[r+1]--;
-        }
-        pair<int,int>last=*vis.begin();
-        int ans=0;
-        int pre=0;
-        vis.erase(vis.begin());
-        for(auto k:vis)
-        {
-            if(k.second==0)
-                continue;
-            if(last.second>0&&k.second>0)
-            {
-                pre+=last.second;
-                if(pre%2!=0)
-                    ans+=k.first-last.first;
-            }else if(last.second>0&&k.second<0)
-            {
-                pre+=last.second;
-                if(pre%2!=0)
-                    ans+=k.first-last.first;
-            }else if(last.second<0&&k.second<0)
-            {
-                pre+=last.second;
-                if(pre%2!=0)
-                    ans+=k.first-last.first;
-            }else
-            {
-                pre+=last.second;
-                if(pre%2!=0)
-                    ans+=k.first-last.first;
-            }
-            last=k;
-        }
-        cout<<ans<<endl;
+        ans2=temp;
     }
+    cout<<ans1<<" "<<ans2<<endl;
     return 0;
 }
