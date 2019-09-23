@@ -1,58 +1,25 @@
 #include <iostream>
-#include <vector> 
+#include <queue> 
+#include <map> 
 #include <cstdio>
 using namespace std;
 typedef long long ll;
 #define wfor(i,j,k) for(i=j;i<k;++i)
 #define mfor(i,j,k) for(i=j;i>=k;--i)
-// void read(int &x) {
+// void read(ll &x) {
 // 	char ch = getchar(); x = 0;
 // 	for (; ch < '0' || ch > '9'; ch = getchar());
 // 	for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
 // }
-vector<int>G[10];
-int p[7][7];
-int val[10];
-int ans;
-void init()
+struct st
 {
-    int i;
-    wfor(i,1,7)
-    {
-        int j;
-        wfor(j,i,7)
-            p[i][j]=1;
-    }   
-}
-void dfs(int now,int aim)
-{
-    if(now==aim+1)
-    {
-        init();
-        int cnt=0;
-        int i;
-        wfor(i,1,aim+1)
-        {
-            for(auto k:G[i])
-            {
-                if(p[val[i]][val[k]]==1)
-                {
-                    cnt++;
-                    p[val[i]][val[k]]=0;
-                }
-            }
-        }
-        ans=max(ans,cnt);
-    }else
-    {
-        int i;
-        wfor(i,1,7)
-        {
-            val[now]=i;
-            dfs(now+1,aim);
-        }
-    }
-}
+    ll a;
+    ll b;
+};
+const ll maxn=7005;
+st stud[maxn];
+map<ll,ll>ma;
+map<ll,ll>ma2;
 int main()
 {
     std::ios::sync_with_stdio(false);
@@ -63,17 +30,42 @@ int main()
     freopen("/home/time/debug/debug/in","r",stdin);
     freopen("/home/time/debug/debug/out","w",stdout);
     #endif
-    int n,m;
-    cin>>n>>m;
-    int i;
-    wfor(i,0,m)
+    ll n;
+    cin>>n;
+    ll i;
+    wfor(i,0,n)
     {
-        int u,v;
-        cin>>u>>v;
-        G[u].push_back(v);
-        G[v].push_back(u);
+        cin>>stud[i].a;
+        ma[stud[i].a]++;
     }
-    dfs(1,n);
-    cout<<ans<<endl;
+    wfor(i,0,n)
+    {
+        cin>>stud[i].b;
+        ma2[stud[i].a]+=stud[i].b;
+    }
+    queue<ll>qu;
+    for(auto k:ma)
+    {
+        if(k.second>=2)
+            qu.push(k.first);
+    }
+    ll sum=0;
+    while(!qu.empty())
+    {
+        ll temp=qu.front();
+        qu.pop();
+        sum+=ma2[temp];
+        ma2.erase(temp);
+        for (ll i = temp; i; i = (i - 1) &temp)
+        {
+            if(ma2.count(i)!=0)
+            {
+                sum+=ma2[i];
+                ma2.erase(i);
+                qu.push(i);
+            }
+        }
+    }
+    cout<<sum<<endl;
     return 0;
 }
