@@ -1,5 +1,5 @@
 #include <iostream>
-#include <string> 
+#include <vector> 
 #include <cstdio>
 using namespace std;
 typedef long long ll;
@@ -10,6 +10,49 @@ typedef long long ll;
 // 	for (; ch < '0' || ch > '9'; ch = getchar());
 // 	for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
 // }
+vector<int>G[10];
+int p[7][7];
+int val[10];
+int ans;
+void init()
+{
+    int i;
+    wfor(i,1,7)
+    {
+        int j;
+        wfor(j,i,7)
+            p[i][j]=1;
+    }   
+}
+void dfs(int now,int aim)
+{
+    if(now==aim+1)
+    {
+        init();
+        int cnt=0;
+        int i;
+        wfor(i,1,aim+1)
+        {
+            for(auto k:G[i])
+            {
+                if(p[val[i]][val[k]]==1)
+                {
+                    cnt++;
+                    p[val[i]][val[k]]=0;
+                }
+            }
+        }
+        ans=max(ans,cnt);
+    }else
+    {
+        int i;
+        wfor(i,1,7)
+        {
+            val[now]=i;
+            dfs(now+1,aim);
+        }
+    }
+}
 int main()
 {
     std::ios::sync_with_stdio(false);
@@ -20,29 +63,17 @@ int main()
     freopen("/home/time/debug/debug/in","r",stdin);
     freopen("/home/time/debug/debug/out","w",stdout);
     #endif
-    int n,k;
-    cin>>n>>k;
+    int n,m;
+    cin>>n>>m;
     int i;
-    string s;
-    cin>>s;
-    int cnt=0;
-    if(s[0]!='1')
+    wfor(i,0,m)
     {
-        s[0]='1';
-        cnt++;
+        int u,v;
+        cin>>u>>v;
+        G[u].push_back(v);
+        G[v].push_back(u);
     }
-    wfor(i,1,n)
-    {
-        if(cnt>=k)
-            break;
-        if(s[i]!='0')
-        {
-            s[i]='0';
-            cnt++;
-        }
-    }
-    if(n==1&&k>=1)
-        s[0]='0';
-    cout<<s<<endl;
+    dfs(1,n);
+    cout<<ans<<endl;
     return 0;
 }
