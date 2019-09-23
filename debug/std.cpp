@@ -1,80 +1,97 @@
-#include<bits/stdc++.h>
-using namespace std;
-
-#define Abigail inline void
-typedef long long LL;
-
-const int N=500000,C=20;
-
-int n,m,sk;
-struct cont{
-  LL cnt;
-  int id;
-}a[N+9];
-
-bool cmp1(const cont &a,const cont &b){return a.cnt<b.cnt||a.cnt==b.cnt&&a.id<b.id;}
-
-struct question{
-  LL k;
-  int id;
-}q[N+9];
-int ans[N+9];
-
-bool cmp2(const question &a,const question &b){return a.k<b.k;}
-
-int c[N+9];
-
-void Add(int p,int v){for (;p<=m;p+=p&-p) c[p]+=v;}
-
-int Query_kth(int p){
-  int res=0;
-  for (int i=C-1;i>=0;--i)
-    if (res+(1<<i)<=m&&p>c[res+(1<<i)]) p-=c[res+=1<<i];
-  return res+1;
-} 
-
-Abigail into(){
-  scanf("%d%d%d",&n,&m,&sk);
-  int x;
-  for (int i=1;i<=n;++i){
-  	scanf("%d",&x);
-  	++a[x].cnt;
-  }
-  for (int i=1;i<=sk;++i){
-  	scanf("%lld",&q[i].k);
-  	q[i].id=i;q[i].k-=(LL)n;
-  }
+#include <iostream>
+#include <vector>
+#include <string>
+#include <utility>
+#include <map>
+ 
+// Typedef
+typedef std::pair<std::string, std::string> strduo;
+ 
+// Vowel related
+bool isVowel(char c){
+	return c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u';
 }
-
-Abigail work(){
-  for (int i=1;i<=m;++i) a[i].id=i;
-  sort(a+1,a+m+1,cmp1);
-  sort(q+1,q+sk+1,cmp2);
-  int j=1;
-  LL now=0;
-  for (int i=1;i<m;++i){
-    Add(a[i].id,1);
-  	for (;j<=sk&&q[j].k<=now+(a[i+1].cnt-a[i].cnt)*i;++j){
-  	  int t=(q[j].k-now)%i;
-  	  ans[q[j].id]=Query_kth(t==0?i:t);
-  	}
-  	now+=(a[i+1].cnt-a[i].cnt)*i;
-  }
-  Add(a[m].id,1);
-  for (;j<=sk;++j){
-  	int t=(q[j].k-now)%m;
-  	ans[q[j].id]=Query_kth(t==0?m:t);
-  }
+int vowelCount(std::string &word){
+	int count = 0;
+	for(auto ch: word) if(isVowel(ch)) count++;
+	return count;
 }
-
-Abigail outo(){
-  for (int i=1;i<=sk;++i)
-    printf("%d\n",ans[i]);
+char lastVowel(std::string &word){
+	for(int i=word.length()-1; i>=0; i--){
+		if(isVowel(word[i])) return word[i];
+	} throw "No vowels";
 }
-
-int main(){
-  into();
-  work();
-  outo();
-  return 0;
+ 
+int main(void){
+	
+	// Get input
+	int n; std::cin >> n;
+	std::vector<std::string> totalwords;
+	std::map<int, std::map<char, std::vector<std::string>>> strings_by_vowels;
+	for(int i=0; i<n; i++){
+		std::string word; std::cin >> word;
+		totalwords.push_back(word);
+		int vowelcount = vowelCount(word);
+		char lastvowel = lastVowel(word);
+		strings_by_vowels[vowelcount][lastvowel].push_back(word);
+	}
+	
+	/*for(auto it: strings_by_vowels){
+		printf("Vowel count %2d:\n", it.first);
+		for(auto it2: it.second){
+			printf("  %c: ", it2.first);
+			for(auto it3: it2.second) printf("%s ", it3.c_str()); printf("\n");
+		}
+	}
+	printf("===============\n");*/
+	
+	// Construct duos; Complete: SameCount+SameLast, Semicomplete: SameCount
+	std::vector<strduo> complete_duos, semicomplete_duos;
+	for(auto &same_counts: strings_by_vowels){
+		
+		// Complete duos
+		for(auto &same_lasts: same_counts.second){
+			while(same_lasts.second.size() >= 2){
+				std::string firstline = same_lasts.second.back();
+				same_lasts.second.pop_back();
+				std::string secondline = same_lasts.second.back();
+				same_lasts.second.pop_back();
+				complete_duos.push_back({firstline, secondline});
+			}
+		}
+		
+		// Semicomplete duos
+		std::vector<std::string> remainings;
+		for(auto &same_lasts: same_counts.second){
+			for(auto &word: same_lasts.second) remainings.push_back(word);
+			same_lasts.second.clear();
+		}
+		while(remainings.size() >= 2){
+			std::string firstline = remainings.back(); remainings.pop_back();
+			std::string secondline = remainings.back(); remainings.pop_back();
+			semicomplete_duos.push_back({firstline, secondline});
+		}
+	}
+	
+	// Construct lyrics
+	std::vector<strduo> wholeLyric;
+	while(!semicomplete_duos.empty() && !complete_duos.empty()){
+		strduo semicomplete_duo = semicomplete_duos.back();
+		semicomplete_duos.pop_back();
+		strduo complete_duo = complete_duos.back();
+		complete_duos.pop_back();
+		wholeLyric.push_back({semicomplete_duo.first, complete_duo.first});
+		wholeLyric.push_back({semicomplete_duo.second, complete_duo.second});
+	}
+	while(complete_duos.size() >= 2){
+		strduo complete_duo1 = complete_duos.back(); complete_duos.pop_back();
+		strduo complete_duo2 = complete_duos.back(); complete_duos.pop_back();
+		wholeLyric.push_back({complete_duo1.first, complete_duo2.first});
+		wholeLyric.push_back({complete_duo1.second, complete_duo2.second});
+	}
+	
+	// Print
+	std::cout << wholeLyric.size() / 2 << '\n';
+	for(strduo &lyric: wholeLyric) std::cout << lyric.first << ' ' << lyric.second << '\n';
+	return 0;
 }
