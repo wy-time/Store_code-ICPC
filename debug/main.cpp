@@ -1,5 +1,5 @@
 #include <iostream>
-#include <vector> 
+#include <string> 
 #include <map> 
 #include <cstdio>
 using namespace std;
@@ -11,31 +11,8 @@ typedef long long ll;
 // 	for (; ch < '0' || ch > '9'; ch = getchar());
 // 	for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
 // }
-ll gcd(ll a,ll b)
-{
-    return b==0?a:gcd(b,a%b);
-}
-const int maxn=1e5+5;
-ll val[maxn];
-const ll mod=1e9+7;
-map<ll,ll>ma[maxn];
-vector<int>G[maxn];
-ll ans=0;
-void dfs(int now,int fa)
-{
-    for(auto k:ma[fa])
-    {
-        ma[now][gcd(k.first,val[now])]+=k.second;
-    }
-    ma[now][val[now]]++;
-    for(auto k:ma[now])
-        ans=(ans+(k.first*k.second%mod))%mod;
-    for(auto k:G[now])
-    {
-        if(k==fa)continue;
-        dfs(k,now);
-    }
-}
+map<string,pair<int,int> >peo;
+string name[15];
 int main()
 {
     std::ios::sync_with_stdio(false);
@@ -51,16 +28,28 @@ int main()
     int i;
     wfor(i,0,n)
     {
-        cin>>val[i+1];
+        string s;
+        cin>>s;
+        name[i]=s;
+        peo.insert(make_pair(s,make_pair(0,0)));
     }
-    wfor(i,0,n-1)
+    string s;
+    while(cin>>s)
     {
-        int u,v;
-        cin>>u>>v;
-        G[u].push_back(v);
-        G[v].push_back(u);
+        int have;
+        int num;
+        cin>>have>>num;
+        if(num==0)
+            continue;
+        peo[s].first+=have/num*num;
+        wfor(i,0,num)
+        {
+            string temp;
+            cin>>temp;
+            peo[temp].second+=have/num;
+        }
     }
-    dfs(1,0);
-    cout<<ans<<endl;
+    wfor(i,0,n)
+        cout<<name[i]<<" "<<peo[name[i]].second-peo[name[i]].first<<endl;
     return 0;
 }
