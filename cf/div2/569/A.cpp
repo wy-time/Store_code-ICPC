@@ -19,21 +19,9 @@ int main()
     freopen("/home/time/debug/debug/in","r",stdin);
     freopen("/home/time/debug/debug/out","w",stdout);
     #endif
-    string s,t;
-    cin>>s>>t;
-    int i,j;
-    ll ans=0;
-    wfor(i,0,s.length()-t.length()+1)
-    {
-        int temp=0;
-        wfor(j,0,t.length())
-        {
-            if(s[i+j]!=t[j])
-                temp++;
-        }
-        if(temp%2==0)
-            ans++;
-    }
+    int n;
+    cin>>n;
+    ll ans=(n*n)*2-(2*n-1);
     cout<<ans<<endl;
     return 0;
 }

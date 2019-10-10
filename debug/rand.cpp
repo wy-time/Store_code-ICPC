@@ -1,41 +1,33 @@
 #include <ctime>
+#include <string> 
 #include <iostream> 
 #include <cstdio>
 #include <cstdlib>
 #include <random> 
 #include<map>
 using namespace std;
-#define random(a,b) ((a)+mt()%((b)-(a)+1))
+typedef long long ll;
+#define random(a,b) ((ll)a+mt()%(1ll+(b)-(a)))
+#define wfor(i,j,k) for(i=j;i<k;++i)
+#define mfor(i,j,k) for(i=j;i>=k;--i)
 const int up = 10;
 int main ()
 {
     std::random_device rd;
     std::mt19937 mt(rd());
-    int n=random(1,20);
+    int len1=random(1,20);
+    int len2=random(1,len1);
     int i;
-    cout<<n<<endl;
-    char ma[330];
-    ma[1]='a';
-    ma[2]='e';
-    ma[3]='i';
-    ma[4]='o';
-    ma[5]='u';
-    ma[6]='c';
-    ma[7]='c';
-    ma[8]='c';
-    ma[9]='c';
-    ma[10]='c';
-    for(i=0;i<n;i++)
+    string s="",t="";
+    wfor(i,0,len1)
     {
-        int len=random(1,10);
-        int j;
-        for(j=0;j<len;j++)
-        {
-            int te=random(1,10);
-            cout<<ma[te];
-        }
-        cout<<endl;
+        s+='0'+random(0,1);
     }
+    wfor(i,0,len2)
+    {
+        t+='0'+random(0,1);
+    }
+    cout<<s<<endl<<t<<endl;
 	return 0;
 }
 

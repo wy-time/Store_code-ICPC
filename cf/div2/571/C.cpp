@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string> 
 #include <cstdio>
 using namespace std;
 typedef long long ll;
@@ -21,18 +22,41 @@ int main()
     #endif
     string s,t;
     cin>>s>>t;
-    int i,j;
-    ll ans=0;
-    wfor(i,0,s.length()-t.length()+1)
+    int chag=0;
+    int i;
+    int diff=0;
+    int ans=0;
+    wfor(i,0,t.length())
     {
-        int temp=0;
-        wfor(j,0,t.length())
+        if(s[i]!=t[i])
+            diff++;
+        if(i!=0&&s[i]!=s[i-1])
+            chag++;
+    }
+    int flag=0;
+    if(diff%2==0)
+    {
+        ans++;
+        flag=1;
+    }
+    wfor(i,t.length(),s.length())
+    {
+        if(s[i]!=s[i-1])chag++;
+        if(chag%2==0)
         {
-            if(s[i+j]!=t[j])
-                temp++;
+            if(flag==1)
+                ans++;
+        }else
+        {
+            if(flag==0)
+            {
+                ans++;
+                flag=1;
+            }else
+                flag=0;
         }
-        if(temp%2==0)
-            ans++;
+        if(s[i-t.length()]!=s[i-t.length()+1])
+            chag--;
     }
     cout<<ans<<endl;
     return 0;
