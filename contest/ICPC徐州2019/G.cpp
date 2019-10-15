@@ -10,16 +10,28 @@ const int N = 3e5 + 5;
 int i, nn;
 ll ans;
 char s[N];
-struct Palindrome_Automaton
+#include <cstdio>
+#include <cstring>
+#include <algorithm>
+using namespace std;
+#define N 300010//绝对要多开一点，因为回文树会多开两个节点，我就被这坑过一次
+#define ll long long
+#define fo(i,a,b) for(i=a;i<=b;i++)
+#define fd(i,a,b) for(i=a;i>=b;i--)
+int i, nn;
+ll ans;
+char s[N];
+struct Palindrome_Automaton//回文自动机
 {
 	int i, len[N], next[N][26], fail[N], cnt[N], last, cur, S[N], p, n;
-	int newnode(int l)
+	int newnode(int l)//新建节点
 	{
-		fo(i, 0, 25)next[p][i] = 0;
+		fo(i, 0, 25)next[p][i] = 0; //新建的节点为p，先消除它的子节点
+		cnt[p] = 0;
 		len[p] = l;
-		return p++;
+		return p++;//勿打成++p，因为此节点为p，我们应返回p
 	}
-	inline void init()
+	inline void init()//初始化
 	{
 		p = n = last = 0;
 		newnode(0);
@@ -32,7 +44,7 @@ struct Palindrome_Automaton
 		while (S[n - len[x] - 1] != S[n])x = fail[x];
 		return x;
 	}
-	inline void add(int c, int pos)
+	inline void add(int c, int pos) //插字符
 	{
 		c -= 'a';
 		S[++n] = c;
@@ -46,9 +58,9 @@ struct Palindrome_Automaton
 		last = next[cur][c];
 		cnt[last]++;
 	}
-	void count()
+	void count()//统计本质相同的回文串的出现次数
 	{
-		fd(i, p - 1, 0)
+		fd(i, p - 1, 0) //逆序累加，保证每个点都会比它的父亲节点先算完，于是父亲节点能加到所有子孙
 		cnt[fail[i]] += cnt[i];
 	}
 } tree;
@@ -75,12 +87,6 @@ void dfs(int now, int flag)
 			}
 			vis[to] = 0;
 		}
-		// if (!vis[tree.fail[now]])
-		// {
-		// 	vis[tree.fail[now]] = 1;
-		// 	dfs(tree.fail[now], 0);
-		// 	vis[tree.fail[now]] = 0;
-		// }
 	}
 }
 int main()
