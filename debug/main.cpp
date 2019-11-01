@@ -1,18 +1,77 @@
 #include <iostream>
-#include <string> 
+#include <vector> 
+#include <algorithm> 
+#include <cmath> 
 #include <cstdio>
 using namespace std;
 typedef long long ll;
 #define wfor(i,j,k) for(i=j;i<k;++i)
 #define mfor(i,j,k) for(i=j;i>=k;--i)
-// void read(ll &x) {
+// void read(int &x) {
 // 	char ch = getchar(); x = 0;
 // 	for (; ch < '0' || ch > '9'; ch = getchar());
 // 	for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
 // }
-const ll maxn=1e5+5;
-const ll mod=1e9+7;
-ll ans[maxn];
+const int maxn=2005;
+struct City
+{
+    int x;
+    int y;
+    int flag;
+    ll c;
+    ll k;
+};
+struct EDGE
+{
+    int flag;
+    int _beg;
+    int _end;
+    //int _next;
+    ll w;
+    bool operator <(const EDGE &other)const
+    {
+        return w<other.w;
+    }
+};
+EDGE edge[4002005];
+//int head[2005];
+City city[maxn];
+int cnt=0;
+void add(int beg,int b,ll w)
+{
+    //edge[++cnt]._next=head[beg];
+    edge[++cnt]._end=b;
+    edge[cnt]._beg=beg;
+    edge[cnt].w=w;
+    if(beg==0)
+        edge[cnt].flag=1;
+    //head[beg]=cnt;
+}
+int root[maxn];
+int findx (int x)
+{
+    int t=x;
+    while(root[t]!=t)
+    {
+        t=root[t];
+    }
+    int j;
+    while(root[x]!=t)
+    {
+        j=root[x];
+        root[x]=t;
+        x=j;
+    }
+    return t;
+}
+void _add(int a,int b)
+{
+    int a1=findx(a);
+    int b1=findx(b);
+    root[b1]=a1;
+}
+vector<int>base;
+vector<pair<int,int>>conn;
 int main()
 {
     std::ios::sync_with_stdio(false);
@@ -23,63 +82,61 @@ int main()
     freopen("/home/time/debug/debug/in","r",stdin);
     freopen("/home/time/debug/debug/out","w",stdout);
     #endif
-    ll i;
-    ans[1]=1;
-    ans[2]=2;
-    wfor(i,3,maxn)
+    int n;
+    cin>>n;
+    int i;
+    wfor(i,1,n+1)
     {
-        ans[i]=ans[i-1]+ans[i-2];
-        ans[i]%=mod;
+        cin>>city[i].x>>city[i].y;
+        city[i].flag=0;
     }
-    string s;
-    cin>>s;
-    ll flag=1;
-    ll cnt1=0;
-    ll cnt2=0;
-    ll res=1;
-    wfor(i,0,s.length())
+    wfor(i,1,n+1)
     {
-        if(s[i]=='w'||s[i]=='m')
+        cin>>city[i].c;
+    }
+    wfor(i,1,n+1)
+    {
+        cin>>city[i].k;
+    }
+    wfor(i,1,n+1)
+        add(0,i,city[i].c);
+    wfor(i,1,n+1)
+    {
+        int j;
+        wfor(j,i+1,n+1)
         {
-            flag=0;
-            break;
-        }else
-        {
-            if(s[i]=='u')
-            {
-                if(cnt2!=0)
-                {
-                    res=res*ans[cnt2]%mod;
-                }
-                cnt2=0;
-                cnt1++;
-            }else if(s[i]=='n')
-            {
-                if(cnt1!=0)
-                    res=res*ans[cnt1]%mod;
-                cnt1=0;
-                cnt2++;
-            }else
-            {
-                if(cnt2!=0)
-                {
-                    res=res*ans[cnt2]%mod;
-                }
-                if(cnt1!=0)
-                    res=res*ans[cnt1]%mod;
-                cnt2=cnt1=0;
-            }
+            ll dis=abs(city[i].x-city[j].x)+abs(city[i].y-city[j].y);
+            add(i,j,(city[i].k+city[j].k)*dis);
         }
     }
-    if(cnt2!=0)
+    wfor(i,1,n+1)
+        root[i]=i;
+    sort(edge+1,edge+cnt+1);
+    ll res=0;
+    wfor(i,1,cnt+1)
     {
-        res=res*ans[cnt2]%mod;
+        int u,v;
+        u=edge[i]._beg;
+        v=edge[i]._end;
+        if(findx(u)!=findx(v))
+        {
+            _add(u,v);
+            if(edge[i].flag==1)
+                base.push_back(v);
+            else
+            {
+                conn.push_back(make_pair(u,v));
+            }
+            res+=edge[i].w;
+        }
     }
-    if(cnt1!=0)
-        res=res*ans[cnt1]%mod;
-    if(flag==1)
-        cout<<res<<endl;
-    else
-        cout<<0<<endl;
+    cout<<res<<endl;
+    cout<<base.size()<<endl;
+    for(auto k:base)
+        cout<<k<<" ";
+    cout<<endl;
+    cout<<conn.size()<<endl;
+    for(auto k:conn)
+        cout<<k.first<<" "<<k.second<<endl;
     return 0;
 }
