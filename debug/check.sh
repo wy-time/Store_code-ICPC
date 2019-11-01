@@ -23,6 +23,9 @@ else
         ./rand>in
         ./debug<in>out
         ./std<in>stdout
+        if [ $? -ne 0 ];then  #看std是否成功执行以判断数据是否合法
+            continue
+        fi
         ./spj<in
         if diff out stdout;then
             echo "AC"

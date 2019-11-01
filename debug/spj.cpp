@@ -12,8 +12,6 @@ typedef long long ll;
 // }
 const int maxn=1e5+5;
 int num[maxn];
-int num1[maxn];
-int num2[maxn];
 int main()
 {
     std::ios::sync_with_stdio(false);
@@ -21,50 +19,68 @@ int main()
     fstream _stdout;
     _out.open("out",ios::in);
     _stdout.open("stdout",ios::in);
-    int n;
-    cin>>n;
-    int i;
-    wfor(i,0,n)
+    int flag=1;
+    string s,s2;
+    _out>>s;
+    _stdout>>s2;
+    if(s.compare(s2)!=0)
     {
-        cin>>num[i];
-        _out>>num1[i];
-        _stdout>>num2[i];
+        flag=0;
+    }
+    if(flag&&s=="YES"&&s2=="YES")
+    {
+        int n,m;
+        cin>>n>>m;
+        int i;
+        wfor(i,1,n+1)
+        {
+            _out>>num[i];
+        }
+        wfor(i,0,m)
+        {
+            if(flag==0)
+                break;
+            int t,l,r;
+            cin>>t>>l>>r;
+            if(t==1)
+            {
+                int j;
+                wfor(j,l+1,r+1)
+                {
+                    if(num[j]<num[j-1])
+                    {
+                        flag=0;
+                        break;
+                    }
+                }
+            }else
+            {
+                int j;
+                int cnt=0;
+                wfor(j,l+1,r+1)
+                {
+                    if(num[j]<num[j-1])
+                    {
+                        cnt=1;
+                        break;
+                    }
+                }
+                if(cnt==0)
+                {
+                    flag=0;
+                }
+            }
+        }
     }
     _out.close();
     _stdout.close();
-    int flag=0;
-    wfor(i,0,n)
-    {
-        int temp;
-        temp=num1[i];
-        if(temp!=num[i]&&temp!=-1*num[i]-1)
-        {
-            flag=1;
-            break;
-        }
-    }
+
     _out.open("out",ios::out|ios::trunc);
     _stdout.open("stdout",ios::out|ios::trunc);
-    if(flag==1)
-        _out<<"operator wrong"<<endl;
+    if(flag==0)
+        _out<<"No"<<endl;
     else
-    {
-        ll sum1=1;
-        ll sum2=1;
-        wfor(i,0,n)
-        {
-            ll temp1,temp2;
-            temp1=num1[i];
-            temp2=num2[i];
-            sum1*=temp1;
-            sum2*=temp2;
-        }
-        if(sum1==sum2)
-        {
-            _out<<"OK"<<endl;
-        }else
-            _out<<"number is different"<<endl;
-    }
+        _out<<"OK"<<endl;
     _stdout<<"OK"<<endl;
     _out.close();
     _stdout.close();
