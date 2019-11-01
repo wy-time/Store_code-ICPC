@@ -5,11 +5,14 @@ using namespace std;
 typedef long long ll;
 #define wfor(i,j,k) for(i=j;i<k;++i)
 #define mfor(i,j,k) for(i=j;i>=k;--i)
-// void read(int &x) {
+// void read(ll &x) {
 // 	char ch = getchar(); x = 0;
 // 	for (; ch < '0' || ch > '9'; ch = getchar());
 // 	for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
 // }
+const ll maxn=1e5+5;
+const ll mod=1e9+7;
+ll ans[maxn];
 int main()
 {
     std::ios::sync_with_stdio(false);
@@ -20,66 +23,63 @@ int main()
     freopen("/home/time/debug/debug/in","r",stdin);
     freopen("/home/time/debug/debug/out","w",stdout);
     #endif
-    int t;
-    cin>>t;
-    while(t--)
+    ll i;
+    ans[1]=1;
+    ans[2]=2;
+    wfor(i,3,maxn)
     {
-        int n;
-        cin>>n;
-        int a,b,c;
-        cin>>a>>b>>c;
-        string s;
-        cin>>s;
-        int len=s.size();
-        int i;
-        int cnt=0;
-        string ans=s;
-        wfor(i,0,len)
+        ans[i]=ans[i-1]+ans[i-2];
+        ans[i]%=mod;
+    }
+    string s;
+    cin>>s;
+    ll flag=1;
+    ll cnt1=0;
+    ll cnt2=0;
+    ll res=1;
+    wfor(i,0,s.length())
+    {
+        if(s[i]=='w'||s[i]=='m')
         {
-            if(s[i]=='R'&&b>0)
-            {
-                ans[i]='P';
-                cnt++;
-                b--;
-            }else if(s[i]=='P'&&c>0)
-            {
-                ans[i]='S';
-                cnt++;
-                c--;
-            }else if(s[i]=='S'&&a>0)
-            {
-                ans[i]='R';
-                a--;
-                cnt++;
-            }else
-                ans[i]=' ';
-        }
-        wfor(i,0,n)
+            flag=0;
+            break;
+        }else
         {
-            if(ans[i]==' ')
+            if(s[i]=='u')
             {
-                if(a>0)
+                if(cnt2!=0)
                 {
-                    a--;
-                    ans[i]='R';
-                }else if(b>0)
-                {
-                    b--;
-                    ans[i]='P';
-                }else if(c>0)
-                {
-                    c--;
-                    ans[i]='S';
+                    res=res*ans[cnt2]%mod;
                 }
+                cnt2=0;
+                cnt1++;
+            }else if(s[i]=='n')
+            {
+                if(cnt1!=0)
+                    res=res*ans[cnt1]%mod;
+                cnt1=0;
+                cnt2++;
+            }else
+            {
+                if(cnt2!=0)
+                {
+                    res=res*ans[cnt2]%mod;
+                }
+                if(cnt1!=0)
+                    res=res*ans[cnt1]%mod;
+                cnt2=cnt1=0;
             }
         }
-        int need=n/2+(n%2!=0);
-        if(cnt>=need)
-        {
-            cout<<"YES"<<endl;
-            cout<<ans<<endl;
-        }else
-            cout<<"NO"<<endl;
     }
+    if(cnt2!=0)
+    {
+        res=res*ans[cnt2]%mod;
+    }
+    if(cnt1!=0)
+        res=res*ans[cnt1]%mod;
+    if(flag==1)
+        cout<<res<<endl;
+    else
+        cout<<0<<endl;
     return 0;
 }
