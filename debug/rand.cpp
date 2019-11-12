@@ -16,19 +16,15 @@ int main ()
 {
     std::random_device rd;
     std::mt19937 mt(rd());
-    int n=random(1,10);
-    int m=random(1,10);
-    cout<<n<<" "<<m<<endl;
+    int n=random(10,100);
     int i;
-    wfor(i,0,m)
+    wfor(i,0,n)
     {
-        int op=random(0,1);
-        int l,r;
-        l=random(1,n);
-        r=random(1,n);
-        if(l>r)
-            swap(l,r);
-        cout<<op<<" "<<l<<" "<<r<<endl;
+        int t=random(1,2);
+        if(t==1)
+            cout<<'v';
+        else
+            cout<<'o';
     }
 	return 0;
 }

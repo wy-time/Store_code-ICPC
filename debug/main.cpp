@@ -1,4 +1,6 @@
 #include <iostream>
+#include <algorithm> 
+#include <vector> 
 #include <cstdio>
 using namespace std;
 typedef long long ll;
@@ -9,10 +11,29 @@ typedef long long ll;
 // 	for (; ch < '0' || ch > '9'; ch = getchar());
 // 	for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
 // }
-const int maxn=1e5+5;
-int numa[maxn];
-int numb[maxn];
-ll ans[maxn][3];
+vector<int>G[1005];
+const int maxn=1e6+5;;
+int prime[maxn];
+int isprime[maxn];
+void get_prime()
+{
+    ll i;
+    wfor(i,2,maxn)
+    {
+        if(prime[i]==0)
+        {
+            prime[++prime[0]]=i;
+            isprime[i]=1;
+        }
+        ll j;
+        for(j=1;j<=prime[0]&&prime[j]*i<maxn;j++)
+        {
+            prime[prime[j]*i]=1;
+            if(i%prime[j]==0)
+                break;
+        }
+    }
+}
 int main()
 {
     std::ios::sync_with_stdio(false);
@@ -25,24 +46,45 @@ int main()
     #endif
     int n;
     cin>>n;
-    int i;
-    wfor(i,0,n)
+    get_prime();
+    if(n<=2)
+        cout<<-1<<endl;
+    else
     {
-        cin>>numa[i];
+        int now=0;
+        int i;
+        wfor(i,1,n)
+        {
+            G[i].push_back(i+1);
+        }
+        G[n].push_back(1);
+        now=n;
+        int flag=1;
+        if(!isprime[now])
+        {
+            int pos=upper_bound(prime+1,prime+prime[0]+1,now)-prime;
+            int cha=prime[pos]-now;
+            int can=n/2;
+            if(can>=cha)
+            {
+                wfor(i,1,cha+1)
+                {
+                    G[i].push_back(G[i][0]+1);
+                }
+                now=prime[pos];
+            }else
+                flag=0;
+        }
+        if(flag==1)
+        {
+            cout<<now<<endl;
+            wfor(i,1,n+1)
+            {
+                for(auto k:G[i])
+                    cout<<i<<" "<<k<<endl;
+            }
+        }else
+            cout<<-1<<endl;
     }
-    wfor(i,0,n)
-    {
-        cin>>numb[i];
-    }
-    ans[0][0]=0;
-    ans[0][1]=numa[0];
-    ans[0][2]=numb[0];
-    wfor(i,1,n)
-    {
-        ans[i][0]=max(ans[i-1][0],max(ans[i-1][1],ans[i-1][2]));
-        ans[i][1]=1ll*numa[i]+max(ans[i-1][0],ans[i-1][2]);
-        ans[i][2]=1ll*numb[i]+max(ans[i-1][0],ans[i-1][1]);
-    }
-    cout<<max(ans[n-1][0],max(ans[i-1][1],ans[i-1][2]))<<endl;
     return 0;
 }
