@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector> 
 #include <cstdio>
 using namespace std;
 typedef long long ll;
@@ -9,10 +10,29 @@ typedef long long ll;
 // 	for (; ch < '0' || ch > '9'; ch = getchar());
 // 	for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
 // }
-const int maxn=1e5+5;
-int numa[maxn];
-int numb[maxn];
-ll ans[maxn][3];
+const int maxn=1e6+5;
+vector<pair<int,int>>edge;
+int prime [maxn];
+int isprime[maxn];
+void getprime()
+{
+    ll i;
+    wfor(i,2,maxn)
+    {
+        if(!prime[i])
+        {
+            prime[++prime[0]]=i;
+            isprime[i]=1;
+        }
+        ll j;
+        for(j=1;j<=prime[0]&&i*prime[j]<maxn;j++)
+        {
+            prime[prime[j]*i]=1;
+            if(i%prime[j]==0)
+                break;
+        }
+    }
+}
 int main()
 {
     std::ios::sync_with_stdio(false);
@@ -20,29 +40,45 @@ int main()
     freopen("F:\\Desktop\\question\\in.txt","r",stdin);
     #endif
     #ifdef ubuntu
-    freopen("/home/time/debug/debug/in","r",stdin);
-    freopen("/home/time/debug/debug/out","w",stdout);
+    freopen("./in","r",stdin);
+    freopen("./out","w",stdout);
     #endif
+    getprime();
     int n;
     cin>>n;
+    int flag=-1;
     int i;
-    wfor(i,0,n)
+    if(n>=3)
     {
-        cin>>numa[i];
-    }
-    wfor(i,0,n)
+        wfor(i,1,n)
+        {
+            edge.push_back(make_pair(i,i+1));
+        }
+        edge.push_back(make_pair(n,1));
+        ll maxnum=n+n/2;
+        int now=1;
+        wfor(i,n,maxnum+1)
+        {
+            if(isprime[i])
+            {
+                flag=1;
+                break;
+            }
+            edge.push_back(make_pair(now,n/2+now));
+            now++;
+        }
+    }else
     {
-        cin>>numb[i];
+        flag=-1;
     }
-    ans[0][0]=0;
-    ans[0][1]=numa[0];
-    ans[0][2]=numb[0];
-    wfor(i,1,n)
+    if(flag!=-1)
     {
-        ans[i][0]=max(ans[i-1][0],max(ans[i-1][1],ans[i-1][2]));
-        ans[i][1]=1ll*numa[i]+max(ans[i-1][0],ans[i-1][2]);
-        ans[i][2]=1ll*numb[i]+max(ans[i-1][0],ans[i-1][1]);
-    }
-    cout<<max(ans[n-1][0],max(ans[i-1][1],ans[i-1][2]))<<endl;
+        cout<<edge.size()<<endl;
+        for(auto k:edge)
+        {
+            cout<<k.first<<" "<<k.second<<endl;
+        }
+    }else
+        cout<<-1<<endl;
     return 0;
 }
