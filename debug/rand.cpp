@@ -18,13 +18,9 @@ int main ()
     std::mt19937 mt(rd());
     int n=random(10,100);
     int i;
-    wfor(i,0,n)
+    wfor(i,0,300000)
     {
-        int t=random(1,2);
-        if(t==1)
-            cout<<'v';
-        else
-            cout<<'o';
+        cout<<"abc";
     }
 	return 0;
 }
