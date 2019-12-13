@@ -35,7 +35,8 @@ import ycm_core
 # compilation database set (by default, one is not set).
 # CHANGE THIS LIST OF FLAGS. YES, THIS IS THE DROID YOU HAVE BEEN LOOKING FOR.
 flags = [
-    '-std=c++17',
+    '-std=c++14',
+    '-stdlib=libc++',
     '-O0',
     '-Werror',
     # '-Weverything',
@@ -55,9 +56,15 @@ flags = [
     '-x',
     'c++',
     '-I',
+    #'F:\codeblocks\MinGW\lib\gcc\mingw32\4.9.2\include\c++\mingw32',
+    'E:\MinGw\lib\gcc\mingw32\8.2.0\include\c++\mingw32',
+    # '-I',
+    # 'G:\Program Files\vc++ build tools\BuildTools\VC\Tools\MSVC\14.16.27023\include'
     '.',
     '-isystem',
-    '/usr/include/c++/7',
+    #'-isystem',
+    'E:\MinGw\lib\gcc\mingw32\8.2.0\include\c++',
+    # 'F:\codeblocks\MinGW\lib\gcc\mingw32\4.9.2\include\c++',
 ]
 
 
