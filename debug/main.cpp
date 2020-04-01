@@ -1,10 +1,8 @@
 #include <iostream>
-#include <vector> 
-#include <algorithm> 
+#include <cctype> 
 #include <set> 
-#include <unordered_map> 
-#include <cmath> 
 #include <vector> 
+#include <string> 
 #include <cstdio>
 using namespace std;
 typedef long long ll;
@@ -15,12 +13,6 @@ typedef long long ll;
 // 	for (; ch < '0' || ch > '9'; ch = getchar());
 // 	for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
 // }
-vector <int>_01;
-vector <int>_11;
-vector <int>_10;
-vector <int>_00;
-unordered_map<string,int> mp;
-set<int>st;
 int main()
 {
     std::ios::sync_with_stdio(false);
@@ -31,99 +23,51 @@ int main()
     freopen("./in","r",stdin);
     freopen("./out","w",stdout);
     #endif
-    int t;
-    cin>>t;
-    while(t--)
+    cout<<"请输入产生式的的个数,格式为左部空格右部"<<endl;;
+    int n;
+    cin>>n;
+    string s1,s2;
+    int i;
+    vector <string> S;
+    set<string> Vn;
+    set<char> Vt;
+    vector<string>P;
+    vector<string>temp;
+    if(n!=0)
     {
-        st.clear();
-        mp.clear();
-        _00.clear();
-        _01.clear();
-        _10.clear();
-        _11.clear();
-        int n;
-        cin>>n;
-        int i;
         wfor(i,0,n)
         {
-            string s;
-            cin>>s;
-            if (s[0]=='0'&&s[s.length()-1]=='0')
-                _00.push_back(i+1);
-            else if(s[0]=='1'&&s[s.length()-1]=='0')
-            {
-                _10.push_back(i+1);
-                string temp=s;
-                reverse(s.begin(),s.end());
-                if(mp.count(s)==0)
-                    mp.insert(make_pair(temp,i+1));
-                else
-                {
-                    st.insert(i+1);
-                    st.insert(mp[s]);
-                }
-            }
-            else if(s[0]=='0'&&s[s.length()-1]=='1')
-            {
-                _01.push_back(i+1);
-                string temp=s;
-                reverse(s.begin(),s.end());
-                if(mp.count(s)==0)
-                    mp.insert(make_pair(temp,i+1));
-                else
-                {
-                    st.insert(i+1);
-                    st.insert(mp[s]);
-                }
-
-            }
-            else
-                _11.push_back(i+1);
+            cin>>s1>>s2;
+            P.push_back(s1+"->"+s2);
+            if(i==0)
+                S.push_back(s1);
+            Vn.insert(s1);
+            temp.push_back(s2);
         }
-        int flag=1;
-        int res=0;
-        if((_01.size()==0&&_10.size()==0)&&(_00.size()>=1&&_11.size()>=1))
-            flag=0;
-        else
+        int sz=temp.size();
+        wfor(i,0,sz)
         {
-            int cha=abs((int)(_01.size()-_10.size()));
-            res=cha/2;
-        }
-        if(flag==1)
-        {
-            vector<int>ans;
-            int len=0;
-            if(_01.size()>_10.size())
+            int j;
+            wfor(j,0,temp[i].length())
             {
-                len=_01.size();
-                wfor(i,0,len)
-                {
-                    if(ans.size()==res)
-                        break;
-                    if(st.count(_01[i])==0)
-                        ans.push_back(_01[i]);
-                }
-            }else
-            {
-                len=_10.size();
-                wfor(i,0,len)
-                {
-                    if(ans.size()==res)
-                        break;
-                    if(st.count(_10[i])==0)
-                        ans.push_back(_10[i]);
-                }
+                string t="";
+                t+=temp[i][j];
+                if(Vn.count(t)==0)
+                    Vt.insert(temp[i][j]);
             }
-            if(ans.size()==res)
-            {
-                cout<<res<<endl;
-                for(int k:ans)
-                    cout<<k<<" ";
-            }else
-                cout<<-1;
-            cout<<endl;
-        }else
-            cout<<-1<<endl;
+        }
+        cout<<"S:"<<S[0]<<endl;
+        cout<<"Vt:";
+        for(auto k:Vt)
+            cout<<k<<" ";
+        cout<<endl;
+        cout<<"Vn:";
+        for(auto k:Vn)
+            cout<<k<<" ";
+        cout<<endl;
+        cout<<"P:";
+        for (auto k:P)
+            cout<<k<<endl;
     }
     return 0;
 }
