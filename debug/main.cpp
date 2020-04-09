@@ -9,8 +9,21 @@ typedef long long ll;
 // 	for (; ch < '0' || ch > '9'; ch = getchar());
 // 	for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
 // }
-const int maxn = 1e5 + 5;
-int a[maxn];
+int check (ll x, ll k, ll n)
+{
+	ll sum = x;
+	while (x / k > 0)
+	{
+		sum += x / k;
+		k *= k;
+		if (sum >= n)
+			break;
+	}
+	if (sum >= n)
+		return 1;
+	else
+		return 0;
+}
 int main()
 {
 	std::ios::sync_with_stdio(false);
@@ -21,22 +34,17 @@ int main()
 	freopen("/home/time/debug/debug/in", "r", stdin);
 	freopen("/home/time/debug/debug/out", "w", stdout);
 #endif
-	int n;
-	cin >> n;
-	int i;
-	wfor(i, 0, n)
+	ll n, k;
+	cin >> n >> k;
+	ll l = 0, r = n;
+	while (l <= r)
 	{
-		int t;
-		cin >> t;
-		a[t] = i;
+		ll mid = (l + r) >> 1;
+		if (check(mid, k, n) == 1)
+			r = mid - 1;
+		else
+			l = mid + 1;
 	}
-	int ans = 0;
-	wfor(i, 0, n)
-	{
-		int t;
-		cin >> t;
-		ans = max(ans, a[t] - i);
-	}
-	cout << ans << endl;
+	cout << l << endl;
 	return 0;
 }
