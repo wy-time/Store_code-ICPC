@@ -1,5 +1,4 @@
 #include <iostream>
-#include <algorithm> 
 #include <cstdio>
 using namespace std;
 typedef long long ll;
@@ -10,8 +9,6 @@ typedef long long ll;
 // 	for (; ch < '0' || ch > '9'; ch = getchar());
 // 	for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
 // }
-const int maxn=1e5+5;
-int num[maxn];
 int main()
 {
     std::ios::sync_with_stdio(false);
@@ -26,26 +23,18 @@ int main()
     cin>>t;
     while(t--)
     {
-        int n;
-        cin>>n;
-        int i;
-        wfor(i,0,n)
+        int n,k;
+        cin>>n>>k;
+        if(n<k)
         {
-            cin>>num[i];
-        }
-        sort(num,num+n);
-        int isin=1;
-        int cnt=0;
-        wfor(i,0,n)
+            cout<<k-n<<endl;
+        }else
         {
-            cnt++;
-            if (isin+cnt-1>=num[i])
-            {
-                isin+=cnt;
-                cnt=0;
-            }
+            if((n-k)%2==0)
+                cout<<0<<endl;
+            else
+                cout<<1<<endl;
         }
-        cout<<isin<<endl;
     }
     return 0;
 }

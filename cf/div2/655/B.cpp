@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cmath>  
 #include <cstdio>
 using namespace std;
 typedef long long ll;
@@ -9,6 +10,10 @@ typedef long long ll;
 // 	for (; ch < '0' || ch > '9'; ch = getchar());
 // 	for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
 // }
+int gcd(int a,int b)
+{
+    return b==0?a:gcd(b,a%b);
+}
 int main()
 {
     std::ios::sync_with_stdio(false);
@@ -23,21 +28,19 @@ int main()
     cin>>t;
     while(t--)
     {
-        int l,n;
-        cin>>l>>n;
+        int n;
+        cin>>n;
+        int ans=0;
+        int maxnum=sqrt(n)+1;
         int i;
-        int num[1005]={0};
-        wfor(i,0,n)
+        wfor(i,2,maxnum)
         {
-            int u,v;
-            cin>>u>>v;
-            int j;
-            wfor(j,u,v+1)
-                num[j]++;
+            if(n%i==0)
+                ans=max(ans,max(i,n/i));
         }
-        wfor(i,1,l+1)
-            cout<<num[i]<<" ";
-        cout<<endl;
+        if(ans==0)
+            ans=1;
+        cout<<ans<<" "<<n-ans<<endl;
     }
     return 0;
 }

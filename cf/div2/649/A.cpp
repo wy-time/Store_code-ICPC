@@ -9,6 +9,8 @@ typedef long long ll;
 // 	for (; ch < '0' || ch > '9'; ch = getchar());
 // 	for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
 // }
+const int maxn=1e5+5;
+int num[maxn];
 int main()
 {
     std::ios::sync_with_stdio(false);
@@ -23,21 +25,33 @@ int main()
     cin>>t;
     while(t--)
     {
-        int l,n;
-        cin>>l>>n;
+        ll sum=0;
+        int n,x;
+        cin>>n>>x;
         int i;
-        int num[1005]={0};
+        int posf=-1;
+        int posb=-1;
         wfor(i,0,n)
         {
-            int u,v;
-            cin>>u>>v;
-            int j;
-            wfor(j,u,v+1)
-                num[j]++;
+            cin>>num[i];
+            sum+=num[i];
+            if(num[i]%x!=0)
+            {
+                if(posf==-1)
+                    posf=i+1;
+                posb=n-i;
+            }
         }
-        wfor(i,1,l+1)
-            cout<<num[i]<<" ";
-        cout<<endl;
+        if(sum%x==0)
+        {
+            int ans;
+            if(posf==-1)
+                ans=-1;
+            else
+                ans=max(n-posf,n-posb);
+            cout<<ans<<endl;
+        }else
+            cout<<n<<endl;
     }
     return 0;
 }

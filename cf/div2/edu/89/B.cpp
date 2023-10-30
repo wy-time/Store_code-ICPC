@@ -23,21 +23,22 @@ int main()
     cin>>t;
     while(t--)
     {
-        int l,n;
-        cin>>l>>n;
+        int n,x,m;
+        cin>>n>>x>>m;
         int i;
-        int num[1005]={0};
-        wfor(i,0,n)
+        int nowl=x;
+        int nowr=x;
+        wfor(i,0,m)
         {
-            int u,v;
-            cin>>u>>v;
-            int j;
-            wfor(j,u,v+1)
-                num[j]++;
+            int l,r;
+            cin>>l>>r;
+            if((nowl>=l&&nowl<=r)||(nowr>=l&&nowr<=r))
+            {
+                nowl=min(l,nowl);
+                nowr=max(r,nowr);
+            }
         }
-        wfor(i,1,l+1)
-            cout<<num[i]<<" ";
-        cout<<endl;
+        cout<<nowr-nowl+1<<endl;
     }
     return 0;
 }

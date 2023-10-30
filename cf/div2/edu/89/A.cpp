@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cmath> 
 #include <cstdio>
 using namespace std;
 typedef long long ll;
@@ -23,21 +24,19 @@ int main()
     cin>>t;
     while(t--)
     {
-        int l,n;
-        cin>>l>>n;
-        int i;
-        int num[1005]={0};
-        wfor(i,0,n)
+        ll a,b;
+        cin>>a>>b;
+        ll ans=0;
+        ll cha=abs(a-b);
+        ans+=min(min(a,b),cha);
+        a=b=min(a-cha,b-cha);
+        if(a>0)
         {
-            int u,v;
-            cin>>u>>v;
-            int j;
-            wfor(j,u,v+1)
-                num[j]++;
+            ans+=(a/3)*2;
+            if(a%3==2)
+                ans++;
         }
-        wfor(i,1,l+1)
-            cout<<num[i]<<" ";
-        cout<<endl;
+        cout<<ans<<endl;
     }
     return 0;
 }

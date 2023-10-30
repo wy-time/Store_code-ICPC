@@ -23,21 +23,12 @@ int main()
     cin>>t;
     while(t--)
     {
-        int l,n;
-        cin>>l>>n;
-        int i;
-        int num[1005]={0};
-        wfor(i,0,n)
-        {
-            int u,v;
-            cin>>u>>v;
-            int j;
-            wfor(j,u,v+1)
-                num[j]++;
-        }
-        wfor(i,1,l+1)
-            cout<<num[i]<<" ";
-        cout<<endl;
+        int x,y,x1,y1;
+        cin>>x>>y>>x1>>y1;
+        ll chax=x1-x;
+        ll chay=y1-y;
+        ll ans=chay*chax+1;
+        cout<<ans<<endl;
     }
     return 0;
 }

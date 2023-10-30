@@ -9,6 +9,8 @@ typedef long long ll;
 // 	for (; ch < '0' || ch > '9'; ch = getchar());
 // 	for (; ch >= '0' && ch <= '9'; ch = getchar()) x = x * 10 + ch - '0';
 // }
+const int maxn=1005;
+int num[maxn];
 int main()
 {
     std::ios::sync_with_stdio(false);
@@ -23,21 +25,35 @@ int main()
     cin>>t;
     while(t--)
     {
-        int l,n;
-        cin>>l>>n;
+        int n;
+        cin>>n;
         int i;
-        int num[1005]={0};
-        wfor(i,0,n)
+        wfor(i,1,n+1)
         {
-            int u,v;
-            cin>>u>>v;
-            int j;
-            wfor(j,u,v+1)
-                num[j]++;
+            int k;
+            cin>>k;
+            num[k]=i;
         }
-        wfor(i,1,l+1)
-            cout<<num[i]<<" ";
-        cout<<endl;
+        int flag=0;
+        int l=1,r=n;
+        mfor(i,n,1)
+        {
+            if(num[i]+1<=r&&num[i]-1>=l)
+            {
+                flag=1;
+                cout<<"YES"<<endl;
+                cout<<num[i]-1<<" "<<num[i]<<" "<<num[i]+1<<endl;
+                break;
+            }else
+            {
+                if(num[i]==r)
+                    r=num[i]-1;
+                else if(num[i]==l)
+                    l=num[i]+1;
+            }
+        }
+        if(flag!=1)
+            cout<<"NO"<<endl;
     }
     return 0;
 }

@@ -23,21 +23,29 @@ int main()
     cin>>t;
     while(t--)
     {
-        int l,n;
-        cin>>l>>n;
+        std::string s;
+        cin>>s;
         int i;
-        int num[1005]={0};
-        wfor(i,0,n)
+        int cntr=0,cnts=0,cntp=0;
+        wfor(i,0,s.length())
         {
-            int u,v;
-            cin>>u>>v;
-            int j;
-            wfor(j,u,v+1)
-                num[j]++;
+            if(s[i]=='R')
+                cntr++;
+            else if(s[i]=='S')
+                cnts++;
+            else
+                cntp++;
         }
-        wfor(i,1,l+1)
-            cout<<num[i]<<" ";
-        cout<<endl;
+        char ans;
+        if(cntr>=cnts&&cntr>=cntp)
+        {
+            ans='P';
+        }else if(cnts>=cntr&&cnts>=cntp)
+            ans='R';
+        else
+            ans='S';
+        string res(s.length(),ans);
+        cout<<res<<endl;
     }
     return 0;
 }

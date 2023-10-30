@@ -19,24 +19,17 @@ int main()
     freopen("./in","r",stdin);
     freopen("./out","w",stdout);
     #endif
+    int n;
     int t;
     cin>>t;
     while(t--)
     {
-        int l,n;
-        cin>>l>>n;
+        cin>>n;
         int i;
-        int num[1005]={0};
         wfor(i,0,n)
         {
-            int u,v;
-            cin>>u>>v;
-            int j;
-            wfor(j,u,v+1)
-                num[j]++;
+            cout<<100<<" ";
         }
-        wfor(i,1,l+1)
-            cout<<num[i]<<" ";
         cout<<endl;
     }
     return 0;

@@ -16,12 +16,18 @@ int main ()
 {
     std::random_device rd;
     std::mt19937 mt(rd());
-    int n=random(10,100);
+    //int t=random(1,5);
+    cout<<1<<endl;
+    int l=random(1,10);
+    int n=random(1,10);
     int i;
-    wfor(i,0,300000)
+    cout<<l<<" "<<n<<endl;
+    wfor(i,0,n)
     {
-        cout<<"abc";
+        int u,v;
+        u=random(1,l);
+        v=random(u,l);
+        cout<<u<<" "<<v<<endl;
     }
-	return 0;
 }
 
